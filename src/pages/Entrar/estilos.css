@@ -1,0 +1,105 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700&display=swap');
+
+html,
+body {
+  margin: 0;
+  height: 100%;
+  font-family: 'Roboto', sans-serif;
+  outline: 0;
+  color: #064d8c;
+  min-width: 400px;
+  min-height: 400px;
+  font-size: 12pt;
+}
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #00a8ab 0%, #01b7ff 100%);
+}
+div.container {
+  background: #fcfff2;
+  width: 300px;
+  height: 350px;
+  border-radius: 5px;
+  margin: auto;
+  box-shadow: 0px 0px 10px 2px rgba(6, 77, 140, 0.534);
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  padding: 20px;
+}
+header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+img {
+  margin: 10px 0;
+  width: 150px;
+  filter: brightness(1);
+  filter: contrast(1);
+  filter: opacity(1);
+}
+form {
+  width: 90%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  flex: 1;
+}
+h2 {
+  font-weight: bold;
+  margin-top: 0px;
+}
+
+input,
+button {
+  border: 0;
+  width: 100%;
+  padding: 15px 20px;
+  box-sizing: border-box;
+  border-radius: 5px;
+  margin-bottom: 5px;
+  font-size: 12pt;
+  color: #f0f2f2;
+}
+
+input:focus,
+button:focus {
+  outline: 3px solid #26fbff;
+  outline-offset: 0.5px;
+  border-radius: 0;
+}
+
+input {
+  background: #00a8ab;
+  transition: 0.2s;
+}
+input:hover::placeholder {
+  color: #f0f2f2;
+}
+input::placeholder {
+  color: #f0f2f2a8;
+}
+
+button {
+  margin-top: 5px;
+  background: #345ac3;
+  cursor: pointer;
+  transition: 0.2s;
+  font-weight: bold;
+}
+
+button:hover {
+  background: #3a6fff;
+}
+
+a {
+  text-decoration: none;
+  color: #00a8ab;
+}
+a:hover {
+  text-decoration: underline;
+}
