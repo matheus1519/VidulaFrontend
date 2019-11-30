@@ -31,6 +31,7 @@ export default createGlobalStyle`
     outline: 3px solid #26fbff;
     outline-offset: 0.5px;
     border-radius: 0;
+    border: .5px solid #19a094;
   }
 
   input {
