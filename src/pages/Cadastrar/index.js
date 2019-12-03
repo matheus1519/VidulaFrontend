@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { history as historyPropTypes } from 'history-prop-types';
+import PropTypes from 'prop-types';
 
 import './estilos.css';
 
@@ -12,6 +14,13 @@ export default function Cadastrar({ history }) {
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
 
+  useEffect(() => {
+    const userId = localStorage.getItem('user');
+    if (userId != null) {
+      history.push('main');
+    }
+  }, []);
+
   function firstLetterCapitalize(stringOriginal) {
     let strings = stringOriginal.split(' ');
     strings = strings.map(str => str[0].toUpperCase() + str.slice(1));
@@ -19,21 +28,29 @@ export default function Cadastrar({ history }) {
     return string;
   }
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
 
     const nom = firstLetterCapitalize(nome);
     const em = email.toLowerCase();
 
-    api.post('usuarios', { nome: nom, email: em, senha });
-    history.push('entrar');
+    const response = await api.post('usuarios', {
+      nome: nom,
+      email: em,
+      senha,
+    });
+    if (response.data === true) {
+      history.push('entrar');
+    } else {
+      console.log('Erro ao cadastrar!');
+    }
   }
 
   return (
     <div className="cad">
       <header>
         <img src={logo} alt="logotipo" />
-        <h2>Entrar no Vidula</h2>
+        <h2>Cadastrar no Vidula</h2>
       </header>
       <form onSubmit={handleSubmit}>
         <input
@@ -65,3 +82,11 @@ export default function Cadastrar({ history }) {
     </div>
   );
 }
+
+Cadastrar.defaultProps = {
+  history: null,
+};
+
+Cadastrar.propTypes = {
+  history: PropTypes.shape(historyPropTypes),
+};

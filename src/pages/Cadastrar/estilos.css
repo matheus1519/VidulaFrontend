@@ -1,7 +1,7 @@
 div.cad {
   background: #fcfff2;
-  width: 350px;
-  height: 450px;
+  max-width: 400px;
+  height: 470px;
   border-radius: 5px;
   box-shadow: 0px 0px 10px 2px rgba(6, 77, 140, 0.534);
   display: flex;

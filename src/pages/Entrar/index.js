@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { history as historyPropTypes } from 'history-prop-types';
+import PropTypes from 'prop-types';
 
 import { Link } from 'react-router-dom';
 
@@ -12,13 +14,25 @@ export default function Entrar({ history }) {
   const [usuario, setUsuario] = useState('');
   const [senha, setSenha] = useState('');
 
+  useEffect(() => {
+    const userId = localStorage.getItem('user');
+    if (userId != null) {
+      history.push('main');
+    }
+  }, []);
+
   async function handleSubmit(event) {
     event.preventDefault();
 
     const response = await api.get(`usuarios/usuario/${usuario}@`);
 
     if (response.status === 200) {
-      history.push('main');
+      if (senha === response.data.senha) {
+        localStorage.setItem('user', response.data.id);
+        history.push('main');
+      } else {
+        console.log('Senha inválida!');
+      }
     } else {
       console.log('Usuário não encontrado!');
     }
@@ -55,3 +69,11 @@ export default function Entrar({ history }) {
     </div>
   );
 }
+
+Entrar.defaultProps = {
+  history: null,
+};
+
+Entrar.propTypes = {
+  history: PropTypes.shape(historyPropTypes),
+};
