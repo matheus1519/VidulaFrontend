@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { history as historyPropTypes } from 'history-prop-types';
 import PropTypes from 'prop-types';
-
+import ReactLoading from 'react-loading';
 import { Link } from 'react-router-dom';
 
-import './estilos.css';
+import { Container, Button } from './estilos';
 
 import api from '../../services/api';
 
@@ -13,6 +13,7 @@ import logo from '../../assets/cerebro.png';
 export default function Entrar({ history }) {
   const [usuario, setUsuario] = useState('');
   const [senha, setSenha] = useState('');
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const userId = localStorage.getItem('user');
@@ -24,22 +25,28 @@ export default function Entrar({ history }) {
   async function handleSubmit(event) {
     event.preventDefault();
 
-    const response = await api.get(`usuarios/usuario/${usuario}@`);
+    setLoading(true);
 
-    if (response.status === 200) {
-      if (senha === response.data.senha) {
-        localStorage.setItem('user', response.data.id);
-        history.push('main');
-      } else {
-        console.log('Senha inválida!');
+    try {
+      const response = await api.get(`usuarios/usuario/${usuario}@`);
+
+      if (response.status === 200) {
+        if (senha === response.data.senha) {
+          localStorage.setItem('user', response.data.id);
+          history.push('main');
+        } else {
+          console.log('Senha inválida!');
+        }
       }
-    } else {
+    } catch {
       console.log('Usuário não encontrado!');
+    } finally {
+      setLoading(false);
     }
   }
 
   return (
-    <div className="ent">
+    <Container className="ent">
       <header>
         <img src={logo} alt="logotipo" />
         <h2>Entrar no Vidula</h2>
@@ -59,14 +66,23 @@ export default function Entrar({ history }) {
           onChange={event => setSenha(event.target.value)}
           value={senha}
         />
-        <button required type="submit">
-          Entrar
-        </button>
+        <Button loading className="primario" type="submit">
+          {loading ? (
+            <ReactLoading
+              type="bubbles"
+              width={80}
+              height={80}
+              color="#fcfff2"
+            />
+          ) : (
+            'Entrar'
+          )}
+        </Button>
         <span>
           Não sou cadastrado, <Link to="/cadastrar">criar uma conta</Link>.
         </span>
       </form>
-    </div>
+    </Container>
   );
 }
 

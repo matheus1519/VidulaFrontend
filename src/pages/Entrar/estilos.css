@@ -1,5 +1,7 @@
 div.ent {
   background: #fcfff2;
+  min-width: 275px;
+
   max-width: 400px;
   height: 420px;
   border-radius: 5px;
@@ -18,25 +20,10 @@ header {
 img {
   margin: 10px 0;
   width: 150px;
-  filter: brightness(1);
-  filter: contrast(1);
-  filter: opacity(1);
 }
 form {
   width: 90%;
 }
 h2 {
   font-weight: bold;
-}
-
-button {
-  margin-top: 5px;
-  background: #345ac3;
-  cursor: pointer;
-  transition: 0.2s;
-  font-weight: bold;
-}
-
-button:hover {
-  background: #3a6fff;
 }

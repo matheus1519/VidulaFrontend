@@ -4,10 +4,13 @@ export default createGlobalStyle`
   *{
     margin: 0;
     padding: 0;
+    border:0;
+    outline:0;
     box-sizing: border-box;
     font-family: 'Roboto', sans-serif;
     color: #064d8c;
   }
+
 
   html,body,#root {
     height:100%;
@@ -47,7 +50,6 @@ export default createGlobalStyle`
 
   input,
   button {
-    border: 0;
     width: 100%;
     padding: 15px 20px;
     border-radius: 5px;
@@ -63,5 +65,19 @@ export default createGlobalStyle`
   a:hover {
     text-decoration: underline;
   }
+
+  button.primario {
+    margin-top: 5px;
+    background: #345ac3;
+    cursor: pointer;
+    transition: 0.2s;
+    font-weight: bold;
+    height:51px;
+  }
+
+  button.primario:hover {
+    background: #3a6fff;
+  }
+
 
 `;
