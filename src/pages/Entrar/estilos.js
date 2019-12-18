@@ -1,11 +1,10 @@
 import styled, { css } from 'styled-components';
+import { lighten } from 'polished';
 
-export const Container = styled.div`
+export const ContainerBranco = styled.div`
   & {
-    background: #fcfff2;
-    min-width: 275px;
-
-    max-width: 400px;
+    background: #ebf2ff;
+    width: 350px;
     height: 420px;
     border-radius: 5px;
     box-shadow: 0px 0px 10px 2px rgba(6, 77, 140, 0.534);
@@ -30,23 +29,25 @@ export const Container = styled.div`
     h2 {
       font-weight: bold;
     }
+
+    #nome {
+      display: none;
+    }
   }
 `;
 
-export const Button = styled.button`
-  ${props =>
-    props.loading &&
-    css`
-      & {
-        padding: 0px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-    `}
-  svg {
-    margin-top: -15px;
-    outline: 0;
-    border: 0;
+export const Button = styled.button.attrs(props => ({
+  disabled: props.loading,
+}))`
+  &[disabled] {
+    padding: 0px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: not-allowed;
+    background: ${lighten(0.3, '#0434C4')};
+  }
+  &[disabled]:hover {
+    background: ${lighten(0.3, '#0434C4')};
   }
 `;

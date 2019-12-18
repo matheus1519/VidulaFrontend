@@ -1,14 +1,21 @@
 import { createGlobalStyle } from 'styled-components';
+import { darken, lighten } from 'polished';
+
+// #01103B Texto
+// #032791
+// #0434C4
+// #4265CE
+// #EBF2FF Fundo
 
 export default createGlobalStyle`
-  *{
+  * {
     margin: 0;
     padding: 0;
     border:0;
     outline:0;
     box-sizing: border-box;
     font-family: 'Roboto', sans-serif;
-    color: #064d8c;
+    color: #01103B;
   }
 
 
@@ -23,7 +30,7 @@ export default createGlobalStyle`
   }
 
   body {
-    background: linear-gradient(135deg, #00a8ab 0%, #01b7ff 100%);
+    background: linear-gradient(135deg, #032791 0%, #0434C4 100%);
     -webkit-font-smothing: antialiased !important;
     display:flex;
     justify-content: center;
@@ -31,21 +38,21 @@ export default createGlobalStyle`
   }
 
   input:focus {
-    outline: 3px solid #26fbff;
+    outline: 2px solid #4265CE;
     outline-offset: 0.5px;
     border-radius: 0;
-    border: .5px solid #19a094;
+    border: .5px solid ${darken(0.2, '#4265CE')} ;
   }
 
   input {
-    background: #00a8ab;
+    background: #032791;
     transition: 0.2s;
   }
   input:hover::placeholder {
-    color: #f0f2f2;
+    color: #EBF2FF;
   }
   input::placeholder {
-    color: #f0f2f2a8;
+    color: #EBF2FFa8;
   }
 
   input,
@@ -68,7 +75,7 @@ export default createGlobalStyle`
 
   button.primario {
     margin-top: 5px;
-    background: #345ac3;
+    background: #0434C4;
     cursor: pointer;
     transition: 0.2s;
     font-weight: bold;
@@ -76,7 +83,10 @@ export default createGlobalStyle`
   }
 
   button.primario:hover {
-    background: #3a6fff;
+    background: ${lighten(0.2, '#0434C4')};
+  }
+  button.primario:active {
+    background: ${darken(0.2, '#0434C4')};
   }
 
 

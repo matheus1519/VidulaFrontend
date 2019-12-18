@@ -1,18 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import { history as historyPropTypes } from 'history-prop-types';
 import PropTypes from 'prop-types';
-import ReactLoading from 'react-loading';
-import { Link } from 'react-router-dom';
+// import ReactLoading from 'react-loading';
+import { makeStyles } from '@material-ui/core/styles';
+import { LinearProgress } from '@material-ui/core';
+import { Container } from 'reactstrap';
+import $ from 'jquery';
+// import { Link } from 'react-router-dom';
 
-import { Container, Button } from './estilos';
+import { ContainerBranco, Button } from './estilos';
 
 import api from '../../services/api';
-
 import logo from '../../assets/cerebro.png';
+import firstLetterCapitalize from '../../funcs';
 
 export default function Entrar({ history }) {
-  const [usuario, setUsuario] = useState('');
+  const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
+  const [nome, setNome] = useState('');
+  const [usuario, setUsuario] = useState({ id: -1, senha: '', email: '' });
+
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -22,66 +29,106 @@ export default function Entrar({ history }) {
     }
   }, []);
 
+  const useStyles = makeStyles({
+    progress: {
+      width: '100%',
+      '& > * + *': {},
+    },
+  });
+
   async function handleSubmit(event) {
-    event.preventDefault();
-
     setLoading(true);
+    event.preventDefault();
+    if (usuario.id === -1) {
+      await api.post('usuarios', {
+        nome: firstLetterCapitalize(nome),
+        email: email.toLowerCase(),
+        senha,
+      });
+    } else if (senha !== usuario.senha) {
+      console.log('Senha inválida!'); //  Substituir por toaste
+      return;
+    }
 
+    localStorage.setItem('user', usuario.id);
+    history.push('main');
+    setLoading(false);
+  }
+
+  async function handleFieldEmail(event) {
+    event.preventDefault();
+    if (email === '') {
+      return;
+    }
+    setLoading(true);
     try {
-      const response = await api.get(`usuarios/usuario/${usuario}@`);
-
-      if (response.status === 200) {
-        if (senha === response.data.senha) {
-          localStorage.setItem('user', response.data.id);
-          history.push('main');
-        } else {
-          console.log('Senha inválida!');
-        }
+      if (email !== usuario.email) {
+        const response = await api.get(`usuarios/email/${email}`);
+        const user = response.data;
+        setUsuario({ id: user.id, email: user.email, senha: user.senha });
       }
+      $('#nome').hide(200);
     } catch {
-      console.log('Usuário não encontrado!');
+      $('#nome')
+        .show(200)
+        .attr('required', 'required');
+      setUsuario({ id: -1 });
     } finally {
       setLoading(false);
     }
   }
 
+  const classes = useStyles();
+
   return (
-    <Container className="ent">
-      <header>
-        <img src={logo} alt="logotipo" />
-        <h2>Entrar no Vidula</h2>
-      </header>
-      <form onSubmit={handleSubmit}>
-        <input
-          required
-          type="text"
-          placeholder="Digite seu usuário"
-          onChange={event => setUsuario(event.target.value)}
-          value={usuario}
-        />
-        <input
-          required
-          type="password"
-          placeholder="Digite sua senha"
-          onChange={event => setSenha(event.target.value)}
-          value={senha}
-        />
-        <Button loading className="primario" type="submit">
-          {loading ? (
-            <ReactLoading
-              type="bubbles"
-              width={80}
-              height={80}
-              color="#fcfff2"
-            />
-          ) : (
-            'Entrar'
-          )}
-        </Button>
-        <span>
-          Não sou cadastrado, <Link to="/cadastrar">criar uma conta</Link>.
-        </span>
-      </form>
+    <Container>
+      {loading && (
+        <LinearProgress color="secondary" className={classes.progress} />
+      )}
+
+      <ContainerBranco>
+        <header>
+          <img src={logo} alt="logotipo" />
+          <h2>Entrar no Vidula</h2>
+        </header>
+        <form onSubmit={handleSubmit}>
+          <input
+            required
+            type="email"
+            placeholder="Digite seu email"
+            onChange={event => setEmail(event.target.value)}
+            onBlur={handleFieldEmail}
+            value={email}
+          />
+
+          <input
+            required
+            type="password"
+            placeholder="Digite sua senha"
+            id="senha"
+            onChange={event => setSenha(event.target.value)}
+            value={senha}
+          />
+          <input
+            type="text"
+            placeholder="Digite seu nome"
+            id="nome"
+            onChange={event => setNome(event.target.value)}
+            value={nome}
+          />
+          <Button loading={loading} className="primario" type="submit">
+            {
+              // <ReactLoading
+              //   type="bubbles"
+              //   width={80}
+              //   height={80}
+              //   color="#fcfff2"
+              // />
+            }
+            Entrar
+          </Button>
+        </form>
+      </ContainerBranco>
     </Container>
   );
 }
