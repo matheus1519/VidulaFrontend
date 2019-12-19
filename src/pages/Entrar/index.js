@@ -4,14 +4,13 @@ import PropTypes from 'prop-types';
 // import ReactLoading from 'react-loading';
 import { makeStyles } from '@material-ui/core/styles';
 import { LinearProgress } from '@material-ui/core';
-import { Container } from 'reactstrap';
 import $ from 'jquery';
 // import { Link } from 'react-router-dom';
 
-import { ContainerBranco, Button } from './estilos';
+import { Container, ContainerBranco, Button } from './estilos';
 
 import api from '../../services/api';
-import logo from '../../assets/cerebro.png';
+import logo from '../../assets/logo.png';
 import firstLetterCapitalize from '../../funcs';
 
 export default function Entrar({ history }) {
@@ -25,7 +24,7 @@ export default function Entrar({ history }) {
   useEffect(() => {
     const userId = localStorage.getItem('user');
     if (userId != null) {
-      history.push('main');
+      history.push('/principal');
     }
   }, []);
 
@@ -37,8 +36,8 @@ export default function Entrar({ history }) {
   });
 
   async function handleSubmit(event) {
-    setLoading(true);
     event.preventDefault();
+    setLoading(true);
     if (usuario.id === -1) {
       await api.post('usuarios', {
         nome: firstLetterCapitalize(nome),
@@ -51,16 +50,18 @@ export default function Entrar({ history }) {
     }
 
     localStorage.setItem('user', usuario.id);
-    history.push('main');
+    history.push('/principal');
     setLoading(false);
   }
 
   async function handleFieldEmail(event) {
     event.preventDefault();
-    if (email === '') {
+    setLoading(true);
+    if (email === null || email === '') {
+      setLoading(false);
+      $('#nome').hide(200);
       return;
     }
-    setLoading(true);
     try {
       if (email !== usuario.email) {
         const response = await api.get(`usuarios/email/${email}`);

@@ -23,11 +23,6 @@ export default createGlobalStyle`
     height:100%;
   }
 
-  #root{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
 
   body {
     background: linear-gradient(135deg, #032791 0%, #0434C4 100%);
@@ -67,10 +62,15 @@ export default createGlobalStyle`
 
   a {
     text-decoration: none;
-    color: #00a8ab;
+    color: #4265CE;
   }
   a:hover {
     text-decoration: underline;
+    color: ${lighten(0.2, '#4265CE')};
+  }
+
+  a:active {
+    color: ${darken(0.2, '#4265CE')};
   }
 
   button.primario {

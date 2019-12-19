@@ -1,14 +1,14 @@
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import React from 'react';
 
-import Main from './pages/Main';
+import Principal from './pages/Principal';
 import Entrar from './pages/Entrar';
 
 export default function Routes() {
   return (
     <BrowserRouter>
       <Switch>
-        <Route path="/main" component={Main} />
+        <Route exact path="/principal" component={Principal} />
         <Route path="/entrar" component={Entrar} />
       </Switch>
     </BrowserRouter>

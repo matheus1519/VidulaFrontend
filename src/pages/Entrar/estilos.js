@@ -1,11 +1,11 @@
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import { lighten } from 'polished';
 
 export const ContainerBranco = styled.div`
   & {
     background: #ebf2ff;
     width: 350px;
-    height: 420px;
+    height: 450px;
     border-radius: 5px;
     box-shadow: 0px 0px 10px 2px rgba(6, 77, 140, 0.534);
     display: flex;
@@ -13,6 +13,8 @@ export const ContainerBranco = styled.div`
     justify-content: space-between;
     flex-direction: column;
     padding: 20px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
 
     header {
       display: flex;
@@ -49,5 +51,21 @@ export const Button = styled.button.attrs(props => ({
   }
   &[disabled]:hover {
     background: ${lighten(0.3, '#0434C4')};
+  }
+`;
+export const Container = styled.div`
+  & {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  & > div {
+    width: 350px;
+  }
+
+  button {
+    width: 100%;
   }
 `;
