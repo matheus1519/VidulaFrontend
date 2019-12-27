@@ -1,7 +1,7 @@
 import React from 'react';
 import { Navbar, Nav, NavDropdown } from 'react-bootstrap';
 import { createHashHistory } from 'history';
-import logo from '../../assets/logo.png';
+import { MdOndemandVideo } from 'react-icons/md';
 import './estilos.css';
 
 export default function SideMenu() {
@@ -22,13 +22,9 @@ export default function SideMenu() {
       variant="light"
       className="py-2"
     >
-      <Navbar.Brand href="principal">
-        <img
-          src={logo}
-          width="50"
-          className="d-inline-block align-top"
-          alt="Vidula Logo"
-        />
+      <Navbar.Brand className="align-items-center" href="principal">
+        <MdOndemandVideo color="#4265CE" fontSize={40} />
+
         <span className="ml-2">Vidula</span>
       </Navbar.Brand>
       <Navbar.Toggle

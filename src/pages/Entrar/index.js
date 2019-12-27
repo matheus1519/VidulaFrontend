@@ -5,12 +5,13 @@ import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import { LinearProgress } from '@material-ui/core';
 import $ from 'jquery';
+import { MdOndemandVideo } from 'react-icons/md';
 // import { Link } from 'react-router-dom';
 
 import { Container, ContainerBranco, Button } from './estilos';
 
 import api from '../../services/api';
-import logo from '../../assets/logo.png';
+// import logo from '../../assets/logo.png';
 import firstLetterCapitalize from '../../funcs';
 
 export default function Entrar({ history }) {
@@ -68,6 +69,9 @@ export default function Entrar({ history }) {
         const user = response.data;
         setUsuario({ id: user.id, email: user.email, senha: user.senha });
       }
+      $('#nome')
+        .show(200)
+        .removeAttr('required');
       $('#nome').hide(200);
     } catch {
       $('#nome')
@@ -89,7 +93,7 @@ export default function Entrar({ history }) {
 
       <ContainerBranco>
         <header>
-          <img src={logo} alt="logotipo" />
+          <MdOndemandVideo color="#4265CE" fontSize={150} />
           <h2>Entrar no Vidula</h2>
         </header>
         <form onSubmit={handleSubmit}>

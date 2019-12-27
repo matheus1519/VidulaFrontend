@@ -5,14 +5,13 @@ export const ContainerBranco = styled.div`
   & {
     background: #ebf2ff;
     width: 350px;
-    height: 450px;
     border-radius: 5px;
     box-shadow: 0px 0px 10px 2px rgba(6, 77, 140, 0.534);
     display: flex;
     align-items: center;
     justify-content: space-between;
     flex-direction: column;
-    padding: 20px;
+    padding: 20px 20px 30px;
     border-top-left-radius: 0;
     border-top-right-radius: 0;
 
@@ -27,6 +26,7 @@ export const ContainerBranco = styled.div`
     }
     form {
       width: 90%;
+      margin-top: 20px;
     }
     h2 {
       font-weight: bold;
