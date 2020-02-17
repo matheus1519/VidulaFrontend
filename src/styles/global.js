@@ -15,7 +15,8 @@ export default createGlobalStyle`
     outline:0;
     box-sizing: border-box;
     font-family: 'Comfortaa', sans-serif;
-    color: #01103B;
+    /* color: #01103B; */
+    color: #EBF2FF
   }
 
 
@@ -25,7 +26,7 @@ export default createGlobalStyle`
 
 
   body {
-    background: linear-gradient(135deg, #032791 0%, #0434C4 100%);
+    background: linear-gradient(135deg, #01103B 0%, #032791 100%);
     -webkit-font-smothing: antialiased !important;
     display:flex;
     justify-content: center;
@@ -62,7 +63,7 @@ export default createGlobalStyle`
 
   a {
     text-decoration: none;
-    color: #4265CE;
+    color: ${lighten(0.1, '#4265CE')};
   }
   a:hover {
     text-decoration: underline;
@@ -89,5 +90,24 @@ export default createGlobalStyle`
     background: ${darken(0.2, '#0434C4')};
   }
 
+  button.secundario {
+    margin-top: 5px;
+    background: #4265CE;
+    cursor: pointer;
+    transition: 0.2s;
+    font-weight: bold;
+    height:51px;
+  }
+
+  button.secundario:hover {
+    background: ${lighten(0.2, '#4265CE')};
+  }
+  button.secundario:active {
+    background: ${darken(0.2, '#4265CE')};
+  }
+  .btn-primary, .btn-secondary {
+    height:51px;
+    font-size:14pt;
+  }
 
 `;

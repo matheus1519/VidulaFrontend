@@ -6,13 +6,13 @@ import SideMenu from '../../components/Menu';
 import { MenuPrincipal } from './estilos';
 import './estilos.css';
 
-export default function Principal({ history }) {
-  useEffect(() => {
-    const userId = localStorage.getItem('user');
-    if (userId === null) {
-      history.push('/entrar');
-    }
-  }, []);
+export default function Dashboard({ history }) {
+  // useEffect(() => {
+  //   const userId = localStorage.getItem('user');
+  //   if (userId === null) {
+  //     history.push('/entrar');
+  //   }
+  // }, []);
 
   return (
     <>
@@ -24,10 +24,10 @@ export default function Principal({ history }) {
   );
 }
 
-Principal.defaultProps = {
+Dashboard.defaultProps = {
   history: null,
 };
 
-Principal.propTypes = {
+Dashboard.propTypes = {
   history: PropTypes.shape(historyPropTypes),
 };

@@ -1,16 +1,24 @@
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import { lighten } from 'polished';
+
+const appear = keyframes`
+  from{
+    transform:translateX(120px);
+    opacity:0;
+  }
+  to{
+    transform:translateX(0);
+    opacity:100%;
+  }
+`;
 
 export const ContainerBranco = styled.div`
   & {
-    background: #ebf2ff;
-    width: 350px;
+    animation: ${appear} linear 0.2s;
+    width: 400px;
     border-radius: 5px;
-    box-shadow: 0px 0px 10px 2px rgba(6, 77, 140, 0.534);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-direction: column;
+    /* box-shadow: 0px 0px 10px 2px rgba(6, 77, 140, 0.534); */
+
     padding: 20px 20px 30px;
     border-top-left-radius: 0;
     border-top-right-radius: 0;
@@ -25,15 +33,11 @@ export const ContainerBranco = styled.div`
       width: 150px;
     }
     form {
-      width: 90%;
+      width: 100%;
       margin-top: 20px;
     }
     h2 {
       font-weight: bold;
-    }
-
-    #nome {
-      display: none;
     }
   }
 `;
@@ -51,21 +55,5 @@ export const Button = styled.button.attrs(props => ({
   }
   &[disabled]:hover {
     background: ${lighten(0.3, '#0434C4')};
-  }
-`;
-export const Container = styled.div`
-  & {
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-  }
-  & > div {
-    width: 350px;
-  }
-
-  button {
-    width: 100%;
   }
 `;
