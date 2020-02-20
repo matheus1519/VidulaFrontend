@@ -1,7 +1,0 @@
-#root {
-  display: block;
-  width: 100%;
-}
-div::first-line {
-  padding: 0;
-}

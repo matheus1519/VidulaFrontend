@@ -1,10 +1,7 @@
 import React, { useEffect } from 'react';
 import { history as historyPropTypes } from 'history-prop-types';
 import PropTypes from 'prop-types';
-import { Container } from 'react-bootstrap';
-import SideMenu from '../../components/Menu';
-import { MenuPrincipal } from './estilos';
-import './estilos.css';
+import Menu from '../../components/Menu';
 
 export default function Dashboard({ history }) {
   // useEffect(() => {
@@ -16,10 +13,8 @@ export default function Dashboard({ history }) {
 
   return (
     <>
-      <MenuPrincipal>
-        <SideMenu />
-      </MenuPrincipal>
-      <Container>Olá Pessoal</Container>
+      <Menu />
+      <div className="container">Dashboard</div>
     </>
   );
 }
