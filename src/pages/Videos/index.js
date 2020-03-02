@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
+import { MdAdd } from 'react-icons/md';
 import Menu from '../../components/Menu';
 import api from '../../services/api';
 
-import { Container } from './styles';
+import { Container, Video, VideoGroup } from './styles';
 
 export default function Videos() {
   const [video, setVideo] = useState(null);
@@ -19,13 +20,15 @@ export default function Videos() {
       <Menu />
       <Container className="container mt-4">
         <h1>Gerenciar Vídeos</h1>
+        <hr className="dropdown-divider"></hr>
         <form>
-          <input
-            type="file"
-            name="1-principal"
-            id="1-principal"
-            onChange={handleFile}
-          />
+          <VideoGroup>
+            <input type="text" placeholder="Nome" />
+            <Video htmlFor="1-principal">
+              <input type="file" name="1-principal" id="1-principal" />
+              <MdAdd size={50} />
+            </Video>
+          </VideoGroup>
         </form>
       </Container>
     </>

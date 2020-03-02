@@ -36,7 +36,7 @@ export default createGlobalStyle`
   }
 
   input:focus {
-    outline: 2px solid #4265CE;
+    outline: 1px solid #4265CE;
     outline-offset: 0.5px;
     border-radius: 0;
     border: .5px solid ${darken(0.2, '#4265CE')} ;
