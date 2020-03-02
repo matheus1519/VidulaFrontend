@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Menu from '../../components/Menu';
 import api from '../../services/api';
 
-// import { Container } from './styles';
+import { Container } from './styles';
 
 export default function Videos() {
   const [video, setVideo] = useState(null);
@@ -17,15 +17,17 @@ export default function Videos() {
   return (
     <>
       <Menu />
-      <div className="container mt-5">Gerenciar Vídeos</div>
-      <form>
-        <input
-          type="file"
-          name="1-principal"
-          id="1-principal"
-          onChange={handleFile}
-        />
-      </form>
+      <Container className="container mt-4">
+        <h1>Gerenciar Vídeos</h1>
+        <form>
+          <input
+            type="file"
+            name="1-principal"
+            id="1-principal"
+            onChange={handleFile}
+          />
+        </form>
+      </Container>
     </>
   );
 }

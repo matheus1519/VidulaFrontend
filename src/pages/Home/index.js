@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { MdOndemandVideo, MdArrowForward } from 'react-icons/md';
+import { MdOndemandVideo } from 'react-icons/md';
 
 import { Container } from './styles';
-import Cadastrar from '../../components/Cadastrar';
-import Logar from '../../components/Logar';
+import Cadastrar from './auth/Cadastrar';
+import Logar from './auth/Logar';
 
 export default function Home() {
   const [cadastro, setCadastro] = useState(true);

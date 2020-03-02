@@ -1,6 +1,8 @@
 import { createGlobalStyle } from 'styled-components';
 import { darken, lighten } from 'polished';
 
+import 'react-toastify/dist/ReactToastify.css';
+
 // #01103B Texto
 // #032791
 // #0434C4
@@ -15,7 +17,6 @@ export default createGlobalStyle`
     outline:0;
     box-sizing: border-box;
     font-family: 'Comfortaa', sans-serif;
-    /* color: #01103B; */
     color: #EBF2FF
   }
 
@@ -43,6 +44,7 @@ export default createGlobalStyle`
 
   input {
     background: #032791;
+    width:100%;
     transition: 0.2s;
   }
   input:hover::placeholder {
@@ -54,11 +56,10 @@ export default createGlobalStyle`
 
   input,
   button {
-    width: 100%;
     padding: 15px 20px;
     border-radius: 5px;
     margin-bottom: 5px;
-    font-size: 13pt;
+    font-size: 14pt;
     color: #f0f2f2;
   }
 

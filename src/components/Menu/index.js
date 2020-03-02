@@ -1,17 +1,18 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { MdOndemandVideo } from 'react-icons/md';
 // import history from '../../services/history';
 
 export default function Menu() {
   return (
-    <nav className="navbar navbar-expand-sm navbar-dark bg-primary px-3 px-sm-5 sticky-top">
-      <a className="navbar-brand d-flex align-items-center" href="/principal">
-        <MdOndemandVideo color="#4265CE" fontSize={40} />
+    <nav className="navbar navbar-expand-sm navbar-dark bg-primary py-1 px-3 px-sm-5 sticky-top">
+      <Link className="navbar-brand d-flex align-items-center" to="/principal">
+        <MdOndemandVideo color="#4265CE" fontSize={34} />
         <span className="ml-2">Vidula</span>
-      </a>
+      </Link>
       <button
         style={{ width: 'unset' }}
-        className="navbar-toggler"
+        className="navbar-toggler m-0"
         type="button"
         data-toggle="collapse"
         data-target="#navbarNav"
@@ -25,26 +26,26 @@ export default function Menu() {
         <ul className="navbar-nav ml-auto ">
           <div className="dropdown-divider" />
           <li className="nav-item">
-            <a className="nav-link" href="/videos">
+            <Link className="nav-link" to="/videos">
               Gerenciar Videos
-            </a>
+            </Link>
           </li>
           <div className="dropdown-divider" />
           <li className="nav-item">
-            <a className="nav-link" href="/minhaconta">
+            <Link className="nav-link" to="/minhaconta">
               Minha Conta
-            </a>
+            </Link>
           </li>
           <div className="dropdown-divider" />
           <li className="nav-item">
-            <a
+            <Link
               className="nav-link"
-              href="/sair"
-              tabindex="-1"
+              to="/sair"
+              tabIndex="-1"
               aria-disabled="true"
             >
               Sair
-            </a>
+            </Link>
           </li>
         </ul>
       </div>

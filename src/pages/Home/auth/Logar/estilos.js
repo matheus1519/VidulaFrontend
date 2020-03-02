@@ -12,7 +12,7 @@ const appear = keyframes`
   }
 `;
 
-export const ContainerBranco = styled.div`
+export const Container = styled.div`
   & {
     animation: ${appear} linear 0.2s;
     width: 400px;

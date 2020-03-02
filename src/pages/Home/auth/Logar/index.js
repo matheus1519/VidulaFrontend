@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { history as historyPropTypes } from 'history-prop-types';
 import PropTypes from 'prop-types';
 // import ReactLoading from 'react-loading';
 import { makeStyles } from '@material-ui/core/styles';
@@ -8,15 +7,15 @@ import { MdOndemandVideo } from 'react-icons/md';
 // import { Link } from 'react-router-dom';
 
 import { Container, Button } from './estilos';
-import api from '../../services/api';
+
+// import api from '../../../../services/api';
 
 // import logo from '../../assets/logo.png';
 // import firstLetterCapitalize from '../../funcs';
 
-export default function Cadastrar({ history }) {
+export default function Logar() {
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
-  const [nome, setNome] = useState('');
   // const [usuario, setUsuario] = useState({ id: -1, senha: '', email: '' });
 
   const [loading, setLoading] = useState(false);
@@ -27,17 +26,6 @@ export default function Cadastrar({ history }) {
   //     history.push('/principal');
   //   }
   // }, []);
-
-  async function emailExist() {
-    try {
-      const response = await api.get(`/usuarios/email/${email}`);
-      if (response.data) {
-        console.log(
-          'Já existe um usuário com esse email. Entrar com essa conta!'
-        );
-      }
-    } catch (error) {}
-  }
 
   const useStyles = makeStyles({
     progress: {
@@ -73,7 +61,7 @@ export default function Cadastrar({ history }) {
     <Container>
       <header>
         <MdOndemandVideo color="#4265CE" fontSize={150} />
-        <h2>Criar uma conta</h2>
+        <h2>Iniciar Sessão</h2>
       </header>
       <form onSubmit={() => {}}>
         <input
@@ -81,16 +69,9 @@ export default function Cadastrar({ history }) {
           type="email"
           placeholder="Digite seu email"
           onChange={event => setEmail(event.target.value)}
-          onBlur={emailExist}
           value={email}
         />
-        <input
-          type="text"
-          placeholder="Digite seu nome"
-          id="nome"
-          onChange={event => setNome(event.target.value)}
-          value={nome}
-        />
+
         <input
           required
           type="password"
@@ -100,8 +81,20 @@ export default function Cadastrar({ history }) {
           value={senha}
         />
 
-        <Button loading={loading} className="btn btn-primary" type="submit">
-          Cadastrar
+        <Button
+          loading={loading}
+          className="btn btn-primary btn-block"
+          type="submit"
+        >
+          {
+            // <ReactLoading
+            //   type="bubbles"
+            //   width={80}
+            //   height={80}
+            //   color="#fcfff2"
+            // />
+          }
+          Entrar
         </Button>
         {loading && (
           <LinearProgress color="primary" className={classes.progress} />
@@ -110,11 +103,3 @@ export default function Cadastrar({ history }) {
     </Container>
   );
 }
-
-Cadastrar.defaultProps = {
-  history: null,
-};
-
-Cadastrar.propTypes = {
-  history: PropTypes.shape(historyPropTypes),
-};
