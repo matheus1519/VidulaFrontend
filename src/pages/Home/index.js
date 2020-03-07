@@ -12,18 +12,18 @@ export default function Home() {
       <div className="info">
         <div>
           <header>
-            <MdOndemandVideo color="#4265CE" fontSize={120} />
+            <MdOndemandVideo color="#4265CE" size={80} />
             <h1>Vidula</h1>
           </header>
           <p>
-            Vidula é uma plataforma de videoaulas interativas onde o aluno
+            Vidula é uma plataforma de videoaulas interativas onde o estudante
             decide se precisa de mais conteúdo.
           </p>
           <p>Faça você seu próprio tempo de acordo com suas necessidades.</p>
           <button
             type="button"
             onClick={() => setCadastro(!cadastro)}
-            className="btn btn-secondary"
+            className="btn btn-secondary btn-lg"
           >
             {cadastro ? 'Já tenho conta' : 'Criar Conta'}
           </button>

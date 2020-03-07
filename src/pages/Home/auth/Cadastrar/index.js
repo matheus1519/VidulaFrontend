@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { LinearProgress } from '@material-ui/core';
 import { MdOndemandVideo } from 'react-icons/md';
-import { toast } from 'react-toastify';
+import { toast, Zoom } from 'react-toastify';
 
 import { Container, Button } from './estilos';
 import api from '~/services/api';
@@ -23,9 +23,8 @@ export default function Cadastrar() {
   const [emailAntes, setEmailAntes] = useState('');
   const [nome, setNome] = useState('');
   const [senha, setSenha] = useState('');
-  // const [usuario, setUsuario] = useState({ id: -1, senha: '', email: '' });
-
   const [loading, setLoading] = useState(false);
+  const [errorEmail, setErroEmail] = useState(false);
 
   // useEffect(() => {
   //   const userId = localStorage.getItem('user');
@@ -34,18 +33,38 @@ export default function Cadastrar() {
   //   }
   // }, []);
 
+  function errorEmailMsg() {
+    toast.error('Já existe um usuário com esse email.', {
+      transition: Zoom,
+    });
+    setErroEmail(true);
+  }
+
+  function errorServidor() {
+    toast.error('Sem conexão com o servidor!', {
+      transition: Zoom,
+    });
+  }
+
   async function emailExist() {
     setEmailAntes(email);
     if (emailAntes !== email) {
       try {
-        const response = await api.get(`/usuarios/existe/${email}`);
-        if (!response.data) {
-          toast.success('Email disponível!', { autoClose: 5000 });
-        } else {
-          toast.error('Já existe um usuário com esse email.');
+        const input = document.querySelector('input');
+        if (input.validity.valid) {
+          const response = await api.get(`/usuarios/existe/${email}`);
+          if (!response.data) {
+            toast.success('Email disponível!', {
+              autoClose: 5000,
+              transition: Zoom,
+            });
+            setErroEmail(false);
+          } else {
+            errorEmailMsg();
+          }
         }
       } catch (error) {
-        toast.error('Sem conexão com o servidor!');
+        errorServidor();
       }
     }
   }
@@ -53,31 +72,24 @@ export default function Cadastrar() {
   async function handleSubmit(e) {
     e.preventDefault();
     setLoading(true);
-    await api.post('/usuarios', {
-      nome: firstLetterCapitalize(nome),
-      email: email.toLowerCase(),
-      senha,
-    });
+    let response = false;
+    if (!errorEmail) {
+      response = await api.post('/usuarios', {
+        nome: firstLetterCapitalize(nome),
+        email: email.toLowerCase(),
+        senha,
+      });
+    } else {
+      errorEmailMsg();
+    }
+    if (response.data) {
+      history.push('/principal');
+    } else if (!errorEmail) {
+      errorServidor();
+    }
+
     setLoading(false);
-    history.push('/principal');
   }
-
-  // async function handleSubmit(event) {
-  //   event.preventDefault();
-  //   setLoading(true);
-  //   if (usuario.id === -1) {
-  //     await api.post('usuarios', {
-  //
-  //     });
-  //   } else if (senha !== usuario.senha) {
-  //     console.log('Senha inválida!'); //  Substituir por toaste
-  //     return;
-  //   }
-
-  //   localStorage.setItem('user', usuario.id);
-  //   history.push('/principal');
-  //   setLoading(false);
-  // }
 
   const classes = useStyles();
 
@@ -96,6 +108,7 @@ export default function Cadastrar() {
             setEmail(event.target.value);
           }}
           onBlur={emailExist}
+          maxLength={100}
         />
         <input
           required
@@ -103,6 +116,7 @@ export default function Cadastrar() {
           onChange={event => setNome(event.target.value)}
           value={nome}
           placeholder="Digite seu nome"
+          maxLength={50}
         />
         <input
           required
@@ -110,6 +124,7 @@ export default function Cadastrar() {
           placeholder="Digite sua senha"
           onChange={event => setSenha(event.target.value)}
           value={senha}
+          maxLength={50}
         />
 
         <Button

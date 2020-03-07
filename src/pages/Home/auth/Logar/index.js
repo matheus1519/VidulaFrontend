@@ -1,23 +1,19 @@
-import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
-// import ReactLoading from 'react-loading';
+import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { LinearProgress } from '@material-ui/core';
 import { MdOndemandVideo } from 'react-icons/md';
-// import { Link } from 'react-router-dom';
+import { toast, Zoom } from 'react-toastify';
 
 import { Container, Button } from './estilos';
-
-// import api from '../../../../services/api';
-
-// import logo from '../../assets/logo.png';
-// import firstLetterCapitalize from '../../funcs';
+import api from '~/services/api';
+import history from '~/services/history';
 
 export default function Logar() {
   const [email, setEmail] = useState('');
+  const [emailAntes, setEmailAntes] = useState('');
   const [senha, setSenha] = useState('');
-  // const [usuario, setUsuario] = useState({ id: -1, senha: '', email: '' });
-
+  const [senhaAntes, setSenhaAntes] = useState('');
+  const [errorEmail, setErroEmail] = useState(false);
   const [loading, setLoading] = useState(false);
 
   // useEffect(() => {
@@ -36,24 +32,74 @@ export default function Logar() {
     },
   });
 
-  // async function handleSubmit(event) {
-  //   event.preventDefault();
-  //   setLoading(true);
-  //   if (usuario.id === -1) {
-  //     await api.post('usuarios', {
-  //       nome: firstLetterCapitalize(nome),
-  //       email: email.toLowerCase(),
-  //       senha,
-  //     });
-  //   } else if (senha !== usuario.senha) {
-  //     console.log('Senha inválida!'); //  Substituir por toaste
-  //     return;
-  //   }
+  function errorEmailMsg() {
+    toast.error('Não existe um usuário com esse email.', {
+      transition: Zoom,
+    });
+    setErroEmail(true);
+  }
 
-  //   localStorage.setItem('user', usuario.id);
-  //   history.push('/principal');
-  //   setLoading(false);
-  // }
+  function errorServidor() {
+    toast.error('Sem conexão com o servidor!', {
+      transition: Zoom,
+    });
+  }
+
+  function errorSenha() {
+    if (senhaAntes !== senha) {
+      toast.error('Senha incorreta!', {
+        transition: Zoom,
+      });
+      setSenhaAntes(senha);
+    }
+  }
+
+  async function emailExist() {
+    setEmailAntes(email);
+    if (emailAntes !== email) {
+      try {
+        const input = document.querySelector('input');
+        if (input.validity.valid) {
+          const response = await api.get(`/usuarios/existe/${email}`);
+          if (response.data) {
+            setErroEmail(false);
+          } else {
+            errorEmailMsg();
+          }
+        }
+      } catch (error) {
+        errorServidor();
+      }
+    }
+  }
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+    setLoading(true);
+    let response = false;
+    try {
+      if (!errorEmail) {
+        response = await api.post('/usuarios/autenticar', {
+          email,
+          senha,
+        });
+      } else {
+        errorEmailMsg();
+        setLoading(false);
+        return;
+      }
+    } catch (error) {
+      errorServidor();
+      return;
+    }
+    if (response.data) {
+      history.push('/principal');
+    } else {
+      errorSenha();
+    }
+
+    setLoading(false);
+  }
 
   const classes = useStyles();
 
@@ -63,13 +109,15 @@ export default function Logar() {
         <MdOndemandVideo color="#4265CE" fontSize={150} />
         <h2>Iniciar Sessão</h2>
       </header>
-      <form onSubmit={() => {}}>
+      <form onSubmit={handleSubmit}>
         <input
           required
           type="email"
           placeholder="Digite seu email"
           onChange={event => setEmail(event.target.value)}
           value={email}
+          onBlur={emailExist}
+          maxLength={100}
         />
 
         <input
@@ -86,14 +134,6 @@ export default function Logar() {
           className="btn btn-primary btn-block"
           type="submit"
         >
-          {
-            // <ReactLoading
-            //   type="bubbles"
-            //   width={80}
-            //   height={80}
-            //   color="#fcfff2"
-            // />
-          }
           Entrar
         </Button>
         {loading && (
