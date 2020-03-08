@@ -5,6 +5,7 @@ export const Container = styled.div``;
 export const VideoGroup = styled.div`
   width: 280px;
   margin-top: 30px;
+  border-radius: 4px;
   > input {
     padding: 10px 15px;
     font-size: 12pt;
@@ -17,8 +18,9 @@ export const VideoGroup = styled.div`
 export const Video = styled.label`
   width: 100%;
   height: 150px;
+  background: #aaa;
   border-radius: 4px;
-  background: ${props => (props.carregado ? '#75ff75' : '#ff7575')};
+  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -28,7 +30,6 @@ export const Video = styled.label`
 
   &:hover {
     box-shadow: 1px 1px 20px 2px black;
-    cursor: pointer;
   }
 
   input {
