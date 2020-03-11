@@ -12,24 +12,29 @@ import { CircularProgressbar } from 'react-circular-progressbar';
 export default function Videos() {
   const [progresso, setProgresso] = useState(0);
   const [uploaded, setUploaded] = useState(false);
-  const [errorUp, setErrorUp] = useState(false);
-  const [video, setVideo] = useState(null);
+  const [error, setError] = useState(false);
+  const [video, setVideo] = useState();
 
   function handleFile(e) {
+    const dados = new FormData();
     setVideo(e.target.files[0]);
-    const data = new FormData();
-    data.append('1-principal', video);
-    try {
-      api.post('/videos', data, {
+    dados.append('1-principal', e.target.files[0]);
+
+    api
+      .post('/videos', dados, {
         onUploadProgress: ev => {
           // eslint-disable-next-line radix
           const progress = parseInt(Math.round((ev.loaded * 100) / ev.total));
           setProgresso(progress);
         },
+      })
+      .then(() => {
+        setUploaded(true);
+        setError(false);
+      })
+      .catch(() => {
+        setError(true);
       });
-    } catch (error) {
-      console.log(error);
-    }
   }
 
   return (
@@ -41,15 +46,16 @@ export default function Videos() {
         <form>
           <VideoGroup>
             <input type="text" placeholder="Nome" />
-            <Video htmlFor="video">
+            <Video htmlFor="video" uploaded={uploaded} error={error}>
               <input
                 id="video"
                 type="file"
                 accept="video/*"
-                onChange={e => handleFile(e)}
+                onChange={handleFile}
+                disabled={uploaded || error || !!progresso}
               />
               {!progresso && <MdAdd fill="#0434C4" size={50} />}
-              {!uploaded && !errorUp && !!progresso && (
+              {!uploaded && !error && !!progresso && (
                 <CircularProgressbar
                   styles={{
                     root: { width: 40 },
@@ -60,8 +66,8 @@ export default function Videos() {
                 />
               )}
 
-              {uploaded && <MdCheckCircle size={48} cor="#75ff75" />}
-              {errorUp && <MdError size={48} cor="#ff7575" />}
+              {uploaded && <MdCheckCircle size={48} />}
+              {error && <MdError size={48} />}
             </Video>
           </VideoGroup>
         </form>

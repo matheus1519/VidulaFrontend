@@ -1,4 +1,18 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
+
+const colorUndef = css`
+  background: #aaa;
+`;
+
+const colorSuccess = css`
+  background: #75ff75;
+`;
+
+const colorFailed = css`
+  background: #ff7575;
+`;
+
+let disabled = false;
 
 export const Container = styled.div``;
 
@@ -18,19 +32,26 @@ export const VideoGroup = styled.div`
 export const Video = styled.label`
   width: 100%;
   height: 150px;
-  background: #aaa;
   border-radius: 4px;
-  cursor: pointer;
+
   display: flex;
   align-items: center;
   justify-content: center;
   transition: all 0.2s;
   border-top-left-radius: 0;
   border-top-right-radius: 0;
+  ${props => !props.uploaded && !props.error && colorUndef}
+  ${props => props.uploaded && colorSuccess}
+  ${props => props.error && colorFailed}
 
-  &:hover {
-    box-shadow: 1px 1px 20px 2px black;
-  }
+  ${props =>
+    !props.children[0].props.disabled &&
+    css`
+      &:hover {
+        box-shadow: 1px 1px 20px 2px black;
+        cursor: pointer;
+      }
+    `}
 
   input {
     display: none;
