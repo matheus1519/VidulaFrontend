@@ -4,21 +4,37 @@ import { uniqueId } from 'lodash';
 import Menu from '../../components/Menu';
 import Upload from '~/components/Upload';
 import api from '~/services/api';
-
-import { Container, Video, VideoGroup } from './styles';
-import { MdAdd, MdCheckCircle, MdError } from 'react-icons/md';
-import { CircularProgressbar } from 'react-circular-progressbar';
+import { Container, Header } from './styles';
 
 export default function Videos() {
   const [progresso, setProgresso] = useState(0);
   const [uploaded, setUploaded] = useState(false);
   const [error, setError] = useState(false);
-  const [video, setVideo] = useState();
+  const [video, setVideo] = useState({});
+  const [videos, setVideos] = useState([
+    [
+      {
+        progresso: 0,
+        uploaded: false,
+        error: false,
+      },
+    ],
+    [],
+    [],
+  ]);
 
-  function handleFile(e) {
+  function addNewTemplate() {
+    const newTemplate = {
+      progresso: 0,
+      uploaded: false,
+      error: false,
+    };
+    return newTemplate;
+  }
+
+  function handleFile(file, linha, coluna) {
     const dados = new FormData();
-    setVideo(e.target.files[0]);
-    dados.append('1-principal', e.target.files[0]);
+    dados.append('videoFile', file[0]);
 
     api
       .post('/videos', dados, {
@@ -28,53 +44,62 @@ export default function Videos() {
           setProgresso(progress);
         },
       })
-      .then(() => {
+      .then(success => {
         setUploaded(true);
         setError(false);
+        setVideo(success.data);
+        setVideos(
+          videos.map((nivel, col) =>
+            nivel.map((vid, lin) =>
+              lin === 0 && col === 0 ? vid : vid.progresso
+            )
+          )
+        );
+        console.log(success);
+        console.log(videos);
       })
-      .catch(() => {
+      .catch(fail => {
         setError(true);
+        console.log(fail);
       });
   }
 
   return (
     <>
       <Menu />
-      <Container className="container mt-4">
-        <h1>Gerenciar Vídeos</h1>
-        <hr className="dropdown-divider" />
-        <form>
-          <VideoGroup>
-            <input type="text" placeholder="Nome" />
-            <Video htmlFor="video" uploaded={uploaded} error={error}>
-              <input
-                id="video"
-                type="file"
-                accept="video/*"
-                onChange={handleFile}
-                disabled={uploaded || error || !!progresso}
-              />
-              {!progresso && <MdAdd fill="#0434C4" size={50} />}
-              {!uploaded && !error && !!progresso && (
-                <CircularProgressbar
-                  styles={{
-                    root: { width: 40 },
-                    path: { stroke: '#032791' },
-                  }}
-                  strokeWidth={10}
-                  value={progresso}
-                />
-              )}
+      <div className="container mt-4">
+        <Header>
+          <h1>Gerenciar Vídeos</h1>
+          <button
+            type="submit"
+            className="d-flex ml-auto btn btn-light btn-lg m-0"
+          >
+            Concluir
+          </button>
+        </Header>
+        <hr className="dropdown-divider mb-3" />
 
-              {uploaded && <MdCheckCircle size={48} />}
-              {error && <MdError size={48} />}
-            </Video>
-          </VideoGroup>
-        </form>
-        <button type="submit" className="mt-5 btn btn-primary btn-lg">
-          Concluir
-        </button>
-      </Container>
+        {/* <Upload
+            progresso={progresso}
+            error={error}
+            uploaded={uploaded}
+            handleFile={handleFile}
+            disabled
+          /> */}
+        {videos.map((nivel, linha) => (
+          <Container>
+            {nivel.map((vid, coluna) => (
+              <Upload
+                progresso={vid.progresso}
+                error={vid.error}
+                uploaded={vid.uploaded}
+                handleFile={file => handleFile(file, linha, coluna)}
+                disabled
+              />
+            ))}
+          </Container>
+        ))}
+      </div>
     </>
   );
 }

@@ -3,14 +3,16 @@ import Dropzone from 'react-dropzone';
 import { MdAdd, MdError, MdCheckCircle } from 'react-icons/md';
 import { CircularProgressbar } from 'react-circular-progressbar';
 
-import { DropContainer, UploadMessage } from './styles';
+import { DropContainer, Container, UploadMessage } from './styles';
 
-export default function Upload({ onUpload, video }) {
+export default function Upload({ progresso, uploaded, error, handleFile }) {
   function renderDragMessage(isActive, isReject) {
     if (!isActive) {
       return (
         <UploadMessage>
-          {!video.progress && <MdAdd fill="#0434C4" size={50} />}
+          {!progresso && !error && !uploaded && (
+            <MdAdd fill="#0434C4" size={50} />
+          )}
         </UploadMessage>
       );
     }
@@ -21,33 +23,38 @@ export default function Upload({ onUpload, video }) {
   }
 
   return (
-    <Dropzone accept="video/*" onDropAccepted={onUpload}>
-      {({ getRootProps, getInputProps, isDragActive, isDragReject }) => (
-        <DropContainer
-          {...getRootProps()}
-          isDragActive={isDragActive}
-          isDragReject={isDragReject}
-        >
-          <input {...getInputProps()} />
-          {renderDragMessage(isDragActive, isDragReject)}
+    <Container>
+      <input type="text" placeholder="Nome" />
+      <Dropzone accept="video/*" multiple={false} onDropAccepted={handleFile}>
+        {({ getRootProps, getInputProps, isDragActive, isDragReject }) => (
+          <DropContainer
+            {...getRootProps()}
+            isDragActive={isDragActive}
+            isDragReject={isDragReject}
+            uploaded={uploaded}
+            error={error}
+          >
+            <input
+              disabled={uploaded || error || !!progresso}
+              {...getInputProps()}
+            />
+            {renderDragMessage(isDragActive, isDragReject)}
 
-          <div>
-            {!video.uploaded && !video.error && !video && (
+            {!uploaded && !error && !!progresso && (
               <CircularProgressbar
                 styles={{
                   root: { width: 40 },
                   path: { stroke: '#032791' },
                 }}
                 strokeWidth={10}
-                value={video.progress}
+                value={progresso}
               />
             )}
-
-            {video.uploaded && <MdCheckCircle size={48} cor="#75ff75" />}
-            {video.error && <MdError size={48} cor="#ff7575" />}
-          </div>
-        </DropContainer>
-      )}
-    </Dropzone>
+            {uploaded && <MdCheckCircle size={48} />}
+            {error && <MdError size={48} />}
+          </DropContainer>
+        )}
+      </Dropzone>
+    </Container>
   );
 }
