@@ -1,4 +1,6 @@
-import styled, { css } from 'styled-components';
+import styled, { css, keyframes } from 'styled-components';
+
+const dimensao = 200;
 
 const colorUndef = css`
   background: #aaa;
@@ -12,10 +14,18 @@ const colorFailed = css`
   background: #ff7575;
 `;
 
-let disabled = false;
-const dimensao = 200;
+const appear = keyframes`
+  from{
+    opacity:0;
+  }
+  to{
+    opacity:100%;
+  }
+`;
 
 export const Container = styled.div`
+  animation: ${appear} linear 0.2s;
+
   border-radius: 4px;
   width: ${dimensao}px;
   padding: 10px;

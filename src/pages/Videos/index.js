@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { uniqueId } from 'lodash';
 
 import Menu from '../../components/Menu';
@@ -7,24 +7,32 @@ import api from '~/services/api';
 import { Container, Header } from './styles';
 
 export default function Videos() {
+  let arrayVid = [[addNewTemplate()], [], []];
+
+  const [telaSm, setTelaSm] = useState(window.innerWidth < 575 && true);
   const [progresso, setProgresso] = useState(0);
   const [uploaded, setUploaded] = useState(false);
   const [error, setError] = useState(false);
   const [video, setVideo] = useState({});
-  const [videos, setVideos] = useState([
-    [
-      {
-        progresso: 0,
-        uploaded: false,
-        error: false,
-      },
-    ],
-    [],
-    [],
-  ]);
+  const [videos, setVideos] = useState(arrayVid);
+
+  window.addEventListener(
+    'resize',
+    () => {
+      if (window.innerWidth < 575) {
+        setTelaSm(true);
+        return true;
+      }
+      setTelaSm(false);
+      return false;
+    },
+    false
+  );
 
   function addNewTemplate() {
     const newTemplate = {
+      id: uniqueId(),
+      nome: '',
       progresso: 0,
       uploaded: false,
       error: false,
@@ -32,7 +40,7 @@ export default function Videos() {
     return newTemplate;
   }
 
-  function handleFile(file, linha, coluna) {
+  function handleFile(file, coluna, linha) {
     const dados = new FormData();
     dados.append('videoFile', file[0]);
 
@@ -42,24 +50,37 @@ export default function Videos() {
           // eslint-disable-next-line radix
           const progress = parseInt(Math.round((ev.loaded * 100) / ev.total));
           setProgresso(progress);
+          arrayVid = videos;
+          arrayVid[coluna][linha].progresso = progress;
+          setVideos(arrayVid);
         },
       })
       .then(success => {
-        setUploaded(true);
-        setError(false);
+        arrayVid = videos;
+        arrayVid[coluna][linha].uploaded = true;
+        arrayVid[coluna][linha].error = false;
+        arrayVid[coluna][linha].data = success.data;
+
+        if (coluna < 2) {
+          arrayVid[coluna + 1][linha] = addNewTemplate();
+        }
+        if (linha < 3 && coluna == 0) {
+          arrayVid[coluna][linha + 1] = addNewTemplate();
+        }
+        setVideos(arrayVid);
         setVideo(success.data);
-        setVideos(
-          videos.map((nivel, col) =>
-            nivel.map((vid, lin) =>
-              lin === 0 && col === 0 ? vid : vid.progresso
-            )
-          )
-        );
-        console.log(success);
+        // setUploaded(true);
+        // setError(false);
+        // setVideo(success.data);
+
         console.log(videos);
       })
       .catch(fail => {
-        setError(true);
+        arrayVid = videos;
+        arrayVid[coluna][linha].error = true;
+        setVideos(arrayVid);
+        setError(true); // retirar
+
         console.log(fail);
       });
   }
@@ -70,31 +91,27 @@ export default function Videos() {
       <div className="container mt-4">
         <Header>
           <h1>Gerenciar Vídeos</h1>
-          <button
-            type="submit"
-            className="d-flex ml-auto btn btn-light btn-lg m-0"
-          >
-            Concluir
-          </button>
+          <div className="ml-auto">
+            <button
+              type="submit"
+              className={`btn btn-light m-0 ${telaSm ? 'btn-sm' : 'btn-lg'}`}
+            >
+              Concluir
+            </button>
+          </div>
         </Header>
         <hr className="dropdown-divider mb-3" />
 
-        {/* <Upload
-            progresso={progresso}
-            error={error}
-            uploaded={uploaded}
-            handleFile={handleFile}
-            disabled
-          /> */}
-        {videos.map((nivel, linha) => (
-          <Container>
-            {nivel.map((vid, coluna) => (
+        {videos.map((nivel, coluna) => (
+          <Container key={uniqueId()}>
+            {nivel.map((vid, linha) => (
               <Upload
+                key={vid.id}
+                nome={vid.nome}
                 progresso={vid.progresso}
                 error={vid.error}
                 uploaded={vid.uploaded}
-                handleFile={file => handleFile(file, linha, coluna)}
-                disabled
+                handleFile={file => handleFile(file, coluna, linha)}
               />
             ))}
           </Container>

@@ -1,11 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Dropzone from 'react-dropzone';
 import { MdAdd, MdError, MdCheckCircle } from 'react-icons/md';
 import { CircularProgressbar } from 'react-circular-progressbar';
 
 import { DropContainer, Container, UploadMessage } from './styles';
 
-export default function Upload({ progresso, uploaded, error, handleFile }) {
+export default function Upload({
+  nome,
+  progresso,
+  uploaded,
+  error,
+  handleFile,
+}) {
   function renderDragMessage(isActive, isReject) {
     if (!isActive) {
       return (
@@ -24,7 +30,7 @@ export default function Upload({ progresso, uploaded, error, handleFile }) {
 
   return (
     <Container>
-      <input type="text" placeholder="Nome" />
+      <input type="text" placeholder="Nome" value={nome} />
       <Dropzone accept="video/*" multiple={false} onDropAccepted={handleFile}>
         {({ getRootProps, getInputProps, isDragActive, isDragReject }) => (
           <DropContainer

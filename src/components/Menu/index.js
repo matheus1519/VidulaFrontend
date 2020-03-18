@@ -7,11 +7,10 @@ export default function Menu() {
   return (
     <nav className="navbar navbar-expand-sm navbar-dark bg-primary py-1 px-3 px-sm-5 sticky-top">
       <Link className="navbar-brand d-flex align-items-center" to="/principal">
-        <MdOndemandVideo color="#4265CE" fontSize={34} />
+        <MdOndemandVideo fontSize={34} />
         <span className="ml-2">Vidula</span>
       </Link>
       <button
-        style={{ width: 'unset' }}
         className="navbar-toggler m-0"
         type="button"
         data-toggle="collapse"
