@@ -1,12 +1,11 @@
 import styled, { css } from 'styled-components';
 
+export const ContainerGrid = styled.div``;
+
 export const Container = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
-  grid-template-areas:
-    '00 01 02 03'
-    '10 11 12 13'
-    '20 21 22 23';
+  grid-auto-flow: column;
   grid-gap: 5px;
   overflow: auto;
   justify-items: center;
