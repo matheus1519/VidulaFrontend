@@ -1,6 +1,18 @@
 import styled, { css } from 'styled-components';
 
-export const ContainerGrid = styled.div``;
+const dimensao = 225;
+
+export const ContainerInput = styled.div`
+  width: ${dimensao}px;
+  padding: 10px;
+  > input {
+    padding: 5px 10px;
+    font-size: 12pt;
+    margin: 0;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+`;
 
 export const Container = styled.div`
   display: grid;

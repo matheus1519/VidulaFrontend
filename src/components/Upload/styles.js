@@ -24,19 +24,7 @@ const colorFailed = css`
 // `;
 // animation: ${appear} linear 0.2s;
 
-export const Container = styled.div`
-  border-radius: 4px;
-  width: ${dimensao}px;
-  padding: 10px;
-
-  > input {
-    padding: 5px 10px;
-    font-size: 12pt;
-    margin: 0;
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0;
-  }
-`;
+export const Container = styled.div``;
 
 export const DropContainer = styled.div.attrs({
   className: 'dropzone',
@@ -74,4 +62,5 @@ export const DropContainer = styled.div.attrs({
 
 export const UploadMessage = styled.p`
   color: #01103b;
+  margin: 0;
 `;

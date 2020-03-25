@@ -29,38 +29,35 @@ export default function Upload({
   }
 
   return (
-    <Container>
-      <input type="text" placeholder="Nome" value={nome} />
-      <Dropzone accept="video/*" multiple={false} onDropAccepted={handleFile}>
-        {({ getRootProps, getInputProps, isDragActive, isDragReject }) => (
-          <DropContainer
-            {...getRootProps()}
-            isDragActive={isDragActive}
-            isDragReject={isDragReject}
-            uploaded={uploaded}
-            error={error}
-          >
-            <input
-              disabled={uploaded || error || !!progresso}
-              {...getInputProps()}
-            />
-            {renderDragMessage(isDragActive, isDragReject)}
+    <Dropzone accept="video/*" multiple={false} onDropAccepted={handleFile}>
+      {({ getRootProps, getInputProps, isDragActive, isDragReject }) => (
+        <DropContainer
+          {...getRootProps()}
+          isDragActive={isDragActive}
+          isDragReject={isDragReject}
+          uploaded={uploaded}
+          error={error}
+        >
+          <input
+            disabled={uploaded || error || !!progresso}
+            {...getInputProps()}
+          />
+          {renderDragMessage(isDragActive, isDragReject)}
 
-            {!uploaded && !error && !!progresso && (
-              <CircularProgressbar
-                styles={{
-                  root: { width: 40 },
-                  path: { stroke: '#032791' },
-                }}
-                strokeWidth={10}
-                value={progresso}
-              />
-            )}
-            {uploaded && <MdCheckCircle size={48} />}
-            {error && <MdError size={48} />}
-          </DropContainer>
-        )}
-      </Dropzone>
-    </Container>
+          {!uploaded && !error && !!progresso && (
+            <CircularProgressbar
+              styles={{
+                root: { width: 40 },
+                path: { stroke: '#032791' },
+              }}
+              strokeWidth={10}
+              value={progresso}
+            />
+          )}
+          {uploaded && <MdCheckCircle fill="#EBF2FF" size={48} />}
+          {error && <MdError fill="#EBF2FF" size={48} />}
+        </DropContainer>
+      )}
+    </Dropzone>
   );
 }

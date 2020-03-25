@@ -1,11 +1,11 @@
 /* eslint-disable no-plusplus */
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { memo, useState, useEffect, useMemo } from 'react';
 import { uniqueId } from 'lodash';
 
-import Menu from '../../components/Menu';
+import Menu from '~/components/Menu';
 import Upload from '~/components/Upload';
 import api from '~/services/api';
-import { Container, Header } from './styles';
+import { Container, ContainerInput, Header } from './styles';
 
 export default function Videos() {
   let arrayVid = [[], [], []];
@@ -16,15 +16,12 @@ export default function Videos() {
         arrayVid[linha][coluna] = {};
       }
     }
+    arrayVid[0][0] = addNewTemplate();
   }
   inicializaArray();
-  arrayVid[0][0] = addNewTemplate();
 
   const [telaSm, setTelaSm] = useState(window.innerWidth < 575 && true);
-  const [progresso, setProgresso] = useState(0);
-  const [uploaded, setUploaded] = useState(false);
   const [error, setError] = useState(false);
-  const [video, setVideo] = useState({});
   const [videos, setVideos] = useState(arrayVid);
 
   window.addEventListener(
@@ -62,18 +59,7 @@ export default function Videos() {
           const progress = parseInt(Math.round((ev.loaded * 100) / ev.total));
           arrayVid = videos;
           arrayVid[linha][coluna].progresso = progress;
-          setProgresso(progress);
-          // setVideos([
-          //   arrayVid.map((nivel, lin) => [
-          //     nivel.map((vid, col) =>
-          //       linha === lin && coluna === col
-          //         ? {
-          //             progresso: progress,
-          //           }
-          //         : vid
-          //     ),
-          //   ]),
-          // ]);
+          setVideos([...arrayVid]);
         },
       })
       .then(success => {
@@ -86,23 +72,19 @@ export default function Videos() {
         if (linha < 2) {
           arrayVid[linha + 1][coluna] = addNewTemplate();
         }
-        if (coluna < 3 && linha == 0) {
+        if (coluna < 3 && linha === 0) {
           arrayVid[linha][coluna + 1] = addNewTemplate();
         }
-        setVideos(arrayVid);
-        setVideo(success.data);
-        // setUploaded(true);
-        // setError(false);
-        // setVideo(success.data);
+        setVideos([...arrayVid]);
         console.log(videos);
       })
       .catch(fail => {
         arrayVid = videos;
         arrayVid[linha][coluna].error = true;
         setVideos(arrayVid);
-        setError(true); // retirar
 
         console.log(fail);
+        console.log(videos);
       });
   }
 
@@ -128,14 +110,26 @@ export default function Videos() {
               vid.valueOf().id === undefined ? (
                 <div />
               ) : (
-                <Upload
-                  key={vid.id}
-                  nome={vid.nome}
-                  progresso={vid.progresso}
-                  error={vid.error}
-                  uploaded={vid.uploaded}
-                  handleFile={file => handleFile(file, linha, coluna)}
-                />
+                <ContainerInput>
+                  <input
+                    type="text"
+                    placeholder="Nome"
+                    onChange={e => {
+                      arrayVid = videos;
+                      arrayVid[linha][coluna].nome = e.target.value;
+                      setVideos(arrayVid);
+                    }}
+                    // value={vid.nome}
+                  />
+                  <Upload
+                    key={vid.id}
+                    nome={vid.nome}
+                    progresso={vid.progresso}
+                    error={vid.error}
+                    uploaded={vid.uploaded}
+                    handleFile={file => handleFile(file, linha, coluna)}
+                  />
+                </ContainerInput>
               )
             )}
           </Container>
