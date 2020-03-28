@@ -4,11 +4,11 @@ import { darken, lighten } from 'polished';
 import 'react-toastify/dist/ReactToastify.css';
 import 'react-circular-progressbar/dist/styles.css';
 
-// #01103B Texto
+// #01103B
 // #032791
 // #0434C4
 // #4265CE
-// #EBF2FF Fundo
+// #EBF2FF
 
 export default createGlobalStyle`
   * {
@@ -23,8 +23,8 @@ export default createGlobalStyle`
 
 
   html,body,#root {
-    height:100%;
     width:100%;
+    height:100vh;
   }
 
 

@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import { LinearProgress } from '@material-ui/core';
 import { MdOndemandVideo } from 'react-icons/md';
 import { toast, Zoom } from 'react-toastify';
 
+import { signInRequest } from '~/store/modules/auth/actions';
 import { Container, Button } from './estilos';
 import api from '~/services/api';
 import history from '~/services/history';
@@ -15,6 +17,7 @@ export default function Logar() {
   const [senhaAntes, setSenhaAntes] = useState('');
   const [errorEmail, setErroEmail] = useState(false);
   const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch();
 
   // useEffect(() => {
   //   const userId = localStorage.getItem('user');
@@ -76,27 +79,29 @@ export default function Logar() {
   async function handleSubmit(e) {
     e.preventDefault();
     setLoading(true);
-    let response = false;
-    try {
-      if (!errorEmail) {
-        response = await api.post('/usuarios/autenticar', {
-          email,
-          senha,
-        });
-      } else {
-        errorEmailMsg();
-        setLoading(false);
-        return;
-      }
-    } catch (error) {
-      errorServidor();
-      return;
-    }
-    if (response.data) {
-      history.push('/principal');
-    } else {
-      errorSenha();
-    }
+    dispatch(signInRequest(email, senha));
+
+    // let response = false;
+    // try {
+    //   if (!errorEmail) {
+    //     response = await api.post('/sessions', {
+    //       email,
+    //       senha,
+    //     });
+    //   } else {
+    //     errorEmailMsg();
+    //     setLoading(false);
+    //     return;
+    //   }
+    // } catch (error) {
+    //   errorServidor();
+    //   return;
+    // }
+    // if (response.data) {
+    //   history.push('/principal');
+    // } else {
+    //   errorSenha();
+    // }
 
     setLoading(false);
   }

@@ -54,12 +54,24 @@ export default function Videos() {
 
     api
       .post('/videos', dados, {
+        headers: {
+          Authorization: `Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJzZW1AZ21haWwuY29tIiwiZXhwIjoxNTg1NDMwNDQxLCJpYXQiOjE1ODU0MTI0NDF9.7FPNwY6cZ5LD3NKX813w2NK2HhVfFc8F8IR3eurkfL4OUz7ilVyn4qXivMkMse7AQrKfHBp2QMdFjjqA0SEjZA`,
+        },
         onUploadProgress: ev => {
           // eslint-disable-next-line radix
           const progress = parseInt(Math.round((ev.loaded * 100) / ev.total));
           arrayVid = videos;
           arrayVid[linha][coluna].progresso = progress;
           setVideos([...arrayVid]);
+          // setVideos(
+          //   videos.map((nivel, li) =>
+          //     nivel.map((vid, co) =>
+          //       li === linha && co === coluna
+          //         ? { ...vid, progresso: progress }
+          //         : vid
+          //     )
+          //   )
+          // );
         },
       })
       .then(success => {
@@ -76,7 +88,6 @@ export default function Videos() {
           arrayVid[linha][coluna + 1] = addNewTemplate();
         }
         setVideos([...arrayVid]);
-        console.log(videos);
       })
       .catch(fail => {
         arrayVid = videos;

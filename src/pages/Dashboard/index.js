@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react';
-import PropTypes from 'prop-types';
-import Menu from '../../components/Menu';
+// import JwtDecode from 'jwt-decode';
+import Menu from '~/components/Menu';
 import { Container, Video, ListVideos } from './estilos';
 
 export default function Dashboard() {
+  const token = '';
   // useEffect(() => {
   //   const userId = localStorage.getItem('user');
   //   if (userId === null) {
@@ -28,24 +29,23 @@ export default function Dashboard() {
               label="portuguese_captions"
             />
             {/* olhar mais sobre a tag track */}
-            Seu navegador esta desatualizado e não suporta a visualização de
+            Seu navegador está desatualizado e não suporta a visualização de
             videos!
           </video>
-          <div className="btn-group">
-            <button type="button" className="btn btn-outline-primary btn-lg">
-              Necessito de mais detalhes
-            </button>
-            <button type="button" className="btn btn-primary">
-              Entendi, prosseguir com conteúdo
-            </button>
-          </div>
+
+          <button type="button" className="btn btn-block btn-warning btn-lg">
+            Entendi, prosseguir com conteúdo
+          </button>
+          <button type="button" className="btn btn-block btn-outline-warning">
+            Preciso de mais detalhes
+          </button>
         </Video>
         <ListVideos>
           <ul>
-            <li>Video 1</li>
-            <li>Video 2</li>
-            <li>Video 3</li>
-            <li>Video 4</li>
+            <li>Introdução a algoritmos</li>
+            <li>Comandos de Entrada</li>
+            <li>Comandos de Saída</li>
+            <li>Estruturas de Decisão</li>
           </ul>
         </ListVideos>
       </Container>
