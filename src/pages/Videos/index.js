@@ -3,9 +3,10 @@ import React, { useState } from 'react';
 import { uniqueId } from 'lodash';
 
 import Menu from '~/components/Menu';
-import Upload from '~/components/Upload';
+import Upload from './Upload';
 import api from '~/services/api';
 import { Container, ContainerInput, Header } from './styles';
+import history from '~/services/history';
 
 export default function Videos() {
   let arrayVid = [[], [], []];
@@ -96,14 +97,40 @@ export default function Videos() {
   }
 
   function handleConcluir() {
-    videos.map((nivel, lin) => {
-      nivel.map((video, col) => {
+    let campoNome = 0;
+    videos.forEach(nivel => {
+      nivel.forEach(video => {
         if (video.nome === '') {
-          console.log('Preencha todos os nomes!');
-          return;
+          campoNome++;
         }
       });
     });
+
+    // if (campoNome > 0) {
+    //   console.log(`Faltam ${campoNome} a ser preenchido!`);
+    //   return;
+    // }
+
+    arrayVid = videos;
+    arrayVid.forEach((nivel, linha) => {
+      nivel.forEach((video, coluna) => {
+        if (typeof video.id === 'number') {
+          api.put(`/videos/${video.id}`, {
+            nome: video.nome,
+            proximo: { id: arrayVid[0][coluna + 1].id },
+            // !== undefined
+            //   ? arrayVid[0][coluna + 1].id
+            //   : null,
+            detalhe: { id: arrayVid[linha + 1][coluna].id },
+            // !== undefined
+            //   ? arrayVid[linha + 1][coluna].id
+            //   : null,
+          });
+        }
+      });
+    });
+
+    history.push('principal');
   }
 
   function handleNameChange(e, linha, coluna) {
