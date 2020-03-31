@@ -26,13 +26,6 @@ export default function Cadastrar() {
   const [loading, setLoading] = useState(false);
   const [errorEmail, setErroEmail] = useState(false);
 
-  // useEffect(() => {
-  //   const userId = localStorage.getItem('user');
-  //   if (userId != null) {
-  //     history.push('/principal');
-  //   }
-  // }, []);
-
   function errorEmailMsg() {
     toast.error('Já existe um usuário com esse email.', {
       transition: Zoom,

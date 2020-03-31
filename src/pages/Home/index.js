@@ -6,7 +6,7 @@ import Cadastrar from './auth/Cadastrar';
 import Logar from './auth/Logar';
 
 export default function Home() {
-  const [cadastro, setCadastro] = useState(true);
+  const [cadastro, setCadastro] = useState(false);
   return (
     <Container>
       <div className="info">

@@ -1,5 +1,5 @@
 /* eslint-disable no-plusplus */
-import React, { memo, useState, useEffect, useMemo } from 'react';
+import React, { useState } from 'react';
 import { uniqueId } from 'lodash';
 
 import Menu from '~/components/Menu';
@@ -9,6 +9,16 @@ import { Container, ContainerInput, Header } from './styles';
 
 export default function Videos() {
   let arrayVid = [[], [], []];
+
+  function addNewTemplate() {
+    return {
+      id: uniqueId(),
+      nome: '',
+      progresso: 0,
+      uploaded: false,
+      error: false,
+    };
+  }
 
   function inicializaArray() {
     for (let linha = 0; linha < 3; linha++) {
@@ -21,7 +31,6 @@ export default function Videos() {
   inicializaArray();
 
   const [telaSm, setTelaSm] = useState(window.innerWidth < 575 && true);
-  const [error, setError] = useState(false);
   const [videos, setVideos] = useState(arrayVid);
 
   window.addEventListener(
@@ -37,26 +46,12 @@ export default function Videos() {
     false
   );
 
-  function addNewTemplate() {
-    const newTemplate = {
-      id: uniqueId(),
-      nome: '',
-      progresso: 0,
-      uploaded: false,
-      error: false,
-    };
-    return newTemplate;
-  }
-
   function handleFile(file, linha, coluna) {
     const dados = new FormData();
     dados.append('videoFile', file[0]);
 
     api
       .post('/videos', dados, {
-        headers: {
-          Authorization: `Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJzZW1AZ21haWwuY29tIiwiZXhwIjoxNTg1NDMwNDQxLCJpYXQiOjE1ODU0MTI0NDF9.7FPNwY6cZ5LD3NKX813w2NK2HhVfFc8F8IR3eurkfL4OUz7ilVyn4qXivMkMse7AQrKfHBp2QMdFjjqA0SEjZA`,
-        },
         onUploadProgress: ev => {
           // eslint-disable-next-line radix
           const progress = parseInt(Math.round((ev.loaded * 100) / ev.total));
@@ -88,6 +83,7 @@ export default function Videos() {
           arrayVid[linha][coluna + 1] = addNewTemplate();
         }
         setVideos([...arrayVid]);
+        console.log(videos);
       })
       .catch(fail => {
         arrayVid = videos;
@@ -97,6 +93,28 @@ export default function Videos() {
         console.log(fail);
         console.log(videos);
       });
+  }
+
+  function handleConcluir() {
+    videos.map((nivel, lin) => {
+      nivel.map((video, col) => {
+        if (video.nome === '') {
+          console.log('Preencha todos os nomes!');
+          return;
+        }
+      });
+    });
+  }
+
+  function handleNameChange(e, linha, coluna) {
+    // arrayVid = videos;
+    // arrayVid[linha][coluna].nome = e.target.value;
+    // setVideos(arrayVid);
+    // console.log(e.target.value);
+  }
+
+  function handleNameValue(linha, coluna) {
+    return videos[linha][coluna].nome;
   }
 
   return (
@@ -109,6 +127,7 @@ export default function Videos() {
             <button
               type="submit"
               className={`btn btn-light m-0 ${telaSm ? 'btn-sm' : 'btn-lg'}`}
+              onClick={handleConcluir}
             >
               Concluir
             </button>
@@ -130,11 +149,11 @@ export default function Videos() {
                       arrayVid[linha][coluna].nome = e.target.value;
                       setVideos(arrayVid);
                     }}
+                    // value={handleNameValue(linha, coluna)}
                     // value={vid.nome}
                   />
                   <Upload
                     key={vid.id}
-                    nome={vid.nome}
                     progresso={vid.progresso}
                     error={vid.error}
                     uploaded={vid.uploaded}

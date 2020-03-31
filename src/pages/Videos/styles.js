@@ -1,4 +1,5 @@
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
+// import PerfectScrollbar from "react-perfect-scrollbar";
 
 const dimensao = 225;
 

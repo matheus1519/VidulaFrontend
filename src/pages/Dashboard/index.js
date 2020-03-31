@@ -1,17 +1,9 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 // import JwtDecode from 'jwt-decode';
 import Menu from '~/components/Menu';
 import { Container, Video, ListVideos } from './estilos';
 
 export default function Dashboard() {
-  const token = '';
-  // useEffect(() => {
-  //   const userId = localStorage.getItem('user');
-  //   if (userId === null) {
-  //     history.push('/entrar');
-  //   }
-  // }, []);
-
   return (
     <>
       <Menu />
@@ -19,7 +11,7 @@ export default function Dashboard() {
         <Video>
           <video controls>
             <source
-              src="http://localhost:8080/videofile/1584995698656Upload de arquivos- front-end com ReactJS - Diego Fernandes.mp4"
+              src="http://localhost:8080/videofile/1585568228685Upload de arquivos- front-end com ReactJS - Diego Fernandes.mp4"
               type="video/mp4"
             />
             <track

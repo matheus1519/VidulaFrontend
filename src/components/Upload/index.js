@@ -1,17 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Dropzone from 'react-dropzone';
 import { MdAdd, MdError, MdCheckCircle } from 'react-icons/md';
 import { CircularProgressbar } from 'react-circular-progressbar';
 
-import { DropContainer, Container, UploadMessage } from './styles';
+import { DropContainer, UploadMessage } from './styles';
 
-export default function Upload({
-  nome,
-  progresso,
-  uploaded,
-  error,
-  handleFile,
-}) {
+export default function Upload({ progresso, uploaded, error, handleFile }) {
   function renderDragMessage(isActive, isReject) {
     if (!isActive) {
       return (

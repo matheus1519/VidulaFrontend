@@ -1,9 +1,16 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { MdOndemandVideo } from 'react-icons/md';
-// import history from '../../services/history';
+import { useDispatch } from 'react-redux';
+import { signOut } from '~/store/modules/auth/actions';
 
 export default function Menu() {
+  const dispatch = useDispatch();
+
+  function handleSignOut() {
+    dispatch(signOut());
+  }
+
   return (
     <nav className="navbar navbar-expand-sm navbar-dark bg-primary py-1 px-3 px-sm-5 sticky-top">
       <Link className="navbar-brand d-flex align-items-center" to="/principal">
@@ -37,14 +44,16 @@ export default function Menu() {
           </li>
           <div className="dropdown-divider" />
           <li className="nav-item">
-            <Link
-              className="nav-link"
-              to="/sair"
+            <button
+              style={{ background: 'none', fontSize: 'unset', margin: 0 }}
+              type="submit"
+              className="nav-link btn-link"
+              onClick={handleSignOut}
               tabIndex="-1"
               aria-disabled="true"
             >
               Sair
-            </Link>
+            </button>
           </li>
         </ul>
       </div>

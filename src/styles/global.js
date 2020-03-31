@@ -2,6 +2,7 @@ import { createGlobalStyle } from 'styled-components';
 import { darken, lighten } from 'polished';
 
 import 'react-toastify/dist/ReactToastify.css';
+import 'react-perfect-scrollbar/dist/css/styles.css';
 import 'react-circular-progressbar/dist/styles.css';
 
 // #01103B

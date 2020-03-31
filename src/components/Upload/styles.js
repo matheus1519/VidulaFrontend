@@ -1,4 +1,4 @@
-import styled, { css, keyframes } from 'styled-components';
+import styled, { css } from 'styled-components';
 
 const dimensao = 225;
 
@@ -23,8 +23,6 @@ const colorFailed = css`
 //   }
 // `;
 // animation: ${appear} linear 0.2s;
-
-export const Container = styled.div``;
 
 export const DropContainer = styled.div.attrs({
   className: 'dropzone',
