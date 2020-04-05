@@ -1,6 +1,7 @@
 /* eslint-disable no-plusplus */
 import React, { useState } from 'react';
 import { uniqueId } from 'lodash';
+import { toast, Zoom } from 'react-toastify';
 
 import Menu from '~/components/Menu';
 import Upload from './Upload';
@@ -100,36 +101,43 @@ export default function Videos() {
     let campoNome = 0;
     videos.forEach(nivel => {
       nivel.forEach(video => {
-        if (video.nome === '') {
+        if (typeof video.id === 'number' && video.nome === '') {
           campoNome++;
         }
       });
     });
 
-    // if (campoNome > 0) {
-    //   console.log(`Faltam ${campoNome} a ser preenchido!`);
-    //   return;
-    // }
+    if (campoNome > 0) {
+      toast.error(`Faltam ${campoNome} a ser preenchido!`, {
+        transition: Zoom,
+      });
+      return;
+    }
 
     arrayVid = videos;
     arrayVid.forEach((nivel, linha) => {
       nivel.forEach((video, coluna) => {
         if (typeof video.id === 'number') {
           api.put(`/videos/${video.id}`, {
+            id: video.id,
             nome: video.nome,
-            proximo: { id: arrayVid[0][coluna + 1].id },
-            // !== undefined
-            //   ? arrayVid[0][coluna + 1].id
-            //   : null,
-            detalhe: { id: arrayVid[linha + 1][coluna].id },
-            // !== undefined
-            //   ? arrayVid[linha + 1][coluna].id
-            //   : null,
+            url: video.data.url,
+            proximo:
+              coluna < 3 && typeof arrayVid[0][coluna + 1].id === 'number'
+                ? { id: arrayVid[0][coluna + 1].id }
+                : null,
+            detalhe:
+              linha < 2 && typeof arrayVid[linha + 1][coluna].id === 'number'
+                ? { id: arrayVid[linha + 1][coluna].id }
+                : null,
           });
         }
       });
     });
 
+    toast.success('Plano de video criado com sucesso!', {
+      transition: Zoom,
+    });
     history.push('principal');
   }
 
