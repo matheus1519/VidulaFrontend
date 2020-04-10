@@ -1,12 +1,24 @@
 /* eslint-disable no-plusplus */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { MdAddCircleOutline } from 'react-icons/md';
+import { IoIosArrowBack } from 'react-icons/io';
+import { FaCheckCircle } from 'react-icons/fa';
 import { uniqueId } from 'lodash';
 import { toast, Zoom } from 'react-toastify';
+import TextField from '@material-ui/core/TextField';
+import Autocomplete from '@material-ui/lab/Autocomplete';
+import { makeStyles, lighten, darken } from '@material-ui/core/styles';
 
 import Menu from '~/components/Menu';
 import Upload from './Upload';
 import api from '~/services/api';
-import { Container, ContainerInput, Header } from './styles';
+import {
+  Container,
+  ContainerInput,
+  Header,
+  Modal,
+  ContainerMaior,
+} from './styles';
 import history from '~/services/history';
 
 export default function Videos() {
@@ -34,6 +46,20 @@ export default function Videos() {
 
   const [telaSm, setTelaSm] = useState(window.innerWidth < 575 && true);
   const [videos, setVideos] = useState(arrayVid);
+  const [listaDisciplinas, setListaDisciplinas] = useState([]);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [disciplina, setDisciplina] = useState('');
+  const [assunto, setAssunto] = useState('');
+  const [step, setStep] = useState(1);
+
+  async function loadDisciplinas() {
+    const response = await api.get('disciplinas');
+    setListaDisciplinas(response.data);
+  }
+
+  useEffect(() => {
+    loadDisciplinas();
+  }, [modalVisible]);
 
   window.addEventListener(
     'resize',
@@ -60,15 +86,6 @@ export default function Videos() {
           arrayVid = videos;
           arrayVid[linha][coluna].progresso = progress;
           setVideos([...arrayVid]);
-          // setVideos(
-          //   videos.map((nivel, li) =>
-          //     nivel.map((vid, co) =>
-          //       li === linha && co === coluna
-          //         ? { ...vid, progresso: progress }
-          //         : vid
-          //     )
-          //   )
-          // );
         },
       })
       .then(success => {
@@ -85,7 +102,6 @@ export default function Videos() {
           arrayVid[linha][coluna + 1] = addNewTemplate();
         }
         setVideos([...arrayVid]);
-        console.log(videos);
       })
       .catch(fail => {
         arrayVid = videos;
@@ -93,12 +109,13 @@ export default function Videos() {
         setVideos(arrayVid);
 
         console.log(fail);
-        console.log(videos);
       });
   }
 
-  function handleConcluir() {
+  function handleAvancar() {
     let campoNome = 0;
+    let interativo = false;
+
     videos.forEach(nivel => {
       nivel.forEach(video => {
         if (typeof video.id === 'number' && video.nome === '') {
@@ -107,99 +124,270 @@ export default function Videos() {
       });
     });
 
-    if (campoNome > 0) {
-      toast.error(`Faltam ${campoNome} a ser preenchido!`, {
+    // if (campoNome > 0) {
+    //   toast.error(`Faltam ${campoNome} a ser preenchido!`, {
+    //     transition: Zoom,
+    //   });
+    //   return;
+    // }
+
+    arrayVid = videos;
+
+    interativo = arrayVid[1].some(
+      vid => Object.values(vid).length > 0 && typeof vid.id !== 'string'
+    );
+
+    if (!interativo) {
+      toast.error(`Não há como aplicar interatividade no plano de aula atual`, {
         transition: Zoom,
       });
       return;
     }
 
-    arrayVid = videos;
     arrayVid.forEach((nivel, linha) => {
       nivel.forEach((video, coluna) => {
         if (typeof video.id === 'number') {
-          api.put(`/videos/${video.id}`, {
-            id: video.id,
-            nome: video.nome,
-            url: video.data.url,
-            proximo:
-              coluna < 3 && typeof arrayVid[0][coluna + 1].id === 'number'
-                ? { id: arrayVid[0][coluna + 1].id }
-                : null,
-            detalhe:
-              linha < 2 && typeof arrayVid[linha + 1][coluna].id === 'number'
-                ? { id: arrayVid[linha + 1][coluna].id }
-                : null,
-          });
+          try {
+            api.put(`/videos/${video.id}`, {
+              id: video.id,
+              nome: video.nome,
+              url: video.data.url,
+              proximo:
+                coluna < 3 && typeof arrayVid[0][coluna + 1].id === 'number'
+                  ? { id: arrayVid[0][coluna + 1].id }
+                  : null,
+              detalhe:
+                linha < 2 && typeof arrayVid[linha + 1][coluna].id === 'number'
+                  ? { id: arrayVid[linha + 1][coluna].id }
+                  : null,
+            });
+          } catch (err) {
+            console.log(err);
+          }
         }
       });
     });
 
-    toast.success('Plano de video criado com sucesso!', {
+    setModalVisible(true);
+  }
+
+  function handleConcluir() {
+    try {
+      api.post('assuntos', {
+        nome: assunto,
+        inicio: { id: videos[0][0].id },
+        disciplina: { id: disciplina.id },
+      });
+    } catch (err) {
+      console.log(err);
+    }
+
+    history.push('principal');
+    toast.success('Plano de aula criado com sucesso!', {
       transition: Zoom,
     });
-    history.push('principal');
   }
 
-  function handleNameChange(e, linha, coluna) {
-    // arrayVid = videos;
-    // arrayVid[linha][coluna].nome = e.target.value;
-    // setVideos(arrayVid);
-    // console.log(e.target.value);
+  async function handleAddDisciplina(e) {
+    const elemento = e.target;
+    await api.post('disciplinas', { nome: disciplina });
+    loadDisciplinas();
+    elemento.blur();
   }
 
-  function handleNameValue(linha, coluna) {
-    return videos[linha][coluna].nome;
+  function handleSelected(id) {
+    console.log(id);
   }
 
+  const useStyles = makeStyles({
+    button: {
+      fontSize: 13,
+      width: '100%',
+      textAlign: 'left',
+      paddingBottom: 8,
+      color: '#586069',
+      fontWeight: 600,
+      '&:hover,&:focus': {
+        color: '#0366d6',
+      },
+      '& span': {
+        width: '100%',
+      },
+      '& svg': {
+        width: 16,
+        height: 16,
+      },
+    },
+    option: {
+      minHeight: 'auto',
+      alignItems: 'flex-start',
+      padding: 8,
+      '&[aria-selected="true"]': {
+        backgroundColor: darken('#ebf2ff', 0.1),
+      },
+      '&[data-focus="true"]': {
+        backgroundColor: '#ebf2ff',
+      },
+      color: '#01103b',
+    },
+  });
+  const classes = useStyles();
   return (
     <>
-      <Menu />
-      <div className="container mt-4">
-        <Header>
-          <h1>Gerenciar Vídeos</h1>
-          <div className="ml-auto">
-            <button
-              type="submit"
-              className={`btn btn-light m-0 ${telaSm ? 'btn-sm' : 'btn-lg'}`}
-              onClick={handleConcluir}
-            >
-              Concluir
-            </button>
-          </div>
-        </Header>
-        <hr className="dropdown-divider mb-3" />
-        {videos.map((nivel, linha) => (
-          <Container key={uniqueId()}>
-            {nivel.map((vid, coluna) =>
-              vid.valueOf().id === undefined ? (
-                <div />
-              ) : (
-                <ContainerInput>
-                  <input
-                    type="text"
-                    placeholder="Nome"
-                    onChange={e => {
-                      arrayVid = videos;
-                      arrayVid[linha][coluna].nome = e.target.value;
-                      setVideos(arrayVid);
+      {modalVisible && (
+        <Modal>
+          {step === 1 && (
+            <div>
+              <h4>
+                Informe em qual disciplina você quer inserir este assunto!
+              </h4>
+              <Autocomplete
+                blurOnSelect
+                classes={{
+                  option: classes.option,
+                  paper: classes.paper,
+                }}
+                id="controlled-demo"
+                noOptionsText="Nenhuma disciplina encontrada"
+                options={listaDisciplinas}
+                getOptionLabel={option => listaDisciplinas && option.nome}
+                getOptionSelected={(option, op) => setDisciplina(option, op)}
+                onChange={(e, value) => {
+                  setDisciplina(value);
+                }}
+                style={{
+                  maxWidth: 300,
+                }}
+                renderInput={params => (
+                  <TextField
+                    onChange={event => {
+                      setDisciplina(event.target.value);
                     }}
-                    // value={handleNameValue(linha, coluna)}
-                    // value={vid.nome}
+                    value={disciplina}
+                    onKeyPress={e => {
+                      if (e.which === 13) {
+                        handleAddDisciplina(e);
+                      }
+                    }}
+                    {...params}
+                    label="Selecione uma disciplina"
+                    margin="normal"
                   />
-                  <Upload
-                    key={vid.id}
-                    progresso={vid.progresso}
-                    error={vid.error}
-                    uploaded={vid.uploaded}
-                    handleFile={file => handleFile(file, linha, coluna)}
+                )}
+              />
+              <button
+                id="add"
+                type="button"
+                className="btn btn-outline-secondary"
+                onClick={handleAddDisciplina}
+                onFocus={() => {}}
+              >
+                <MdAddCircleOutline fill="#6c757d" size={24} />
+              </button>
+              <button
+                type="button"
+                className="btn btn-primary ml-auto d-flex"
+                onClick={() => {
+                  console.log(disciplina);
+                  setStep(2);
+                  localStorage.setItem('step', step);
+                }}
+              >
+                Avançar
+              </button>
+            </div>
+          )}
+          {step !== 1 && (
+            <div>
+              <h4>Insira um nome correspondente ao assunto da aula</h4>
+              <TextField
+                id="standard-size-normal"
+                label="Assunto"
+                onChange={e => setAssunto(e.target.value)}
+                value={assunto}
+                style={{ marginTop: 10, width: 300 }}
+              />
+              <div id="step2">
+                <button
+                  type="button"
+                  className="btn btn-outline-primary"
+                  onClick={() => {
+                    setStep(1);
+                    localStorage.setItem('step', step);
+                  }}
+                >
+                  <IoIosArrowBack
+                    size={26}
+                    style={{ marginTop: -5 }}
+                    fill="#007bff"
                   />
-                </ContainerInput>
-              )
-            )}
-          </Container>
-        ))}
-      </div>
+                  Voltar
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-primary"
+                  onClick={handleConcluir}
+                >
+                  <FaCheckCircle
+                    style={{ marginTop: -5, marginRight: 5 }}
+                    className="concluir"
+                    size={26}
+                  />
+                  Concluir
+                </button>
+              </div>
+            </div>
+          )}
+        </Modal>
+      )}
+      <ContainerMaior>
+        <Menu />
+        <div className="container mt-4">
+          <Header>
+            <h1>Gerenciar Vídeos</h1>
+            <div className="ml-auto">
+              <button
+                type="submit"
+                className={`btn btn-light m-0 ${telaSm ? 'btn-sm' : 'btn-lg'}`}
+                onClick={handleAvancar}
+              >
+                Avançar
+              </button>
+            </div>
+          </Header>
+          <hr className="dropdown-divider mb-3" />
+          {videos.map((nivel, linha) => (
+            <Container key={uniqueId()}>
+              {nivel.map((vid, coluna) =>
+                vid.valueOf().id === undefined ? (
+                  <div />
+                ) : (
+                  <ContainerInput>
+                    <input
+                      type="text"
+                      placeholder="Nome"
+                      onChange={e => {
+                        arrayVid = videos;
+                        arrayVid[linha][coluna].nome = e.target.value;
+                        setVideos(arrayVid);
+                      }}
+                      // value={handleNameValue(linha, coluna)}
+                      // value={vid.nome}
+                    />
+                    <Upload
+                      key={vid.id}
+                      progresso={vid.progresso}
+                      error={vid.error}
+                      uploaded={vid.uploaded}
+                      handleFile={file => handleFile(file, linha, coluna)}
+                    />
+                  </ContainerInput>
+                )
+              )}
+            </Container>
+          ))}
+        </div>
+      </ContainerMaior>
     </>
   );
 }

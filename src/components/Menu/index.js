@@ -12,7 +12,7 @@ export default function Menu() {
   }
 
   return (
-    <nav className="navbar navbar-expand-sm navbar-dark bg-primary py-1 px-3 px-sm-5 sticky-top">
+    <nav className="navbar navbar-expand-sm navbar-dark bg-primary py-1 px-3 px-sm-5 ">
       <Link className="navbar-brand d-flex align-items-center" to="/principal">
         <MdOndemandVideo fontSize={34} />
         <span className="ml-2">Vidula</span>

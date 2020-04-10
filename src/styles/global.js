@@ -37,6 +37,7 @@ export default createGlobalStyle`
     align-items: center;
   }
 
+
   input:focus {
     outline: 1px solid #4265CE;
     outline-offset: 0.5px;

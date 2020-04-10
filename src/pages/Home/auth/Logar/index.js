@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import { LinearProgress } from '@material-ui/core';
 import { MdOndemandVideo } from 'react-icons/md';
 import { toast, Zoom } from 'react-toastify';
 
-import { signInRequest } from '~/store/modules/auth/actions';
+import { signInRequest, signFailure } from '~/store/modules/auth/actions';
 import { Container, Button } from './estilos';
 import api from '~/services/api';
 
@@ -25,6 +25,12 @@ export default function Logar() {
       borderRadius: 5,
     },
   });
+
+  useEffect(() => {
+    if (loading) {
+      dispatch(signFailure());
+    }
+  }, []);
 
   function errorEmailMsg() {
     toast.error('Não existe um usuário com esse email.', {
@@ -62,7 +68,11 @@ export default function Logar() {
   async function handleSubmit(e) {
     e.preventDefault();
     if (!errorEmail) {
-      dispatch(signInRequest(email, senha));
+      try {
+        dispatch(signInRequest(email, senha));
+      } catch (err) {
+        console.log(err);
+      }
     } else {
       errorEmailMsg();
     }

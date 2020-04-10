@@ -34,14 +34,14 @@ export function* setToken({ payload }) {
   if (!payload) return;
 
   const { token } = payload.auth;
-  const tokenDecode = JwtDecode(token);
+  let tokenDecode;
 
   if (token) {
     api.defaults.headers.Authorization = `Bearer ${token}`;
-  }
-
-  if (tokenDecode.exp * 1000 < new Date().getTime()) {
-    yield put(signOut());
+    tokenDecode = JwtDecode(token);
+    if (tokenDecode.exp * 1000 < new Date().getTime()) {
+      yield put(signOut());
+    }
   }
 }
 
@@ -50,7 +50,7 @@ export function signOutSaga() {
 }
 
 export default all([
+  takeLatest('@auth/SIGN_OUT', signOutSaga),
   takeLatest('persist/REHYDRATE', setToken),
   takeLatest('@auth/SIGN_IN_REQUEST', signIn),
-  takeLatest('@auth/SIGN_OUT', signOutSaga),
 ]);
