@@ -21,6 +21,9 @@ export default createGlobalStyle`
     font-family: 'Comfortaa', sans-serif;
     color: #EBF2FF
   }
+  *:hover{
+    transition: all .3s;
+  }
 
 
   html,body,#root {
@@ -110,7 +113,7 @@ export default createGlobalStyle`
   button.secundario:active {
     background: ${darken(0.2, '#4265CE')};
   }
-  .btn-primary, .btn-secondary {
+  .btn-primary, .btn-secundary{
     height:51px;
     font-size:14pt;
   }

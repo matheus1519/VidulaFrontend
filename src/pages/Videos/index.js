@@ -1,13 +1,15 @@
 /* eslint-disable no-plusplus */
 import React, { useState, useEffect } from 'react';
 import { MdAddCircleOutline } from 'react-icons/md';
-import { IoIosArrowBack } from 'react-icons/io';
+import { IoIosArrowBack, IoIosCloseCircle } from 'react-icons/io';
 import { FaCheckCircle } from 'react-icons/fa';
+import { AiFillPlaySquare } from 'react-icons/ai';
+
 import { uniqueId } from 'lodash';
 import { toast, Zoom } from 'react-toastify';
 import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
-import { makeStyles, lighten, darken } from '@material-ui/core/styles';
+import { makeStyles, darken } from '@material-ui/core/styles';
 
 import Menu from '~/components/Menu';
 import Upload from './Upload';
@@ -18,8 +20,10 @@ import {
   Header,
   Modal,
   ContainerMaior,
+  ModalTool,
 } from './styles';
 import history from '~/services/history';
+import tccEsquema from '~/assets/tcc-esquema.svg';
 
 export default function Videos() {
   let arrayVid = [[], [], []];
@@ -48,6 +52,7 @@ export default function Videos() {
   const [videos, setVideos] = useState(arrayVid);
   const [listaDisciplinas, setListaDisciplinas] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
+  const [toolTip, setToolTip] = useState(false);
   const [disciplina, setDisciplina] = useState('');
   const [assunto, setAssunto] = useState('');
   const [step, setStep] = useState(1);
@@ -124,12 +129,12 @@ export default function Videos() {
       });
     });
 
-    // if (campoNome > 0) {
-    //   toast.error(`Faltam ${campoNome} a ser preenchido!`, {
-    //     transition: Zoom,
-    //   });
-    //   return;
-    // }
+    if (campoNome > 0) {
+      toast.error(`Faltam ${campoNome} a ser preenchido!`, {
+        transition: Zoom,
+      });
+      return;
+    }
 
     arrayVid = videos;
 
@@ -195,10 +200,6 @@ export default function Videos() {
     elemento.blur();
   }
 
-  function handleSelected(id) {
-    console.log(id);
-  }
-
   const useStyles = makeStyles({
     button: {
       fontSize: 13,
@@ -232,8 +233,25 @@ export default function Videos() {
     },
   });
   const classes = useStyles();
+
   return (
     <>
+      {toolTip && (
+        <ModalTool>
+          <div>
+            <h4>Esquema de organização dos videos interativos</h4>
+            <img src={tccEsquema} alt="Esquema de Aulas interativas" />
+            <IoIosCloseCircle
+              onClick={() => {
+                setToolTip(false);
+              }}
+              fill="#dc3545"
+              size={60}
+            />
+            <div className="bac" />
+          </div>
+        </ModalTool>
+      )}
       {modalVisible && (
         <Modal>
           {step === 1 && (
@@ -288,7 +306,6 @@ export default function Videos() {
                 type="button"
                 className="btn btn-primary ml-auto d-flex"
                 onClick={() => {
-                  console.log(disciplina);
                   setStep(2);
                   localStorage.setItem('step', step);
                 }}
@@ -344,7 +361,16 @@ export default function Videos() {
         <Menu />
         <div className="container mt-4">
           <Header>
-            <h1>Gerenciar Vídeos</h1>
+            <div className="d-flex">
+              <h1>Gerenciar Vídeos</h1>
+              <AiFillPlaySquare
+                onClick={() => {
+                  setToolTip(true);
+                }}
+                size={48}
+                className="ml-3"
+              />
+            </div>
             <div className="ml-auto">
               <button
                 type="submit"

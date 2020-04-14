@@ -1,46 +1,212 @@
-import React from 'react';
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
+import React, { useState, useEffect } from 'react';
 // import JwtDecode from 'jwt-decode';
 import Menu from '~/components/Menu';
-import { Container, Video, ListVideos } from './estilos';
+import Modal from '~/components/Modal';
+import {
+  ContainerMaior,
+  ContainerVidList,
+  Video,
+  ListVideos,
+  DisciplinaList,
+  Header,
+  ButtonGroup,
+} from './estilos';
+import api from '~/services/api';
 
 export default function Dashboard() {
+  const [disciplinas, setDisciplinas] = useState([]);
+  const dis = localStorage.getItem('disciplina');
+  const [disciplina, setDisciplina] = useState(JSON.parse(dis) || {});
+  const [assunto, setAssunto] = useState(disciplina.assuntos[0]);
+  const [video, setVideo] = useState(assunto.inicio);
+  const [visible, setVisible] = useState(!dis);
+  const [endedOfVideo, setEndedOfVideo] = useState(false);
+  const [videoVisible, setVideoVisible] = useState(true);
+
+  function elVideoAdd(url) {
+    const videoEl = document.createElement('video');
+    videoEl.setAttribute('controls', 'controls');
+    videoEl.setAttribute('autoplay', 'autoplay');
+    videoEl.setAttribute('preload', 'auto');
+
+    const sourceEl = document.createElement('source');
+    sourceEl.setAttribute('src', url);
+    sourceEl.setAttribute('type', 'video/mp4');
+
+    const textEl = document.createTextNode(
+      'Seu navegador está desatualizado e não suporta a visualização de videos!'
+    );
+
+    videoEl.appendChild(sourceEl);
+    videoEl.appendChild(textEl);
+    videoEl.onended = () => {
+      setEndedOfVideo(true);
+    };
+
+    return videoEl;
+  }
+
+  useEffect(() => {
+    async function loadDisciplinas() {
+      try {
+        const response = await api.get('disciplinas');
+        setDisciplinas(response.data);
+      } catch (err) {
+        console.log(err);
+      }
+    }
+    loadDisciplinas();
+  }, []);
+
+  function handleChangeTagVideo(url) {
+    const vid = document.querySelector('video');
+    const pai = vid.parentNode;
+    pai.appendChild(elVideoAdd(url));
+    vid.remove();
+  }
+
+  function handleButtonDetail() {
+    setVideo(video.detalhe);
+
+    handleChangeTagVideo(video.detalhe.url);
+    setEndedOfVideo(false);
+  }
+
+  function handleProximo() {
+    setVideo(video.proximo);
+
+    handleChangeTagVideo(video.proximo.url);
+
+    setEndedOfVideo(false);
+  }
+
+  function handleTerminar() {
+    console.log('Indo para o proximo assunto...');
+  }
+
   return (
     <>
-      <Menu />
-      <Container className="container mt-4">
-        <Video>
-          <video controls>
-            <source
-              src="http://localhost:8080/videofile/1585568228685Upload de arquivos- front-end com ReactJS - Diego Fernandes.mp4"
-              type="video/mp4"
-            />
-            <track
-              src="captions_pt.vtt"
-              kind="captions"
-              srcLang="pt"
-              label="portuguese_captions"
-            />
-            {/* olhar mais sobre a tag track */}
-            Seu navegador está desatualizado e não suporta a visualização de
-            videos!
-          </video>
+      {visible && (
+        <Modal closeable={disciplinas.length === 0}>
+          <h2 className="mb-4">
+            {disciplinas.length === 0
+              ? 'Não existe disciplinas!'
+              : 'Seleciona a Disciplina'}
+          </h2>
+          <DisciplinaList>
+            {disciplinas.map(disc => (
+              <li
+                onClick={() => {
+                  setDisciplina(disc);
+                  setAssunto(disc.assuntos[0]);
+                  setVideo(disc.assuntos[0].inicio);
+                  localStorage.setItem('disciplina', JSON.stringify(disc));
+                  setVisible(false);
+                }}
+              >
+                <h5>{disc.nome}</h5>
+                <p>{disc.descricao}</p>
+              </li>
+            ))}
+          </DisciplinaList>
+        </Modal>
+      )}
+      <ContainerMaior>
+        <Menu />
+        <div className="container mt-4">
+          <Header>
+            <h1>{disciplina.nome || 'Nenhuma disciplina selecionada'}</h1>
+            <button
+              type="submit"
+              className="btn btn-light btn-lg m-0"
+              onClick={() => setVisible(true)}
+            >
+              Mudar
+            </button>
+          </Header>
+          <hr className="dropdown-divider mb-4" />
+          <ContainerVidList>
+            {assunto.inicio && (
+              <Video>
+                <video controls autoPlay preload="auto">
+                  <source src={video.url} type="video/mp4" />
+                  {/* <track
+            src="captions_pt.vtt"
+            kind="captions"
+            srcLang="pt"
+            label="portuguese_captions"
+          /> */}
+                  {/* olhar mais sobre a tag track */}
+                  Seu navegador está desatualizado e não suporta a visualização
+                  de videos!
+                </video>
 
-          <button type="button" className="btn btn-block btn-warning btn-lg">
-            Entendi, prosseguir com conteúdo
-          </button>
-          <button type="button" className="btn btn-block btn-outline-warning">
-            Preciso de mais detalhes
-          </button>
-        </Video>
-        <ListVideos>
-          <ul>
-            <li>Introdução a algoritmos</li>
-            <li>Comandos de Entrada</li>
-            <li>Comandos de Saída</li>
-            <li>Estruturas de Decisão</li>
-          </ul>
-        </ListVideos>
-      </Container>
+                {endedOfVideo && (
+                  <ButtonGroup>
+                    {video.proximo === null && (
+                      <button
+                        onClick={handleTerminar}
+                        type="button"
+                        className="btn btn-block btn-warning btn-lg"
+                      >
+                        Entendi, terminar assunto!
+                      </button>
+                    )}
+                    {!!video.proximo && (
+                      <button
+                        onClick={handleProximo}
+                        type="button"
+                        className="btn btn-block btn-warning btn-lg"
+                      >
+                        Entendi, prosseguir com conteúdo
+                      </button>
+                    )}
+                    {video.detalhe === null &&
+                      video.proximo !== null &&
+                      handleProximo()}
+                    {video.detalhe === null &&
+                      video.proximo === null &&
+                      handleTerminar()}
+                    {video.detalhe && (
+                      <button
+                        onClick={handleButtonDetail}
+                        type="button"
+                        className="btn btn-block btn-outline-warning"
+                      >
+                        Preciso de mais detalhes
+                      </button>
+                    )}
+                  </ButtonGroup>
+                )}
+              </Video>
+            )}
+            <ListVideos>
+              <h4>Assuntos</h4>
+              <ul>
+                {disciplina.assuntos ? (
+                  disciplina.assuntos.map(as => (
+                    <li
+                      key={as.id}
+                      onClick={() => {
+                        setVideo(as.inicio);
+                        setAssunto(as);
+                        setEndedOfVideo(false);
+                        handleChangeTagVideo(as.inicio.url);
+                      }}
+                    >
+                      {as.nome}
+                    </li>
+                  ))
+                ) : (
+                  <h6>Não há assuntos disponíveis</h6>
+                )}
+              </ul>
+            </ListVideos>
+          </ContainerVidList>
+        </div>
+      </ContainerMaior>
     </>
   );
 }

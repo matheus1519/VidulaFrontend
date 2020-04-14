@@ -12,7 +12,7 @@ export default function Home() {
       <div className="info">
         <div>
           <header>
-            <MdOndemandVideo color="#4265CE" size={80} />
+            <MdOndemandVideo size={80} />
             <h1>Vidula</h1>
           </header>
           <p>
@@ -23,7 +23,7 @@ export default function Home() {
           <button
             type="button"
             onClick={() => setCadastro(!cadastro)}
-            className="btn btn-secondary btn-lg"
+            className="btn btn-secondary"
           >
             {cadastro ? 'Já tenho conta' : 'Criar Conta'}
           </button>
