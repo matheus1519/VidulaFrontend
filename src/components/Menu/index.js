@@ -1,6 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { MdOndemandVideo } from 'react-icons/md';
+import { FiLogOut } from 'react-icons/fi';
+
 import { useDispatch } from 'react-redux';
 import { signOut } from '~/store/modules/auth/actions';
 
@@ -53,6 +55,7 @@ export default function Menu() {
               aria-disabled="true"
             >
               Sair
+              <FiLogOut className="ml-2" style={{ marginTop: -4 }} size={18} />
             </button>
           </li>
         </ul>

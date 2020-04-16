@@ -54,6 +54,10 @@ export default function Videos() {
   const [modalVisible, setModalVisible] = useState(false);
   const [toolTip, setToolTip] = useState(false);
   const [disciplina, setDisciplina] = useState('');
+  const [objDisciplina, setObjDisciplina] = useState({});
+  const [descricao, setDescricao] = useState('');
+  const [descricaoVisible, setDescricaoVisible] = useState(false);
+
   const [assunto, setAssunto] = useState('');
   const [step, setStep] = useState(1);
 
@@ -195,9 +199,21 @@ export default function Videos() {
 
   async function handleAddDisciplina(e) {
     const elemento = e.target;
-    await api.post('disciplinas', { nome: disciplina });
+    setDescricaoVisible(true);
+    const response = await api.post('disciplinas', { nome: disciplina });
+    setObjDisciplina(response.data);
     loadDisciplinas();
     elemento.blur();
+  }
+
+  async function handleUpdateDisciplina() {
+    if (descricaoVisible) {
+      await api.put(`disciplinas/${objDisciplina.id}`, {
+        ...objDisciplina,
+        descricao,
+      });
+    }
+    setStep(2);
   }
 
   const useStyles = makeStyles({
@@ -269,7 +285,6 @@ export default function Videos() {
                 noOptionsText="Nenhuma disciplina encontrada"
                 options={listaDisciplinas}
                 getOptionLabel={option => listaDisciplinas && option.nome}
-                getOptionSelected={(option, op) => setDisciplina(option, op)}
                 onChange={(e, value) => {
                   setDisciplina(value);
                 }}
@@ -302,13 +317,19 @@ export default function Videos() {
               >
                 <MdAddCircleOutline fill="#6c757d" size={24} />
               </button>
+              {descricaoVisible && (
+                <TextField
+                  id="standard-basic"
+                  label="Descrição"
+                  style={{ width: 558, marginTop: 20 }}
+                  onChange={e => setDescricao(e.target.value)}
+                  value={descricao}
+                />
+              )}
               <button
                 type="button"
-                className="btn btn-primary ml-auto d-flex"
-                onClick={() => {
-                  setStep(2);
-                  localStorage.setItem('step', step);
-                }}
+                className="btn btn-primary ml-auto d-flex mt-3"
+                onClick={handleUpdateDisciplina}
               >
                 Avançar
               </button>

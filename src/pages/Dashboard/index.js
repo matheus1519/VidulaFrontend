@@ -19,11 +19,12 @@ export default function Dashboard() {
   const [disciplinas, setDisciplinas] = useState([]);
   const dis = localStorage.getItem('disciplina');
   const [disciplina, setDisciplina] = useState(JSON.parse(dis) || {});
-  const [assunto, setAssunto] = useState(disciplina.assuntos[0]);
+  const [assunto, setAssunto] = useState(
+    disciplina.assuntos ? disciplina.assuntos[0] : {}
+  );
   const [video, setVideo] = useState(assunto.inicio);
   const [visible, setVisible] = useState(!dis);
   const [endedOfVideo, setEndedOfVideo] = useState(false);
-  const [videoVisible, setVideoVisible] = useState(true);
 
   function elVideoAdd(url) {
     const videoEl = document.createElement('video');
@@ -69,21 +70,39 @@ export default function Dashboard() {
 
   function handleButtonDetail() {
     setVideo(video.detalhe);
-
-    handleChangeTagVideo(video.detalhe.url);
+    document.querySelector('video').load();
     setEndedOfVideo(false);
   }
 
   function handleProximo() {
     setVideo(video.proximo);
 
-    handleChangeTagVideo(video.proximo.url);
+    document.querySelector('video').load();
 
     setEndedOfVideo(false);
   }
 
   function handleTerminar() {
-    console.log('Indo para o proximo assunto...');
+    disciplina.assuntos.forEach(assuntoArray => {
+      if (assuntoArray.id === assunto.id) {
+        const posicao = disciplina.assuntos.indexOf(assunto);
+        if (posicao < disciplina.assuntos.length - 1) {
+          setVideo(disciplina.assuntos[posicao + 1].inicio);
+          setEndedOfVideo(false);
+          document.querySelector('video').load();
+        }
+      } else {
+        console.log('fsdfsd');
+      }
+    });
+  }
+
+  function handleDecisions() {
+    if (video.detalhe === null && video.proximo !== null) {
+      handleProximo();
+    } else if (video.detalhe === null && video.proximo === null) {
+      handleTerminar();
+    }
   }
 
   return (
@@ -102,6 +121,9 @@ export default function Dashboard() {
                   setDisciplina(disc);
                   setAssunto(disc.assuntos[0]);
                   setVideo(disc.assuntos[0].inicio);
+                  setEndedOfVideo(false);
+                  document.querySelector('video').load();
+
                   localStorage.setItem('disciplina', JSON.stringify(disc));
                   setVisible(false);
                 }}
@@ -127,61 +149,62 @@ export default function Dashboard() {
             </button>
           </Header>
           <hr className="dropdown-divider mb-4" />
+          <h4>{video ? video.nome : 'Sem nome'}</h4>
           <ContainerVidList>
-            {assunto.inicio && (
-              <Video>
-                <video controls autoPlay preload="auto">
-                  <source src={video.url} type="video/mp4" />
-                  {/* <track
-            src="captions_pt.vtt"
-            kind="captions"
-            srcLang="pt"
-            label="portuguese_captions"
-          /> */}
-                  {/* olhar mais sobre a tag track */}
-                  Seu navegador está desatualizado e não suporta a visualização
-                  de videos!
-                </video>
+            <Video>
+              <video
+                onEnded={() => {
+                  setEndedOfVideo(true);
+                }}
+                controls
+                autoPlay
+                preload="auto"
+              >
+                <source src={video && video.url} type="video/mp4" />
+                <track
+                  src="captions_pt.vtt"
+                  kind="captions"
+                  srcLang="pt"
+                  label="portuguese_captions"
+                />
+                {/* olhar mais sobre a tag track */}
+                Seu navegador está desatualizado e não suporta a visualização de
+                videos!
+              </video>
 
-                {endedOfVideo && (
-                  <ButtonGroup>
-                    {video.proximo === null && (
-                      <button
-                        onClick={handleTerminar}
-                        type="button"
-                        className="btn btn-block btn-warning btn-lg"
-                      >
-                        Entendi, terminar assunto!
-                      </button>
-                    )}
-                    {!!video.proximo && (
-                      <button
-                        onClick={handleProximo}
-                        type="button"
-                        className="btn btn-block btn-warning btn-lg"
-                      >
-                        Entendi, prosseguir com conteúdo
-                      </button>
-                    )}
-                    {video.detalhe === null &&
-                      video.proximo !== null &&
-                      handleProximo()}
-                    {video.detalhe === null &&
-                      video.proximo === null &&
-                      handleTerminar()}
-                    {video.detalhe && (
-                      <button
-                        onClick={handleButtonDetail}
-                        type="button"
-                        className="btn btn-block btn-outline-warning"
-                      >
-                        Preciso de mais detalhes
-                      </button>
-                    )}
-                  </ButtonGroup>
-                )}
-              </Video>
-            )}
+              {endedOfVideo && (
+                <ButtonGroup>
+                  {video.proximo === null && (
+                    <button
+                      onClick={handleTerminar}
+                      type="button"
+                      className="btn btn-block btn-warning btn-lg"
+                    >
+                      Entendi, terminar assunto!
+                    </button>
+                  )}
+                  {!!video.proximo && (
+                    <button
+                      onClick={handleProximo}
+                      type="button"
+                      className="btn btn-block btn-warning btn-lg"
+                    >
+                      Entendi, prosseguir com conteúdo
+                    </button>
+                  )}
+                  {handleDecisions()}
+                  {video.detalhe && (
+                    <button
+                      onClick={handleButtonDetail}
+                      type="button"
+                      className="btn btn-block btn-outline-warning"
+                    >
+                      Preciso de mais detalhes
+                    </button>
+                  )}
+                </ButtonGroup>
+              )}
+            </Video>
             <ListVideos>
               <h4>Assuntos</h4>
               <ul>
@@ -191,9 +214,9 @@ export default function Dashboard() {
                       key={as.id}
                       onClick={() => {
                         setVideo(as.inicio);
+                        document.querySelector('video').load();
                         setAssunto(as);
                         setEndedOfVideo(false);
-                        handleChangeTagVideo(as.inicio.url);
                       }}
                     >
                       {as.nome}

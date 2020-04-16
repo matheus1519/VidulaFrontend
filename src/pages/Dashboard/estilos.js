@@ -38,12 +38,12 @@ export const Video = styled.div`
   height: 100%;
   position: relative;
   overflow: hidden;
-  border-radius: 4px;
 
   video {
     width: 100%;
     height: 100%;
-    border-radius: 4px;
+
+    /* overflow: hidden; */
   }
 `;
 
