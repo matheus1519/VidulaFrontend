@@ -1,7 +1,6 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 import React, { useState, useEffect } from 'react';
-// import JwtDecode from 'jwt-decode';
 import Menu from '~/components/Menu';
 import Modal from '~/components/Modal';
 import {
@@ -26,28 +25,6 @@ export default function Dashboard() {
   const [visible, setVisible] = useState(!dis);
   const [endedOfVideo, setEndedOfVideo] = useState(false);
 
-  function elVideoAdd(url) {
-    const videoEl = document.createElement('video');
-    videoEl.setAttribute('controls', 'controls');
-    videoEl.setAttribute('autoplay', 'autoplay');
-    videoEl.setAttribute('preload', 'auto');
-
-    const sourceEl = document.createElement('source');
-    sourceEl.setAttribute('src', url);
-    sourceEl.setAttribute('type', 'video/mp4');
-
-    const textEl = document.createTextNode(
-      'Seu navegador está desatualizado e não suporta a visualização de videos!'
-    );
-
-    videoEl.appendChild(sourceEl);
-    videoEl.appendChild(textEl);
-    videoEl.onended = () => {
-      setEndedOfVideo(true);
-    };
-
-    return videoEl;
-  }
 
   useEffect(() => {
     async function loadDisciplinas() {
@@ -61,12 +38,7 @@ export default function Dashboard() {
     loadDisciplinas();
   }, []);
 
-  function handleChangeTagVideo(url) {
-    const vid = document.querySelector('video');
-    const pai = vid.parentNode;
-    pai.appendChild(elVideoAdd(url));
-    vid.remove();
-  }
+
 
   function handleButtonDetail() {
     setVideo(video.detalhe);
