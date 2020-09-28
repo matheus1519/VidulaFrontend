@@ -404,12 +404,12 @@ export default function Videos() {
           </Header>
           <hr className="dropdown-divider mb-3" />
           {videos.map((nivel, linha) => (
-            <Container key={uniqueId()}>
+            <Container key={nivel}>
               {nivel.map((vid, coluna) =>
                 vid.valueOf().id === undefined ? (
                   <div />
                 ) : (
-                  <ContainerInput>
+                  <ContainerInput key={vid.id}>
                     <input
                       type="text"
                       placeholder="Nome"
@@ -417,9 +417,10 @@ export default function Videos() {
                         arrayVid = videos;
                         arrayVid[linha][coluna].nome = e.target.value;
                         setVideos(arrayVid);
+                        console.log(videos);
                       }}
                       // value={handleNameValue(linha, coluna)}
-                      // value={vid.nome}
+                      // value={videos[linha][coluna].nome}
                     />
                     <Upload
                       key={vid.id}

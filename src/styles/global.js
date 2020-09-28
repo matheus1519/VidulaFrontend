@@ -5,11 +5,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import 'react-perfect-scrollbar/dist/css/styles.css';
 import 'react-circular-progressbar/dist/styles.css';
 
-// #01103B
-// #032791
-// #0434C4
-// #4265CE
-// #EBF2FF
+
 
 export default createGlobalStyle`
   * {
@@ -28,7 +24,7 @@ export default createGlobalStyle`
 
   html,body,#root {
     width:100%;
-    height:100vh;
+    height:100%;
   }
 
 
@@ -117,41 +113,4 @@ export default createGlobalStyle`
     height:51px;
     font-size:14pt;
   }
-
-  // #01103B Texto
-  // #032791
-  // #0434C4
-  // #4265CE
-  // #EBF2FF Fundo
-  .f1-text {
-    color:#EBF2FF;
-  }
-  .f2-text {
-    color:#4265CE;
-  }
-  .f3-text {
-    color:#0434C4;
-  }
-  .f4-text {
-    color:#032791;
-  }
-  .f5-text {
-    color:#01103B;
-  }
-  .f1-bg {
-    background:#EBF2FF;
-  }
-  .f2-bg {
-    background:#4265CE;
-  }
-  .f3-bg {
-    background:#0434C4;
-  }
-  .f4-bg {
-    background:#032791;
-  }
-  .f5-bg {
-    background:#01103B;
-  }
-
 `;

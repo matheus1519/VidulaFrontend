@@ -67,15 +67,25 @@ export default function Cadastrar() {
     setLoading(true);
     let response = false;
     if (!errorEmail) {
-      response = await api.post('/usuarios', {
-        nome: firstLetterCapitalize(nome),
-        email: email.toLowerCase(),
-        senha,
-      });
+      try {
+        response = await api.post('/usuarios', {
+          nome: firstLetterCapitalize(nome),
+          email: email.toLowerCase(),
+          senha,
+        });
+      } catch (error) {
+        console.log(error);
+      }
     } else {
       errorEmailMsg();
     }
     if (response.data) {
+      toast.success(
+        'Conta criada com sucesso! Entre com o email e senha cadastrados.',
+        {
+          transition: Zoom,
+        }
+      );
       history.push('/principal');
     } else if (!errorEmail) {
       errorServidor();
