@@ -5,6 +5,7 @@ import Route from './Route';
 import Dashboard from '~/pages/Dashboard';
 import Home from '~/pages/Home';
 import Videos from '~/pages/Videos';
+import Theme from '~/pages/Theme';
 
 export default function Routes() {
   return (
@@ -13,6 +14,8 @@ export default function Routes() {
 
       <Route path="/videos" isPrivate component={Videos} />
       <Route path="/principal" isPrivate component={Dashboard} />
+
+      <Route path="/theme" component={Theme} />
 
       <Route path="/" component={() => <h1>404</h1>} />
     </Switch>

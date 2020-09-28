@@ -3,9 +3,6 @@ import { darken, lighten } from 'polished';
 
 import 'react-toastify/dist/ReactToastify.css';
 import 'react-perfect-scrollbar/dist/css/styles.css';
-import 'react-circular-progressbar/dist/styles.css';
-
-
 
 export default createGlobalStyle`
   * {
@@ -17,6 +14,7 @@ export default createGlobalStyle`
     font-family: 'Comfortaa', sans-serif;
     color: #EBF2FF
   }
+  /* Theme Change */
   *:hover{
     transition: all .3s;
   }
@@ -76,41 +74,5 @@ export default createGlobalStyle`
 
   a:active {
     color: ${darken(0.2, '#4265CE')};
-  }
-
-  button.primario {
-    margin-top: 5px;
-    background: #0434C4;
-    cursor: pointer;
-    transition: 0.2s;
-    font-weight: bold;
-    height:51px;
-  }
-
-  button.primario:hover {
-    background: ${lighten(0.2, '#0434C4')};
-  }
-  button.primario:active {
-    background: ${darken(0.2, '#0434C4')};
-  }
-
-  button.secundario {
-    margin-top: 5px;
-    background: #4265CE;
-    cursor: pointer;
-    transition: 0.2s;
-    font-weight: bold;
-    height:51px;
-  }
-
-  button.secundario:hover {
-    background: ${lighten(0.2, '#4265CE')};
-  }
-  button.secundario:active {
-    background: ${darken(0.2, '#4265CE')};
-  }
-  .btn-primary, .btn-secundary{
-    height:51px;
-    font-size:14pt;
   }
 `;
