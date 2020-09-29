@@ -6,9 +6,10 @@ import { useTheme } from '~/context/Theme';
 import { Container } from './styles';
 
 export default function Header() {
-  const [checked, setChecked] = useState(false);
+  const { changeTheme, theme } = useTheme();
+  const { colors } = theme;
 
-  const { changeTheme, colors } = useTheme();
+  const [checked, setChecked] = useState(!!(theme.title === 'light'));
 
   const handleTheme = useCallback(() => {
     setChecked(!checked);

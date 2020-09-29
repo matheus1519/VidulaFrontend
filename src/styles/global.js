@@ -1,5 +1,6 @@
 import { createGlobalStyle } from 'styled-components';
-import { darken, lighten } from 'polished';
+import { darken, desaturate } from 'polished';
+import hexToRgba from '~/util/hexToRgba';
 
 import 'react-toastify/dist/ReactToastify.css';
 import 'react-perfect-scrollbar/dist/css/styles.css';
@@ -11,28 +12,64 @@ export default createGlobalStyle`
     border:0;
     outline:0;
     box-sizing: border-box;
-    font-family: 'Comfortaa', sans-serif;
+    font-family: 'Roboto', sans-serif;
     color: #EBF2FF
   }
-  /* Theme Change */
-  *:hover{
-    transition: all .3s;
-  }
 
+  html{
+    font-size:16px;
+  }
 
   html,body,#root {
     width:100%;
     height:100%;
   }
 
-
   body {
-    background: linear-gradient(135deg, #01103B 0%, #032791 100%);
+    background: ${({ theme }) => theme.backgrounds.primary};
     -webkit-font-smothing: antialiased !important;
     display:flex;
     justify-content: center;
     align-items: center;
   }
+
+  #root{
+    max-width:1100px;
+  }
+
+  h1{
+    font-size:2.986rem;
+  }
+
+  h2{
+    font-size:2.488rem;
+  }
+
+  h3{
+    font-size:2.074rem;
+  }
+
+  h4{
+    font-size:1.728rem;
+  }
+
+  h5{
+    font-size:1.44rem;
+  }
+
+  h6{
+    font-size:1.2rem;
+  }
+
+  p{
+    font-family: 'Comfortaa',serif;
+    font-size:1rem;
+  }
+
+  hr{
+
+  }
+
 
 
   input:focus {
@@ -63,16 +100,7 @@ export default createGlobalStyle`
     color: #f0f2f2;
   }
 
-  a {
-    text-decoration: none;
-    color: ${lighten(0.1, '#4265CE')};
-  }
-  a:hover {
-    text-decoration: underline;
-    color: ${lighten(0.2, '#4265CE')};
-  }
 
-  a:active {
-    color: ${darken(0.2, '#4265CE')};
-  }
+
+
 `;

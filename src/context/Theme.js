@@ -14,15 +14,15 @@ function MyThemeProvider({ children }) {
   );
 
   const changeTheme = useCallback(() => {
-    setDarkTheme(!darkTheme);
-    localStorage.setItem('Vidula:theme', darkTheme ? 'dark' : 'light');
-  });
+    localStorage.setItem('Vidula:theme', darkTheme ? 'light' : 'dark');
+    setDarkTheme(darkT => !darkT);
+  }, [darkTheme]);
 
   const theme = darkTheme ? dark : light;
 
   return (
-    <ThemeProvider theme={theme}>
-      <ThemeContext.Provider value={{ changeTheme, ...theme }}>
+    <ThemeProvider theme={theme.colors}>
+      <ThemeContext.Provider value={{ changeTheme, theme }}>
         {children}
       </ThemeContext.Provider>
     </ThemeProvider>

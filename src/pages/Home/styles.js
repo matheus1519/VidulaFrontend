@@ -39,9 +39,7 @@ export const Container = styled.div`
         font-size: 52pt;
       }
     }
-    p {
-      font-size: 16pt;
-    }
+
 
     button {
       margin-top: 30px;
