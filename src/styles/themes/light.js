@@ -4,6 +4,9 @@ export default {
   colors: {
     primary: '#ED00AF',
     disabled: '#DDDDFF99',
+    danger: '#FF5050',
+    warning: '#FFFF50',
+    success: '#50FF50',
 
     texts: {
       primary: '#000022',
@@ -12,11 +15,6 @@ export default {
     backgrounds: {
       primary: '#DDDDFF',
       secondary: '#AAAAFF',
-    },
-    helps: {
-      danger: '#FF5050',
-      warning: '#FFFF50',
-      success: '#50FF50',
     },
   },
 };

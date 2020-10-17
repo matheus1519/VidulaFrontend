@@ -9,11 +9,13 @@ export const Container = styled(Link)`
   padding: 8px;
   transition: 0.2s;
   font-weight: bolder;
+  border-radius: 4px;
+
+  margin-top: ${({ mt }) => `${mt}px` || 'unset'};
 
   :hover {
     color: ${({ theme }) => theme.primary};
     text-decoration: none;
-    border-radius: 4px;
     background-color: ${({ theme }) => hexToRgba(theme.primary, 0.2)};
     box-shadow: 0 4px 4px 0 ${({ theme }) => hexToRgba(theme.primary, 0.6)};
   }

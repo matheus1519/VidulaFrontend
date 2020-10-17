@@ -1,23 +1,34 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { ButtonLink } from '~/components';
+import { ButtonLink, Button } from '~/components';
 
 import icon from '~/assets/iconPlay.svg';
 
-import { Container, Menu, Buttons } from './styles';
+import { Container, Menu, Buttons, Content, Info } from './styles';
+import SignIn from './SignIn';
 
 function Landing() {
   return (
     <Container>
       <Menu>
-        <Link to="/">
-          <img src={icon} alt="Logotipo Vidula" />
-        </Link>
+        <img src={icon} alt="Logotipo Vidula" />
         <Buttons>
           <ButtonLink to="/aprender">Quero aprender</ButtonLink>
           <ButtonLink to="/ensinar">Quero ensinar</ButtonLink>
         </Buttons>
       </Menu>
+      <Content>
+        <Info>
+          <h3>Aprenda em menos de 5 minutos.</h3>
+          <h2>
+            Decida você mesmo quais conteúdos assistir e trilhe seu próprio
+            caminho nos estudos.
+          </h2>
+          <Button type="secondary" onClick={() => console.log('CADASTRAR')}>
+            QUERO ME CADASTRAR
+          </Button>
+        </Info>
+        <SignIn />
+      </Content>
     </Container>
   );
 }

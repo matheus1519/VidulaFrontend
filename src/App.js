@@ -5,9 +5,6 @@ import { Provider } from 'react-redux';
 import { ToastContainer } from 'react-toastify';
 import { MyThemeProvider } from './context/Theme';
 
-import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap/dist/js/bootstrap';
-
 import './config/ReactotronConfig';
 import { store, persistor } from './store';
 
