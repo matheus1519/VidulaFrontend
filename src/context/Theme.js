@@ -22,7 +22,7 @@ function MyThemeProvider({ children }) {
 
   return (
     <ThemeProvider theme={theme.colors}>
-      <ThemeContext.Provider value={{ changeTheme, theme }}>
+      <ThemeContext.Provider value={{ changeTheme, theme: theme.colors }}>
         {children}
       </ThemeContext.Provider>
     </ThemeProvider>
@@ -34,7 +34,5 @@ function useTheme() {
 
   return context;
 }
-
-// export default ThemeContext;
 
 export { useTheme, MyThemeProvider };

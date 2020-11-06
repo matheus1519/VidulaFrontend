@@ -2,9 +2,9 @@ import React from 'react';
 
 import { Container } from './styles';
 
-function ButtonLink({ mt, children, ...rest }) {
+function ButtonLink({ mt, children, disabled, ...rest }) {
   return (
-    <Container mt={mt} {...rest}>
+    <Container disabled={disabled} mt={mt} {...rest}>
       {children}
     </Container>
   );

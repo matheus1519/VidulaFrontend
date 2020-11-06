@@ -2,6 +2,7 @@ import { createGlobalStyle } from 'styled-components';
 
 import 'react-toastify/dist/ReactToastify.css';
 import 'react-perfect-scrollbar/dist/css/styles.css';
+import hexToRgba from '~/util/hexToRgba';
 
 export default createGlobalStyle`
   * {
@@ -30,10 +31,6 @@ export default createGlobalStyle`
     justify-content: center;
     align-items: center;
     color: ${({ theme }) => theme.texts.primary};
-  }
-
-  #root{
-    max-width:1100px;
   }
 
   h1,h2,h3,h4,h5,h6{
@@ -67,16 +64,17 @@ export default createGlobalStyle`
   p{
     font-family: 'Comfortaa',serif;
     font-size:1rem;
+    line-height:24px;
   }
 
   small{
     font-size:0.8rem;
     font-weight: 500;
-
   }
 
   hr{
-
+    border: 1px inset ${({ theme }) => hexToRgba(theme.texts.primary, 0.1)};
+    border-width: 1px;
   }
 
   button{

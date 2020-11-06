@@ -1,16 +1,6 @@
 import styled, { keyframes } from 'styled-components';
 import { lighten } from '@material-ui/core';
 
-const appear = keyframes`
-  from{
-    transform:translateY(-200px);
-    opacity:0;
-  }
-  to{
-    transform:translateY(0);
-    opacity:100%;
-  }
-`;
 
 export const ContainerVidList = styled.div`
   display: grid;
@@ -48,7 +38,6 @@ export const Video = styled.div`
 `;
 
 export const ButtonGroup = styled.div`
-  animation: ${appear} ease-in-out 0.3s;
   background: #01103b99;
   padding: 20px;
   position: absolute;

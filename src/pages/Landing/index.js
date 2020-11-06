@@ -1,21 +1,15 @@
-import React from 'react';
-import { ButtonLink, Button } from '~/components';
+import React, { useState } from 'react';
+import { InitialMenu, Button, SignUp } from '~/components';
 
-import icon from '~/assets/iconPlay.svg';
-
-import { Container, Menu, Buttons, Content, Info } from './styles';
+import { Container, Content, Info } from './styles';
 import SignIn from './SignIn';
 
 function Landing() {
+  const [loginSelected, setLoginSelected] = useState(true);
+
   return (
     <Container>
-      <Menu>
-        <img src={icon} alt="Logotipo Vidula" />
-        <Buttons>
-          <ButtonLink to="/aprender">Quero aprender</ButtonLink>
-          <ButtonLink to="/ensinar">Quero ensinar</ButtonLink>
-        </Buttons>
-      </Menu>
+      <InitialMenu active="initial" />
       <Content>
         <Info>
           <h3>Aprenda em menos de 5 minutos.</h3>
@@ -23,11 +17,14 @@ function Landing() {
             Decida você mesmo quais conteúdos assistir e trilhe seu próprio
             caminho nos estudos.
           </h2>
-          <Button type="secondary" onClick={() => console.log('CADASTRAR')}>
-            QUERO ME CADASTRAR
+          <Button
+            type="secondary"
+            onClick={() => setLoginSelected(!loginSelected)}
+          >
+            {loginSelected ? 'QUERO ME CADASTRAR' : 'QUERO ENTRAR'}
           </Button>
         </Info>
-        <SignIn />
+        {loginSelected ? <SignIn /> : <SignUp />}
       </Content>
     </Container>
   );
