@@ -6,10 +6,9 @@ import { useTheme } from '~/context/Theme';
 import { Container } from './styles';
 
 export default function Header() {
-  const { changeTheme, theme } = useTheme();
-  const { colors } = theme;
+  const { changeTheme, theme, themeTitle } = useTheme();
 
-  const [checked, setChecked] = useState(!!(theme.title === 'light'));
+  const [checked, setChecked] = useState(!!(themeTitle === 'light'));
 
   const handleTheme = useCallback(() => {
     setChecked(!checked);
@@ -27,10 +26,10 @@ export default function Header() {
         height={10}
         width={40}
         handleDiameter={20}
-        offColor={colors.disabled}
-        onColor={colors.primary}
-        // onHandleColor={colors.texts.primary}
-        // offHandleColor={colors.texts.primary}
+        offColor={theme.disabled}
+        onColor={theme.primary}
+        // onHandleColor={theme.texts.primary}
+        // offHandleColor={theme.texts.primary}
       />
     </Container>
   );

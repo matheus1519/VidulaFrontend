@@ -6,3 +6,6 @@ export { default as Logo } from './Logo';
 export { default as SignUp } from './SignUp';
 export { default as Menu } from './Menu';
 export { default as MainLayout } from './MainLayout';
+export { default as Icon } from './Icon';
+export { default as TextArea } from './TextArea';
+export { default as Modal } from './Modal';

@@ -1,30 +1,51 @@
-import React, { useState } from 'react';
-import { IoIosCloseCircle } from 'react-icons/io';
+import React, { useEffect, useState } from 'react';
 
-import { ModalTool } from './styles';
+import { AiFillCloseCircle, AiOutlineCloseCircle } from 'react-icons/ai';
+import { Container, Header } from './styles';
+import { useTheme } from '~/context/Theme';
 
-export default function Modal({ children, closeable }) {
-  const [visible, setVisible] = useState(true);
+function Modal({ title, children, onClose }) {
+  const body = document.querySelector('body');
+  body.style.overflow = 'hidden';
+
+  useEffect(() => {
+    return () => {
+      body.style.overflow = 'auto';
+    };
+  }, []);
+
+  const { theme } = useTheme();
+
+  const [onMouseOver, setOnMouseOver] = useState(false);
 
   return (
-    visible && (
-      <ModalTool>
-        <div>
-          {children}
-          {closeable && (
-            <>
-              <IoIosCloseCircle
-                onClick={() => {
-                  setVisible(false);
-                }}
-                fill="#dc3545"
-                size={60}
+    <Container>
+      <div>
+        <Header>
+          <h2>{title}</h2>
+          <div
+            onMouseEnter={() => setOnMouseOver(true)}
+            onMouseLeave={() => setOnMouseOver(false)}
+          >
+            {onMouseOver ? (
+              <AiFillCloseCircle
+                onClick={() => onClose(false)}
+                color={theme.danger}
+                size={44}
               />
-              <div className="bac" />
-            </>
-          )}
-        </div>
-      </ModalTool>
-    )
+            ) : (
+              <AiOutlineCloseCircle
+                onClick={() => onClose(true)}
+                color={theme.danger}
+                size={44}
+              />
+            )}
+          </div>
+        </Header>
+        {children}
+      </div>
+    </Container>
   );
 }
+
+export default Modal;

@@ -1,11 +1,17 @@
 import React from 'react';
 
-import { Container } from './styles';
+import { Container, ContainerLink } from './styles';
 
-function ButtonLink({ mt, children, disabled, ...rest }) {
-  return (
+function ButtonLink({ children, disabled, to, icon: Icon, mt, ...rest }) {
+  return to ? (
+    <ContainerLink disabled={disabled} to={to} mt={mt} {...rest}>
+      {children}
+      {/* <Icon size={20} /> */}
+    </ContainerLink>
+  ) : (
     <Container disabled={disabled} mt={mt} {...rest}>
       {children}
+      {Icon && <Icon size={20} />}
     </Container>
   );
 }

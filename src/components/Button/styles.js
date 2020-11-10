@@ -17,7 +17,7 @@ export const Container = styled.button`
   border-radius: 4px;
   font-size: 1rem;
   text-transform: uppercase;
-  width: ${({ flex }) => (flex ? '100%' : 'unset')};
+  width: ${({ flex }) => (flex ? '100%' : 'fit-content')};
 
   :hover {
     background-color: ${({ theme, color, type }) =>
@@ -26,7 +26,7 @@ export const Container = styled.button`
         : hexToRgba(theme[color], 0.3)};
     border-color: ${({ theme, color, type }) =>
       (type === 'primary' || type === 'submit') && lighten(theme[color], 0.2)};
-    box-shadow: 0 4px 4px 0
+    box-shadow: 0 2px 4px 0
       ${({ theme, color }) => hexToRgba(theme[color], 0.6)};
   }
 

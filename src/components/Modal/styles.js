@@ -1,71 +1,53 @@
+import { shade } from 'polished';
 import styled, { keyframes } from 'styled-components';
 
-const appear = keyframes`
-  from{
-    transform:translateY(50px);
-    opacity:0;
+const swipeDown = keyframes`
+  0%{
+    transform: translateY(-50px);
   }
-  to{
-    transform:translateY(0);
-    opacity:100%;
+  100%{
+    transform: translateY(0);
   }
 `;
 
-const showModal = keyframes`
-from{
-  opacity:0;
-}
-to{
-  opacity:100%;
-}
-`;
-
-export const ModalTool = styled.div`
-  * {
-    color: #01103b;
-  }
-
-  animation: ${showModal} ease-in-out 0.2s;
-  width: 100vw;
-  height: 100vh;
-  background: #01103bbb;
+export const Container = styled.div`
   position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 1;
+
+  backdrop-filter: blur(4px);
+  background: ${({ theme }) => theme.disabled};
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+
   display: flex;
   align-items: center;
   justify-content: center;
-  div {
-    z-index: 2;
-    position: relative;
-    animation: ${appear} ease-in-out 0.3s;
-    background: #ebf2ff;
-    width: auto;
-    height: auto;
-    border-radius: 10px;
-    padding: 30px;
-    h4 {
-      color: #01103b;
-      margin-bottom: 30px;
-    }
-    svg {
-      position: absolute;
-      top: -30px;
-      right: -30px;
-      transition: 0.2s;
-    }
-    svg:hover {
-      cursor: pointer;
-      filter: drop-shadow(0px 0px 5px #01103b);
-    }
-    div.bac {
-      position: absolute;
-      top: -15px;
-      right: -15px;
-      z-index: -2;
-      padding: 15px;
-      border-radius: 50%;
+
+  > div {
+    animation: ${swipeDown} ease-out 0.2s;
+    width: fit-content;
+    height: fit-content;
+    max-width: 60%;
+    max-height: 90%;
+    padding: 16px 32px 32px;
+    box-shadow: 0px 0px 10px ${({ theme }) => theme.backgrounds.primary};
+    border-radius: 4px;
+    background: ${({ theme }) => theme.backgrounds.primary};
+  }
+`;
+
+export const Header = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 40px;
+
+  svg {
+    margin-left: 16px;
+    cursor: pointer;
+
+    :active {
+      fill: ${({ theme }) => shade(0.2, theme.danger)};
     }
   }
 `;

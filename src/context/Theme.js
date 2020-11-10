@@ -22,7 +22,9 @@ function MyThemeProvider({ children }) {
 
   return (
     <ThemeProvider theme={theme.colors}>
-      <ThemeContext.Provider value={{ changeTheme, theme: theme.colors }}>
+      <ThemeContext.Provider
+        value={{ changeTheme, theme: theme.colors, titleTheme: theme.title }}
+      >
         {children}
       </ThemeContext.Provider>
     </ThemeProvider>

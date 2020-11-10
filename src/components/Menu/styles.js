@@ -19,7 +19,12 @@ export const Container = styled.div`
 `;
 
 export const LinksGroup = styled.div`
+  display: flex;
+
   a + a {
+    margin-left: 8px;
+  }
+  a + b {
     margin-left: 8px;
   }
 `;
