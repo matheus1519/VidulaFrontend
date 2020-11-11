@@ -7,18 +7,18 @@ import { Route, Redirect } from 'react-router-dom';
 
 export default function RouteWrapper({
   component: Component,
-  isPrivate,
+  permission,
   ...rest
 }) {
   // const { signed } = store.getState().auth;
   const signed = true;
 
-  if (!signed && isPrivate) {
+  if (!signed && permission) {
     return <Redirect to="/" />;
   }
 
-  if (signed && !isPrivate) {
-    return <Redirect to="/ver" />;
+  if (signed && !permission) {
+    return <Redirect to="/assistir" />;
   }
 
   return <Route {...rest} component={Component} />;

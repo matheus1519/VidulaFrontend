@@ -11,7 +11,7 @@ export const Container = styled.button`
       ? theme[color]
       : hexToRgba(theme[color], 0.1)};
   border: 1px solid ${({ theme, color }) => theme[color]};
-  padding: 16px;
+  padding: ${({ small }) => (small ? 8 : 16)}px;
   transition: 0.2s;
   font-weight: bold;
   border-radius: 4px;

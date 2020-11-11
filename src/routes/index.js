@@ -13,9 +13,14 @@ export default function Routes() {
       <Route path="/ensinar" component={Pages.Teach} />
       <Route path="/aprender" component={Pages.Learn} />
 
-      <Route path="/videos" isPrivate component={Videos} />
-      <Route path="/ver" isPrivate component={Pages.Watch} />
+      <Route path="/assistir" permission="student" component={Pages.Watch} />
+      <Route
+        path="/administrativo"
+        permission="admin"
+        component={Pages.Administrative}
+      />
 
+      <Route path="/videos" isPrivate component={Videos} />
       <Route path="/theme" isPrivate component={Theme} />
 
       <Route path="/" component={() => <h1>404</h1>} />

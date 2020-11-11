@@ -2,9 +2,9 @@ import React from 'react';
 
 import { Container } from './styles';
 
-function Button({ flex, type, color, children, ...rest }) {
+function Button({ flex, type, small, color, children, ...rest }) {
   return (
-    <Container flex={flex} type={type} color={color} {...rest}>
+    <Container flex={flex} type={type} color={color} small={small} {...rest}>
       {children}
     </Container>
   );

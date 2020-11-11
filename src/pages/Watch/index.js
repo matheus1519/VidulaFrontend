@@ -15,6 +15,7 @@ import {
   Icon,
   TextArea,
   Modal,
+  Avatar,
 } from '~/components';
 
 import Questions from './Questions';
@@ -32,7 +33,6 @@ import {
   Video,
   Decision,
   Teacher,
-  Avatar,
   Doubts,
   Doubt,
   DoubtBody,
@@ -155,7 +155,7 @@ function Watch() {
               </video>
             </Video>
             <Teacher>
-              <Avatar src={avatarAnony} />
+              <Avatar url={avatarAnony} />
               <div>
                 <p>Henrique de Carvalho</p>
                 <small>Professor de Matemática</small>
@@ -165,7 +165,7 @@ function Watch() {
             <Doubts>
               <h3>59 Dúvidas</h3>
               <Doubt>
-                <Avatar src={avatarAnony} alt="Juliana Mattos" />
+                <Avatar url={avatarAnony} alt="Juliana Mattos" />
                 <div>
                   <h6>Juliana Mattos</h6>
                   <DoubtBody>
@@ -183,9 +183,11 @@ function Watch() {
                     Ver 4 respostas
                   </ButtonLink>
                   <Doubt>
-                    <Avatar src={avatarAnony} alt="Alex Santos" />
+                    <Avatar url={avatarAnony} alt="Alex Santos" />
                     <div>
-                      <h6>Henrique de Carvalho</h6>
+                      <h6>
+                        Henrique de Carvalho<small>PROFESSOR</small>
+                      </h6>
                       <DoubtBody teacher>
                         <p>
                           Dessa forma não temos como mensaurar o ganho ao
@@ -200,7 +202,7 @@ function Watch() {
                 </div>
               </Doubt>
               <Doubt>
-                <Avatar src={avatarAnony} alt="Alex Santos" />
+                <Avatar url={avatarAnony} alt="Alex Santos" />
                 <div>
                   <h6>Alex Santos </h6>
                   <DoubtBody>
@@ -219,7 +221,7 @@ function Watch() {
                 </div>
               </Doubt>
               <TakeDoubt>
-                <Avatar src={avatarAnony} alt="Usuário Atual" />
+                <Avatar url={avatarAnony} alt="Usuário Atual" />
                 <div>
                   <TextArea placeholder="Tire sua dúvida" />
                   <Button>Enviar</Button>

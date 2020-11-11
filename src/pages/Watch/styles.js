@@ -150,12 +150,6 @@ export const Teacher = styled.div`
   }
 `;
 
-export const Avatar = styled.img`
-  height: 56px;
-  border-radius: 50%;
-  box-shadow: 0px 0px 4px ${({ theme }) => theme.disabled});
-`;
-
 export const Doubts = styled.div`
   margin-bottom: 64px;
 
@@ -180,6 +174,13 @@ export const Doubt = styled.div`
 
     h6 {
       margin-bottom: 8px;
+      position: relative;
+
+      small {
+        position: absolute;
+        right: 8px;
+        color: ${({ theme }) => theme.disabled};
+      }
     }
   }
 `;

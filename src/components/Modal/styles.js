@@ -11,7 +11,7 @@ const swipeDown = keyframes`
 `;
 
 export const Container = styled.div`
-  position: absolute;
+  position: fixed;
 
   backdrop-filter: blur(4px);
   background: ${({ theme }) => theme.disabled};
@@ -28,8 +28,10 @@ export const Container = styled.div`
     width: fit-content;
     height: fit-content;
     max-width: 60%;
-    max-height: 90%;
-    padding: 16px 32px 32px;
+    max-height: 95%;
+    overflow-y: auto;
+
+    padding: 16px 32px 24px;
     box-shadow: 0px 0px 10px ${({ theme }) => theme.backgrounds.primary};
     border-radius: 4px;
     background: ${({ theme }) => theme.backgrounds.primary};
