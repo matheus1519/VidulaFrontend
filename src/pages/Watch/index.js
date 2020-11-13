@@ -179,8 +179,8 @@ function Watch() {
                     <Icon size={24} icon={AiOutlineLike} />
                   </div> */}
                   </DoubtBody>
-                  <ButtonLink icon={FaChevronDown} mt="8">
-                    Ver 4 respostas
+                  <ButtonLink icon={FaChevronUp} mt="8">
+                    Ocultar 1 resposta
                   </ButtonLink>
                   <Doubt>
                     <Avatar url={avatarAnony} alt="Alex Santos" />
@@ -194,9 +194,6 @@ function Watch() {
                           utilizar essa forma.
                         </p>
                       </DoubtBody>
-                      <ButtonLink icon={FaChevronUp} mt="8">
-                        Ocultar 1 resposta
-                      </ButtonLink>
                     </div>
                   </Doubt>
                 </div>
@@ -215,9 +212,6 @@ function Watch() {
                       <Icon size={24} icon={AiOutlineLike} />
                     </div>
                   </DoubtBody>
-                  <ButtonLink icon={FaChevronUp} mt="8">
-                    Ocultar 1 resposta
-                  </ButtonLink>
                 </div>
               </Doubt>
               <TakeDoubt>

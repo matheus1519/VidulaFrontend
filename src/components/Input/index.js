@@ -4,7 +4,7 @@ import { FiAlertCircle } from 'react-icons/fi';
 
 import { Container, Error } from './styles';
 
-function Input({ icon: Icon, name, mb, ...rest }) {
+function Input({ icon: Icon, name, mb, fit, ...rest }) {
   const inputRef = useRef(null);
   const [isFocused, setIsFocused] = useState(false);
   const [isFilled, setIsFilled] = useState(false);
@@ -34,6 +34,7 @@ function Input({ icon: Icon, name, mb, ...rest }) {
       isFocused={isFocused}
       isFilled={isFilled}
       onClick={() => inputRef.current.focus()}
+      fit={fit}
       mb={mb}
     >
       {console.log(error)}

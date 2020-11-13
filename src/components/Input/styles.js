@@ -7,9 +7,9 @@ export const Container = styled.div`
   align-items: center;
   background: ${({ theme }) => hexToRgba(theme.texts.primary, 0.1)};
   border-radius: 4px;
-  border: 2px solid #171739;
+  border: 2px solid ${({ theme }) => hexToRgba(theme.texts.primary, 0.01)};
   padding: 16px;
-  width: ${({ fix }) => fix || '100%'};
+  width: ${({ fit }) => (fit ? 'fit-content' : '100%')};
   transition: 0.2s;
   cursor: text;
 
@@ -64,10 +64,6 @@ export const Container = styled.div`
     font-size: 1rem;
     color: ${({ theme }) => theme.texts.primary};
     transition: 0.2s;
-
-    :focus {
-      border-color: ${({ theme }) => theme.primary};
-    }
 
     :focus::placeholder {
       color: ${({ theme }) => theme.texts.primary};

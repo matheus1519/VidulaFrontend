@@ -5,7 +5,7 @@ import { Container, Content } from './styles';
 
 function MainLayout({ children }) {
   return (
-    <Container id="main-layout">
+    <Container>
       <Menu />
       <Content>{children}</Content>
     </Container>

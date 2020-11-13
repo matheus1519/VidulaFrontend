@@ -15,6 +15,11 @@ export default function Routes() {
 
       <Route path="/assistir" permission="student" component={Pages.Watch} />
       <Route
+        path="/minha-conta"
+        permission="student"
+        component={Pages.MyAccount}
+      />
+      <Route
         path="/administrativo"
         permission="admin"
         component={Pages.Administrative}

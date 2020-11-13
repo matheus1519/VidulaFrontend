@@ -11,8 +11,8 @@ function Menu() {
         <Logo outline />
         <LinksGroup>
           <ButtonLink to="/administrativo">Administrativo</ButtonLink>
-          <ButtonLink to="/minha-conta">Gerenciar Aulas</ButtonLink>
-          <ButtonLink to="/preparar-aula">Minha Conta</ButtonLink>
+          <ButtonLink to="/preparar-aula">Preparar Aulas</ButtonLink>
+          <ButtonLink to="/minha-conta">Minha Conta</ButtonLink>
           <ButtonLink>Sair</ButtonLink>
         </LinksGroup>
       </div>
