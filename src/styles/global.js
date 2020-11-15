@@ -27,6 +27,7 @@ export default createGlobalStyle`
   body {
     background: ${({ theme }) => theme.backgrounds.primary};
     -webkit-font-smothing: antialiased !important;
+    text-rendering:optimizeLegibility;
     display:flex;
     justify-content: center;
     align-items: center;

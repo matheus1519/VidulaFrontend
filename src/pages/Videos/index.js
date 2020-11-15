@@ -1,29 +1,10 @@
 /* eslint-disable no-plusplus */
-import React, { useState, useEffect } from 'react';
-import { MdAddCircleOutline } from 'react-icons/md';
-import { IoIosArrowBack, IoIosCloseCircle } from 'react-icons/io';
-import { FaCheckCircle } from 'react-icons/fa';
-import { AiFillPlaySquare } from 'react-icons/ai';
+import React, { useState } from 'react';
 
 import { uniqueId } from 'lodash';
 import { toast, Zoom } from 'react-toastify';
-import TextField from '@material-ui/core/TextField';
-import Autocomplete from '@material-ui/lab/Autocomplete';
-import { makeStyles, darken } from '@material-ui/core/styles';
 
-import Menu from '~/components/Menu';
-import Upload from './Upload';
 import api from '~/services/api';
-import {
-  Container,
-  ContainerInput,
-  Header,
-  Modal,
-  ContainerMaior,
-  ModalTool,
-} from './styles';
-import history from '~/services/history';
-import tccEsquema from '~/assets/tcc-esquema.svg';
 
 export default function Videos() {
   let arrayVid = [[], [], []];
@@ -48,40 +29,27 @@ export default function Videos() {
   }
   inicializaArray();
 
-  const [telaSm, setTelaSm] = useState(window.innerWidth < 575 && true);
+  // const [telaSm, setTelaSm] = useState(window.innerWidth < 575 && true);
   const [videos, setVideos] = useState(arrayVid);
-  const [listaDisciplinas, setListaDisciplinas] = useState([]);
-  const [modalVisible, setModalVisible] = useState(false);
-  const [toolTip, setToolTip] = useState(false);
   const [disciplina, setDisciplina] = useState('');
   const [objDisciplina, setObjDisciplina] = useState({});
   const [descricao, setDescricao] = useState('');
   const [descricaoVisible, setDescricaoVisible] = useState(false);
 
   const [assunto, setAssunto] = useState('');
-  const [step, setStep] = useState(1);
 
-  async function loadDisciplinas() {
-    const response = await api.get('disciplinas');
-    setListaDisciplinas(response.data);
-  }
-
-  useEffect(() => {
-    loadDisciplinas();
-  }, [modalVisible]);
-
-  window.addEventListener(
-    'resize',
-    () => {
-      if (window.innerWidth < 575) {
-        setTelaSm(true);
-        return true;
-      }
-      setTelaSm(false);
-      return false;
-    },
-    false
-  );
+  // window.addEventListener(
+  //   'resize',
+  //   () => {
+  //     if (window.innerWidth < 575) {
+  //       setTelaSm(true);
+  //       return true;
+  //     }
+  //     setTelaSm(false);
+  //     return false;
+  //   },
+  //   false
+  // );
 
   function handleFile(file, linha, coluna) {
     const dados = new FormData();
@@ -176,8 +144,6 @@ export default function Videos() {
         }
       });
     });
-
-    setModalVisible(true);
   }
 
   function handleConcluir() {
@@ -191,7 +157,7 @@ export default function Videos() {
       console.log(err);
     }
 
-    history.push('principal');
+    // history.push('principal');
     toast.success('Plano de aula criado com sucesso!', {
       transition: Zoom,
     });
@@ -202,7 +168,7 @@ export default function Videos() {
     setDescricaoVisible(true);
     const response = await api.post('disciplinas', { nome: disciplina });
     setObjDisciplina(response.data);
-    loadDisciplinas();
+    // loadDisciplinas();
     elemento.blur();
   }
 
@@ -213,229 +179,5 @@ export default function Videos() {
         descricao,
       });
     }
-    setStep(2);
   }
-
-  const useStyles = makeStyles({
-    button: {
-      fontSize: 13,
-      width: '100%',
-      textAlign: 'left',
-      paddingBottom: 8,
-      color: '#586069',
-      fontWeight: 600,
-      '&:hover,&:focus': {
-        color: '#0366d6',
-      },
-      '& span': {
-        width: '100%',
-      },
-      '& svg': {
-        width: 16,
-        height: 16,
-      },
-    },
-    option: {
-      minHeight: 'auto',
-      alignItems: 'flex-start',
-      padding: 8,
-      '&[aria-selected="true"]': {
-        backgroundColor: darken('#ebf2ff', 0.1),
-      },
-      '&[data-focus="true"]': {
-        backgroundColor: '#ebf2ff',
-      },
-      color: '#01103b',
-    },
-  });
-  const classes = useStyles();
-
-  return (
-    <>
-      {toolTip && (
-        <ModalTool>
-          <div>
-            <h4>Esquema de organização dos videos interativos</h4>
-            <img src={tccEsquema} alt="Esquema de Aulas interativas" />
-            <IoIosCloseCircle
-              onClick={() => {
-                setToolTip(false);
-              }}
-              fill="#dc3545"
-              size={60}
-            />
-            <div className="bac" />
-          </div>
-        </ModalTool>
-      )}
-      {modalVisible && (
-        <Modal>
-          {step === 1 && (
-            <div>
-              <h4>
-                Informe em qual disciplina você quer inserir este assunto!
-              </h4>
-              <Autocomplete
-                blurOnSelect
-                classes={{
-                  option: classes.option,
-                  paper: classes.paper,
-                }}
-                id="controlled-demo"
-                noOptionsText="Nenhuma disciplina encontrada"
-                options={listaDisciplinas}
-                getOptionLabel={option => listaDisciplinas && option.nome}
-                onChange={(e, value) => {
-                  setDisciplina(value);
-                }}
-                style={{
-                  maxWidth: 300,
-                }}
-                renderInput={params => (
-                  <TextField
-                    onChange={event => {
-                      setDisciplina(event.target.value);
-                    }}
-                    value={disciplina}
-                    onKeyPress={e => {
-                      if (e.which === 13) {
-                        handleAddDisciplina(e);
-                      }
-                    }}
-                    {...params}
-                    label="Selecione uma disciplina"
-                    margin="normal"
-                  />
-                )}
-              />
-              <button
-                id="add"
-                type="button"
-                className="btn btn-outline-secondary"
-                onClick={handleAddDisciplina}
-                onFocus={() => {}}
-              >
-                <MdAddCircleOutline fill="#6c757d" size={24} />
-              </button>
-              {descricaoVisible && (
-                <TextField
-                  id="standard-basic"
-                  label="Descrição"
-                  style={{ width: 558, marginTop: 20 }}
-                  onChange={e => setDescricao(e.target.value)}
-                  value={descricao}
-                />
-              )}
-              <button
-                type="button"
-                className="btn btn-primary ml-auto d-flex mt-3"
-                onClick={handleUpdateDisciplina}
-              >
-                Avançar
-              </button>
-            </div>
-          )}
-          {step !== 1 && (
-            <div>
-              <h4>Insira um nome correspondente ao assunto da aula</h4>
-              <TextField
-                id="standard-size-normal"
-                label="Assunto"
-                onChange={e => setAssunto(e.target.value)}
-                value={assunto}
-                style={{ marginTop: 10, width: 300 }}
-              />
-              <div id="step2">
-                <button
-                  type="button"
-                  className="btn btn-outline-primary"
-                  onClick={() => {
-                    setStep(1);
-                    localStorage.setItem('step', step);
-                  }}
-                >
-                  <IoIosArrowBack
-                    size={26}
-                    style={{ marginTop: -5 }}
-                    fill="#007bff"
-                  />
-                  Voltar
-                </button>
-                <button
-                  type="button"
-                  className="btn btn-primary"
-                  onClick={handleConcluir}
-                >
-                  <FaCheckCircle
-                    style={{ marginTop: -5, marginRight: 5 }}
-                    className="concluir"
-                    size={26}
-                  />
-                  Concluir
-                </button>
-              </div>
-            </div>
-          )}
-        </Modal>
-      )}
-      <ContainerMaior>
-        <Menu />
-        <div className="container mt-4">
-          <Header>
-            <div className="d-flex">
-              <h1>Gerenciar Vídeos</h1>
-              <AiFillPlaySquare
-                onClick={() => {
-                  setToolTip(true);
-                }}
-                size={48}
-                className="ml-3"
-              />
-            </div>
-            <div className="ml-auto">
-              <button
-                type="submit"
-                className={`btn btn-light m-0 ${telaSm ? 'btn-sm' : 'btn-lg'}`}
-                onClick={handleAvancar}
-              >
-                Avançar
-              </button>
-            </div>
-          </Header>
-          <hr className="dropdown-divider mb-3" />
-          {videos.map((nivel, linha) => (
-            <Container key={nivel}>
-              {nivel.map((vid, coluna) =>
-                vid.valueOf().id === undefined ? (
-                  <div />
-                ) : (
-                  <ContainerInput key={vid.id}>
-                    <input
-                      type="text"
-                      placeholder="Nome"
-                      onChange={e => {
-                        arrayVid = videos;
-                        arrayVid[linha][coluna].nome = e.target.value;
-                        setVideos(arrayVid);
-                        console.log(videos);
-                      }}
-                      // value={handleNameValue(linha, coluna)}
-                      // value={videos[linha][coluna].nome}
-                    />
-                    <Upload
-                      key={vid.id}
-                      progresso={vid.progresso}
-                      error={vid.error}
-                      uploaded={vid.uploaded}
-                      handleFile={file => handleFile(file, linha, coluna)}
-                    />
-                  </ContainerInput>
-                )
-              )}
-            </Container>
-          ))}
-        </div>
-      </ContainerMaior>
-    </>
-  );
 }

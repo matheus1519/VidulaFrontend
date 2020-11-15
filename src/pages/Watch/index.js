@@ -78,7 +78,7 @@ function Watch() {
   return (
     <>
       {changeSubject && (
-        <Modal title="Escolha uma disciplina." onClose={setChangeSubject}>
+        <Modal title="Escolha uma disciplina" onClose={setChangeSubject}>
           <ModalContent>
             <div>
               <h3>Linguagem C</h3>
@@ -207,7 +207,7 @@ function Watch() {
                       Porque não usar a forma descriva ao invés da comparativa?
                       Seria melhor encaixada.
                     </p>
-                    {/* <ButtonLink>Responder</ButtonLink> */}
+                    {/* <ButtonLink>Responder</Bu  ttonLink> */}
                     <div>
                       <Icon size={24} icon={AiOutlineLike} />
                     </div>

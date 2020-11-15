@@ -10,3 +10,4 @@ export { default as Icon } from './Icon';
 export { default as TextArea } from './TextArea';
 export { default as Modal } from './Modal';
 export { default as Avatar } from './Avatar';
+export { default as Upload } from './Upload';

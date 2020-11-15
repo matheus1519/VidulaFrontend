@@ -32,7 +32,7 @@ function Administrative() {
   return (
     <>
       {analyzeVideo && (
-        <Modal title="Analisar videoaula." onClose={setAnalyzeVideo}>
+        <Modal title="Analisar videoaula" onClose={setAnalyzeVideo}>
           <ModalContent>
             <video onEnded={() => {}} controls preload="auto">
               <source src={personTest?.video?.url} type="video/mp4" />
@@ -67,7 +67,7 @@ function Administrative() {
       )}
       <MainLayout>
         <Header teacherActive={teacherActive}>
-          <h1>Administrativo.</h1>
+          <h1>Administrativo</h1>
           <div>
             <Button
               type={teacherActive ? undefined : 'secondary'}

@@ -20,13 +20,17 @@ export default function Routes() {
         component={Pages.MyAccount}
       />
       <Route
+        path="/preparar-aula"
+        permission="teacher"
+        component={Pages.PrepareLesson}
+      />
+      <Route
         path="/administrativo"
         permission="admin"
         component={Pages.Administrative}
       />
 
-      <Route path="/videos" isPrivate component={Videos} />
-      <Route path="/theme" isPrivate component={Theme} />
+      <Route path="/theme" component={Theme} />
 
       <Route path="/" component={() => <h1>404</h1>} />
     </Switch>

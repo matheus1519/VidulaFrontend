@@ -7,7 +7,7 @@ import { GrReactjs } from 'react-icons/gr';
 import { Form } from '@unform/web';
 
 import { RadioGroup, TextField } from '@material-ui/core';
-import { Avatar, Button, Input, MainLayout, Modal } from '~/components';
+import { Avatar, Button, Input, MainLayout, Modal, Upload } from '~/components';
 
 import {
   ModalContent,
@@ -34,7 +34,7 @@ function MyAccount() {
   return (
     <>
       {changeProfile && (
-        <Modal title="Mudar de Perfil." onClose={setChangeProfile}>
+        <Modal title="Mudar de Perfil" onClose={setChangeProfile}>
           <ModalContent>
             <h4>
               A mudança de perfil para professor é feita através de uma
@@ -51,7 +51,13 @@ function MyAccount() {
               </p>
               <p>3. Envie a videoaula gravada e preencha o campo abaixo.</p>
             </div>
-            <h5>Component Add Video</h5>
+            <Upload
+              progress={0}
+              error={false}
+              uploaded={false}
+              // onUpload={file => handleUploaded(file, row, column)}
+              style={{ marginTop: 24, marginBottom: 16 }}
+            />
             <Form>
               <Input
                 fit
@@ -66,7 +72,7 @@ function MyAccount() {
       )}
       <MainLayout>
         <Header>
-          <h1>Informações pessoais.</h1>
+          <h1>Informações pessoais</h1>
           <small>Evite compartilhar suas informações com outras pessoas.</small>
         </Header>
         <Divider />
