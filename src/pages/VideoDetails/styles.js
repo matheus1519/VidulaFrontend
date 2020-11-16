@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { Form } from '@unform/web';
+import hexToRgba from '~/util/hexToRgba';
 
 export const ModalContent = styled(Form)`
   display: grid;
@@ -47,13 +48,52 @@ export const StyledRadioText = styled.div`
   }
 `;
 
-export const ModalContentAboutLesson = styled.div`
+export const ModalContentAboutLesson = styled(Form)`
+  width: 420px;
+
   h4 {
     margin-bottom: 16px;
   }
 
   div + h4 {
     margin-top: 32px;
+  }
+
+  span {
+    .MuiFormLabel-root {
+      color: ${({ theme }) => theme.disabled};
+    }
+
+    .MuiFormLabel-root.Mui-focused {
+      color: ${({ theme }) => theme.primary};
+    }
+
+    .MuiInputBase-input {
+      color: ${({ theme }) => theme.primary};
+    }
+
+    .MuiOutlinedInput-notchedOutline {
+      border-color: transparent;
+    }
+
+    .MuiOutlinedInput-root {
+      background: ${({ theme }) => hexToRgba(theme.texts.primary, 0.1)};
+      transition: 0.2s;
+    }
+
+    .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
+      border-color: ${({ theme }) => theme.primary};
+    }
+
+    .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+      border-color: ${({ theme }) => theme.primary};
+    }
+
+    .MuiIconButton-label {
+      svg {
+        color: ${({ theme }) => theme.primary};
+      }
+    }
   }
 `;
 

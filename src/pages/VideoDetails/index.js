@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import { RadioGroup } from '@material-ui/core';
+import { RadioGroup, TextField } from '@material-ui/core';
+import { SiGoogleclassroom } from 'react-icons/si';
+import { Autocomplete } from '@material-ui/lab';
 import { Button, Input, MainLayout, Modal, TextArea } from '~/components';
 
 import VideoDetail from './VideoDetail';
@@ -17,8 +19,16 @@ import RadioButton from '~/styles/RadioButton';
 
 function VideoDetails() {
   const [insertDetail, setInsertDetail] = useState(false);
-  const [aboutLesson, setAboutLesson] = useState(false);
+  const [aboutLesson, setAboutLesson] = useState(true);
   const [rightAlternative, setRightAlternative] = useState('alternative1');
+  const [listSubjects, setListSubjects] = useState([
+    {
+      id: 1,
+      nome: 'Linguagem C',
+      descricao:
+        'Linguagem C é uma linguagem de programação ideal para aprender as técnicas de programação. ',
+    },
+  ]);
 
   return (
     <>
@@ -86,7 +96,38 @@ function VideoDetails() {
         <Modal title="Sobre a aula" onClose={setAboutLesson}>
           <ModalContentAboutLesson>
             <h4>Como se chama o assunto mostrado na aula?</h4>
-            <h4>Selecione a disciplina na qual o assunto está inserido. </h4>
+            <Input
+              icon={SiGoogleclassroom}
+              name="name"
+              placeholder="Nome da aula"
+            />
+            <h4>Selecione a disciplina na qual o assunto está inserido</h4>
+            <span>
+              <Autocomplete
+                blurOnSelect
+                id="combo-box-demo"
+                noOptionsText="Nenhuma disciplina encontrada"
+                options={listSubjects}
+                getOptionLabel={option => option.nome}
+                // onChange={(e, value) => {
+                //   setDisciplina(value);
+                // }}
+                // style={{
+                //   maxWidth: 300,
+                // }}
+                renderInput={params => (
+                  <TextField
+                    // onChange={event => {
+                    //   setDisciplina(event.target.value);
+                    // }}
+                    // value={disciplina}
+                    {...params}
+                    label="Selecione a disciplina"
+                    variant="outlined"
+                  />
+                )}
+              />
+            </span>
           </ModalContentAboutLesson>
           <Footer>
             <Button onClick={() => {}}>Concluir</Button>

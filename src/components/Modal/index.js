@@ -4,7 +4,7 @@ import { AiFillCloseCircle, AiOutlineCloseCircle } from 'react-icons/ai';
 import { Container, Header } from './styles';
 import { useTheme } from '~/context/Theme';
 
-function Modal({ title, children, onClose }) {
+function Modal({ title, width, children, onClose }) {
   const body = document.querySelector('body');
   body.style.overflow = 'hidden';
 
@@ -19,7 +19,7 @@ function Modal({ title, children, onClose }) {
   const [onMouseOver, setOnMouseOver] = useState(false);
 
   return (
-    <Container>
+    <Container width={width}>
       <div>
         <Header>
           <h2>{title}</h2>
