@@ -9,7 +9,6 @@
     "@material-ui/pickers": "^3.2.10",
     "@material-ui/styles": "^4.7.1",
     "@material/linear-progress": "^4.0.0",
-    "@rocketseat/unform": "^1.6.2",
     "@stardust-ui/docs-components": "^0.40.0",
     "@storybook/addon-knobs": "^5.2.8",
     "@unform/core": "^2.1.3",

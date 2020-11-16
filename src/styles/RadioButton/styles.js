@@ -16,4 +16,8 @@ export const ContainerLabel = styled.div`
     color: ${({ theme, checked }) =>
       checked ? theme.primary : theme.disabled};
   }
+
+  .MuiFormControlLabel-root {
+    margin-right: ${({ label }) => (label ? 16 : 0)}px;
+  }
 `;

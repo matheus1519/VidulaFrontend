@@ -4,18 +4,18 @@ import Radio from '@material-ui/core/Radio';
 import { FormControlLabel } from '@material-ui/core';
 import { ContainerRadio, ContainerLabel } from './styles';
 
-function CustomizedRadio(props) {
+function CustomizedRadio({ ...rest }) {
   return (
     <ContainerRadio>
-      <Radio {...props} />
+      <Radio {...rest} />
     </ContainerRadio>
   );
 }
 
-export default function RadioButton({ checked, ...rest }) {
+export default function RadioButton({ checked, label, ...rest }) {
   return (
     <ContainerLabel checked={checked}>
-      <FormControlLabel control={<CustomizedRadio />} {...rest} />
+      <FormControlLabel control={<CustomizedRadio />} label={label} {...rest} />
     </ContainerLabel>
   );
 }

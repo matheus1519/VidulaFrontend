@@ -25,6 +25,11 @@ export default function Routes() {
         component={Pages.PrepareLesson}
       />
       <Route
+        path="/detalhes-dos-videos"
+        permission="teacher"
+        component={Pages.VideoDetails}
+      />
+      <Route
         path="/administrativo"
         permission="admin"
         component={Pages.Administrative}

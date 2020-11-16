@@ -1,10 +1,11 @@
 import React, { useCallback, useState } from 'react';
 import { Button, MainLayout, Upload } from '~/components';
+import history from '~/services/history';
 
 import { Header, Divider, UploadContainer } from './styles';
 
 function PrepareLesson() {
-  const [step, setStep] = useState(2);
+  const [step, setStep] = useState(1);
 
   const handleUploaded = useCallback(file => {
     console.log(file);
@@ -18,7 +19,9 @@ function PrepareLesson() {
           <Button type="secondary" onClick={() => {}}>
             Preciso de ajuda
           </Button>
-          <Button onClick={() => {}}>Continuar</Button>
+          <Button onClick={() => history.push('/detalhes-dos-videos')}>
+            Continuar
+          </Button>
         </div>
       </Header>
       <Divider />

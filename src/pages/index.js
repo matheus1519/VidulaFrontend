@@ -5,3 +5,4 @@ export { default as Learn } from '~/pages/Learn';
 export { default as Administrative } from '~/pages/Administrative';
 export { default as MyAccount } from '~/pages/MyAccount';
 export { default as PrepareLesson } from '~/pages/PrepareLesson';
+export { default as VideoDetails } from '~/pages/VideoDetails';
