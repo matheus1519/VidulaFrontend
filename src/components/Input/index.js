@@ -37,7 +37,6 @@ function Input({ icon: Icon, name, mb, fit, ...rest }) {
       fit={fit}
       mb={mb}
     >
-      {console.log(error)}
       {Icon && <Icon size={20} />}
       <input
         onFocus={handleInputFocus}

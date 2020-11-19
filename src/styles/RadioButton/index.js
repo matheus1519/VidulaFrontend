@@ -14,7 +14,7 @@ function CustomizedRadio({ ...rest }) {
 
 export default function RadioButton({ checked, label, ...rest }) {
   return (
-    <ContainerLabel checked={checked}>
+    <ContainerLabel label={label} checked={checked}>
       <FormControlLabel control={<CustomizedRadio />} label={label} {...rest} />
     </ContainerLabel>
   );

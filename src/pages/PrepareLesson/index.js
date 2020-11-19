@@ -1,14 +1,72 @@
+/* eslint-disable radix */
 import React, { useCallback, useState } from 'react';
+import { uniqueId } from 'lodash';
+
 import { Button, MainLayout, Upload } from '~/components';
 import history from '~/services/history';
 
 import { Header, Divider, UploadContainer } from './styles';
+import api from '~/services/api';
+import { VideoDTO } from '~/util/VideoDTO';
 
 function PrepareLesson() {
-  const [step, setStep] = useState(1);
+  let arrayVideo = [[], [], []];
 
-  const handleUploaded = useCallback(file => {
-    console.log(file);
+  function addNewTemplate() {
+    return {
+      id: uniqueId(),
+      name: '',
+      progress: 0,
+      uploaded: false,
+      error: false,
+    };
+  }
+
+  for (let line = 0; line < 3; line += 1) {
+    for (let column = 0; column < 4; column += 1) {
+      arrayVideo[line][column] = {};
+    }
+  }
+  arrayVideo[0][0] = addNewTemplate();
+
+  const [videos, setVideos] = useState(arrayVideo);
+
+  const handleUploaded = useCallback((file, line, column) => {
+    const formVideo = new FormData();
+    formVideo.append('videoFile', file);
+
+    api
+      .post('/videos/send', formVideo, {
+        onUploadProgress: ev => {
+          const progress = parseInt(Math.round((ev.loaded * 100) / ev.total));
+          arrayVideo = videos;
+          arrayVideo[line][column].progress = progress;
+          setVideos([...arrayVideo]);
+        },
+      })
+      .then(success => {
+        arrayVideo = videos;
+        arrayVideo[line][column].name = file.name;
+        arrayVideo[line][column].uploaded = true;
+        arrayVideo[line][column].error = false;
+        arrayVideo[line][column].id = success.data.id;
+        arrayVideo[line][column].url = success.data.url;
+
+        if (line < 2) {
+          arrayVideo[line + 1][column] = addNewTemplate();
+        }
+        if (column < 3 && line === 0) {
+          arrayVideo[line][column + 1] = addNewTemplate();
+        }
+        setVideos([...arrayVideo]);
+      })
+      .catch(fail => {
+        arrayVideo = videos;
+        arrayVideo[line][column].error = true;
+        setVideos(arrayVideo);
+
+        console.log(fail);
+      });
   }, []);
 
   return (
@@ -19,89 +77,33 @@ function PrepareLesson() {
           <Button type="secondary" onClick={() => {}}>
             Preciso de ajuda
           </Button>
-          <Button onClick={() => history.push('/detalhes-dos-videos')}>
+          <Button
+            onClick={() =>
+              history.push('/detalhes-dos-videos', VideoDTO(videos))
+            }
+          >
             Continuar
           </Button>
         </div>
       </Header>
       <Divider />
-      {step === 1 && (
-        <UploadContainer>
-          <Upload
-            progress={0}
-            error={false}
-            uploaded={false}
-            // onUpload={file => handleUploaded(file, row, column)}
-          />
-          <Upload
-            progress={0}
-            error={false}
-            uploaded={false}
-            // onUpload={file => handleUploaded(file, row, column)}
-          />
-          <Upload
-            progress={0}
-            error={false}
-            uploaded={false}
-            // onUpload={file => handleUploaded(file, row, column)}
-          />
-          <Upload
-            progress={0}
-            error={false}
-            uploaded={false}
-            // onUpload={file => handleUploaded(file, row, column)}
-          />
-          <Upload
-            progress={0}
-            error={false}
-            uploaded={false}
-            // onUpload={file => handleUploaded(file, row, column)}
-          />
-          <Upload
-            progress={0}
-            error={false}
-            uploaded={false}
-            // onUpload={file => handleUploaded(file, row, column)}
-          />
-          <Upload
-            progress={0}
-            error={false}
-            uploaded={false}
-            // onUpload={file => handleUploaded(file, row, column)}
-          />
-          <Upload
-            progress={0}
-            error={false}
-            uploaded={false}
-            // onUpload={file => handleUploaded(file, row, column)}
-          />
-          <Upload
-            progress={0}
-            error={false}
-            uploaded={false}
-            // onUpload={file => handleUploaded(file, row, column)}
-          />
-        </UploadContainer>
-      )}
-      {/* {videos.map((nivel, linha) => (
-        <Container key={nivel}>
-          {nivel.map((vid, coluna) =>
+      <UploadContainer>
+        {videos.map((nivel, row) =>
+          nivel.map((vid, column) =>
             vid.valueOf().id === undefined ? (
-              <div />
+              <div key={vid.id} />
             ) : (
-              <ContainerInput key={vid.id}>
-                <Upload
-                  key={vid.id}
-                  progresso={vid.progresso}
-                  error={vid.error}
-                  uploaded={vid.uploaded}
-                  handleFile={file => handleFile(file, linha, coluna)}
-                />
-              </ContainerInput>
+              <Upload
+                key={vid.id}
+                progress={vid.progress}
+                error={vid.error}
+                uploaded={vid.uploaded}
+                onUpload={file => handleUploaded(file, row, column)}
+              />
             )
-          )}
-        </Container>
-      ))} */}
+          )
+        )}
+      </UploadContainer>
     </MainLayout>
   );
 }

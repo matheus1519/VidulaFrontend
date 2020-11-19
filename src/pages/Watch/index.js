@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/no-static-element-interactions */
 import React, { useEffect, useRef, useState } from 'react';
 
 import { AiFillLike, AiOutlineLike } from 'react-icons/ai';
@@ -42,76 +44,87 @@ import {
 } from './styles';
 
 import { useTheme } from '~/context/Theme';
+import api from '~/services/api';
+
+const questions = [
+  {
+    id: 1,
+    label:
+      'Escolher um bloco de código para executar se uma condição for verdadeira.',
+  },
+  {
+    id: 2,
+    label: 'Uma resposta qualquer aqui',
+  },
+  {
+    id: 3,
+    label: 'Uma resposta qualquer longa, comprida e que pule linha',
+  },
+  {
+    id: 4,
+    label: 'Uma resposta qualquer aqui',
+  },
+  {
+    id: 5,
+    label: 'Uma resposta qualquer aqui só que essa é maior.',
+  },
+];
 
 function Watch() {
-  const questions = [
-    {
-      id: 1,
-      label:
-        'Escolher um bloco de código para executar se uma condição for verdadeira.',
-    },
-    {
-      id: 2,
-      label: 'Uma resposta qualquer aqui',
-    },
-    {
-      id: 3,
-      label: 'Uma resposta qualquer longa, comprida e que pule linha',
-    },
-    {
-      id: 4,
-      label: 'Uma resposta qualquer aqui',
-    },
-    {
-      id: 5,
-      label: 'Uma resposta qualquer aqui só que essa é maior.',
-    },
-  ];
-
   const [questionStep, setQuestionStep] = useState(false);
   const [decisionStep, setDecisionStep] = useState(false);
+
   const [failedQuestion, setFailedQuestion] = useState(null);
-  const [changeSubject, setChangeSubject] = useState(false);
+
+  const [disciplines, setDisciplines] = useState([]);
+  const [disciplineSelected, setDisciplinesSelected] = useState({});
+  const [changeDiscipline, setChangeDiscipline] = useState(true);
+
+  const [subjects, setSubjects] = useState([]);
+  const [subjectSelected, setSubjectSelected] = useState({});
 
   const { theme } = useTheme();
 
+  useEffect(() => {
+    api
+      .get('disciplinas')
+      .then(response => setDisciplines(response.data))
+      .catch(fail => console.log(fail));
+  }, []);
+
   return (
     <>
-      {changeSubject && (
-        <Modal title="Escolha uma disciplina" onClose={setChangeSubject}>
+      {changeDiscipline && (
+        <Modal title="Escolha uma disciplina" onClose={setChangeDiscipline}>
           <ModalContent>
-            <div>
-              <h3>Linguagem C</h3>
-              <p>
-                A Linguagem C é uma linguagem de programação ideal para sistemas
-                de tempo real.
-              </p>
-            </div>
-            <div>
-              <h3>Java</h3>
-              <p>A Linguagem C é uma linguagem de programação ideal para</p>
-            </div>
-            <div>
-              <h3>Javascript</h3>
-              <p>
-                A Linguagem C é uma linguagem de programação ideal para sistemas
-                de tempo real.
-              </p>
-            </div>
-            <div>
-              <h3>Python</h3>
-              <p>
-                A Linguagem C é uma linguagem de programação ideal para sistemas
-                de tempo real.
-              </p>
-            </div>
+            {disciplines.length !== 0 ? (
+              disciplines.map(discipline => (
+                <div
+                  key={discipline.id}
+                  onClick={() => {
+                    setDisciplinesSelected(discipline);
+                    setChangeDiscipline(false);
+                    setSubjects(discipline.assuntos);
+                    setSubjectSelected(discipline.assuntos[0]);
+                  }}
+                >
+                  <h3>{discipline.nome}</h3>
+                  <p>{discipline.descricao}</p>
+                </div>
+              ))
+            ) : (
+              <>
+                <h3>Nenhuma disciplina ainda foi adicionada.</h3>
+                <h4>Volte amanhã.</h4>
+              </>
+            )}
           </ModalContent>
         </Modal>
       )}
       <MainLayout>
         <Header>
-          <h1>Linguagem C</h1>
-          <Button type="secondary" onClick={() => setChangeSubject(true)}>
+          <h1>{disciplineSelected.nome}</h1>
+          <Button type="secondary" onClick={() => setChangeDiscipline(true)}>
             Trocar Disciplina
           </Button>
         </Header>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { RadioGroup, TextField } from '@material-ui/core';
 import { SiGoogleclassroom } from 'react-icons/si';
 import { Autocomplete } from '@material-ui/lab';
@@ -16,10 +16,19 @@ import {
   Divider,
 } from './styles';
 import RadioButton from '~/styles/RadioButton';
+import history from '~/services/history';
 
-function VideoDetails() {
+function VideoDetails({ location }) {
+  if (!location.state) {
+    history.push('/preparar-aula');
+  }
+
+  let arrayVideo;
+  const [videos, setVideos] = useState(location.state);
+  const [videoSelected, setVideoSelected] = useState({});
   const [insertDetail, setInsertDetail] = useState(false);
-  const [aboutLesson, setAboutLesson] = useState(true);
+  const [aboutLesson, setAboutLesson] = useState(false);
+  const [question, setQuestion] = useState('');
   const [rightAlternative, setRightAlternative] = useState('alternative1');
   const [listSubjects, setListSubjects] = useState([
     {
@@ -30,16 +39,33 @@ function VideoDetails() {
     },
   ]);
 
+  const handleModalDetail = useCallback((row, column) => {
+    setInsertDetail(true);
+    setVideoSelected(videos[row][column]);
+  }, []);
+
+  function verifyEmptyFields() {}
+
   return (
     <>
       {insertDetail && (
         <Modal title="Insira detalhes do vídeo" onClose={setInsertDetail}>
-          <ModalContent>
+          <ModalContent initialData={{ name: videoSelected.name }}>
+            {console.log(videoSelected)}
             <div>
               <h4>Dê um nome para o vídeo</h4>
               <Input name="name" placeholder="Nome" />
               <h4>Faça uma pergunta objetiva sobre o conteúdo do vídeo</h4>
-              <TextArea placeholder="Pergunta (não dê margem para ambiguidade)" />
+              <TextArea
+                value={videoSelected.question}
+                onChange={e =>
+                  setVideoSelected({
+                    ...videoSelected,
+                    question: e.target.value,
+                  })
+                }
+                placeholder="Pergunta (não dê margem para ambiguidade)"
+              />
             </div>
             <div>
               <h4>Escolhas as alternativas e indique a certa</h4>
@@ -142,15 +168,19 @@ function VideoDetails() {
         </Header>
         <Divider />
         <Container>
-          <VideoDetail onClick={() => setInsertDetail(true)} />
-          <VideoDetail onClick={() => setInsertDetail(true)} filled />
-          <VideoDetail onClick={() => setInsertDetail(true)} filled />
-          <VideoDetail onClick={() => setInsertDetail(true)} />
-          <VideoDetail onClick={() => setInsertDetail(true)} />
-          <VideoDetail onClick={() => setInsertDetail(true)} filled />
-          <VideoDetail onClick={() => setInsertDetail(true)} />
-          <VideoDetail onClick={() => setInsertDetail(true)} filled />
-          <VideoDetail onClick={() => setInsertDetail(true)} filled />
+          {videos.map((nivel, row) =>
+            nivel.map((vid, column) =>
+              vid.valueOf().id === undefined ? (
+                <div />
+              ) : (
+                <VideoDetail
+                  key={vid.id}
+                  filled={false}
+                  onClick={() => handleModalDetail(row, column)}
+                />
+              )
+            )
+          )}
         </Container>
       </MainLayout>
     </>

@@ -12,8 +12,8 @@ export default function Videos() {
   function addNewTemplate() {
     return {
       id: uniqueId(),
-      nome: '',
-      progresso: 0,
+      name: '',
+      progress: 0,
       uploaded: false,
       error: false,
     };
@@ -29,7 +29,6 @@ export default function Videos() {
   }
   inicializaArray();
 
-  // const [telaSm, setTelaSm] = useState(window.innerWidth < 575 && true);
   const [videos, setVideos] = useState(arrayVid);
   const [disciplina, setDisciplina] = useState('');
   const [objDisciplina, setObjDisciplina] = useState({});
@@ -37,57 +36,6 @@ export default function Videos() {
   const [descricaoVisible, setDescricaoVisible] = useState(false);
 
   const [assunto, setAssunto] = useState('');
-
-  // window.addEventListener(
-  //   'resize',
-  //   () => {
-  //     if (window.innerWidth < 575) {
-  //       setTelaSm(true);
-  //       return true;
-  //     }
-  //     setTelaSm(false);
-  //     return false;
-  //   },
-  //   false
-  // );
-
-  function handleFile(file, linha, coluna) {
-    const dados = new FormData();
-    dados.append('videoFile', file[0]);
-
-    api
-      .post('/videos', dados, {
-        onUploadProgress: ev => {
-          // eslint-disable-next-line radix
-          const progress = parseInt(Math.round((ev.loaded * 100) / ev.total));
-          arrayVid = videos;
-          arrayVid[linha][coluna].progresso = progress;
-          setVideos([...arrayVid]);
-        },
-      })
-      .then(success => {
-        arrayVid = videos;
-        arrayVid[linha][coluna].uploaded = true;
-        arrayVid[linha][coluna].error = false;
-        arrayVid[linha][coluna].id = success.data.id;
-        arrayVid[linha][coluna].data = success.data;
-
-        if (linha < 2) {
-          arrayVid[linha + 1][coluna] = addNewTemplate();
-        }
-        if (coluna < 3 && linha === 0) {
-          arrayVid[linha][coluna + 1] = addNewTemplate();
-        }
-        setVideos([...arrayVid]);
-      })
-      .catch(fail => {
-        arrayVid = videos;
-        arrayVid[linha][coluna].error = true;
-        setVideos(arrayVid);
-
-        console.log(fail);
-      });
-  }
 
   function handleAvancar() {
     let campoNome = 0;
@@ -161,23 +109,5 @@ export default function Videos() {
     toast.success('Plano de aula criado com sucesso!', {
       transition: Zoom,
     });
-  }
-
-  async function handleAddDisciplina(e) {
-    const elemento = e.target;
-    setDescricaoVisible(true);
-    const response = await api.post('disciplinas', { nome: disciplina });
-    setObjDisciplina(response.data);
-    // loadDisciplinas();
-    elemento.blur();
-  }
-
-  async function handleUpdateDisciplina() {
-    if (descricaoVisible) {
-      await api.put(`disciplinas/${objDisciplina.id}`, {
-        ...objDisciplina,
-        descricao,
-      });
-    }
   }
 }

@@ -37,7 +37,7 @@ function Upload({ progress, uploaded, error, onUpload, style }) {
       return (
         <CircularProgressbar
           styles={{
-            root: { width: 40 },
+            root: { width: 54 },
             path: { stroke: '#032791' },
           }}
           strokeWidth={10}
