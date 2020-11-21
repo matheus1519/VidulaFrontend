@@ -72,13 +72,13 @@ const questions = [
 
 function Watch() {
   const [questionStep, setQuestionStep] = useState(false);
-  const [decisionStep, setDecisionStep] = useState(false);
+  const [decisionStep, setDecisionStep] = useState(true);
 
   const [failedQuestion, setFailedQuestion] = useState(null);
 
   const [disciplines, setDisciplines] = useState([]);
   const [disciplineSelected, setDisciplinesSelected] = useState({});
-  const [changeDiscipline, setChangeDiscipline] = useState(true);
+  const [changeDiscipline, setChangeDiscipline] = useState(false);
 
   const [subjects, setSubjects] = useState([]);
   const [subjectSelected, setSubjectSelected] = useState({});

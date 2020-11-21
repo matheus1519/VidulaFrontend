@@ -5,7 +5,7 @@ import hexToRgba from '~/util/hexToRgba';
 export const ModalContent = styled(Form)`
   display: grid;
   grid-template-columns: 1fr 1fr;
-  grid-gap: 64px;
+  grid-gap: 40px;
 
   > div {
     height: 100%;
@@ -28,10 +28,6 @@ export const Footer = styled.div`
   width: 100%;
   display: flex;
   justify-content: flex-end;
-
-  button {
-    margin-top: 40px;
-  }
 `;
 
 export const StyledRadioText = styled.div`
@@ -50,6 +46,8 @@ export const StyledRadioText = styled.div`
 
 export const ModalContentAboutLesson = styled(Form)`
   width: 420px;
+  display: flex;
+  flex-direction: column;
 
   h4 {
     margin-bottom: 16px;
@@ -94,6 +92,11 @@ export const ModalContentAboutLesson = styled(Form)`
         color: ${({ theme }) => theme.primary};
       }
     }
+  }
+
+  > button {
+    align-self: flex-end;
+    margin-top: 40px;
   }
 `;
 

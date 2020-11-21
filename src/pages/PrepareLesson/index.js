@@ -2,12 +2,13 @@
 import React, { useCallback, useState } from 'react';
 import { uniqueId } from 'lodash';
 
+import { toast, Zoom } from 'react-toastify';
 import { Button, MainLayout, Upload } from '~/components';
 import history from '~/services/history';
 
 import { Header, Divider, UploadContainer } from './styles';
 import api from '~/services/api';
-import { VideoDTO } from '~/util/VideoDTO';
+import { VideoDTO } from '~/util/video/VideoDTO';
 
 function PrepareLesson() {
   let arrayVideo = [[], [], []];
@@ -63,10 +64,27 @@ function PrepareLesson() {
       .catch(fail => {
         arrayVideo = videos;
         arrayVideo[line][column].error = true;
-        setVideos(arrayVideo);
+        setVideos([...arrayVideo]);
 
-        console.log(fail);
+        console.log('sem conexão com o servidor!');
       });
+  }, []);
+
+  const handleNext = useCallback(() => {
+    let interativo = false;
+
+    interativo = videos[1].some(
+      vid => Object.values(vid).length && typeof vid.id === 'number'
+    );
+
+    if (!interativo) {
+      toast.error(`Não há como aplicar interatividade no plano de aula atual`, {
+        transition: Zoom,
+      });
+      return;
+    }
+
+    history.push('/detalhes-dos-videos', VideoDTO(videos));
   }, []);
 
   return (
@@ -77,13 +95,7 @@ function PrepareLesson() {
           <Button type="secondary" onClick={() => {}}>
             Preciso de ajuda
           </Button>
-          <Button
-            onClick={() =>
-              history.push('/detalhes-dos-videos', VideoDTO(videos))
-            }
-          >
-            Continuar
-          </Button>
+          <Button onClick={handleNext}>Continuar</Button>
         </div>
       </Header>
       <Divider />
