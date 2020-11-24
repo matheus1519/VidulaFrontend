@@ -2,6 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Route, Redirect } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 // import { store } from '~/store';
 
@@ -10,8 +11,7 @@ export default function RouteWrapper({
   permission,
   ...rest
 }) {
-  // const { signed } = store.getState().auth;
-  const signed = true;
+  const { signed } = useSelector(state => state.auth);
 
   if (!signed && permission) {
     return <Redirect to="/" />;

@@ -117,7 +117,7 @@ function VideoDetails({ location }) {
           }
 
           try {
-            api.put(`/videos/${video.id}`, {
+            await api.put(`/videos/${video.id}`, {
               id: video.id,
               nome: video.name,
               url: video.url,

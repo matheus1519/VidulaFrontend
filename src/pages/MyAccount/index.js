@@ -26,7 +26,7 @@ import {
 import RadioButton from '~/styles/RadioButton';
 
 function MyAccount() {
-  const [changeProfile, setChangeProfile] = useState(true);
+  const [changeProfile, setChangeProfile] = useState(false);
 
   const [gender, setGender] = useState('masculino');
   const [birthDate, setBirthDate] = useState('2000-01-01');

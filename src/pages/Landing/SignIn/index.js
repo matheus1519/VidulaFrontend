@@ -2,16 +2,18 @@ import React, { useCallback, useRef } from 'react';
 import { FiMail, FiLock } from 'react-icons/fi';
 
 import * as Yup from 'yup';
+import { useDispatch } from 'react-redux';
 import getValidationErrors from '~/util/getValidationErrors';
 
 import { Input, Button, ButtonLink } from '~/components';
 
 import { Container } from './styles';
 
-import history from '~/services/history';
+import { signInRequest } from '~/store/modules/auth/actions';
 
 function SignIn() {
   const formRef = useRef(null);
+  const dispatch = useDispatch();
 
   const handleSubmit = useCallback(async data => {
     try {
@@ -33,7 +35,7 @@ function SignIn() {
       formRef.current?.setErrors(errors);
     }
 
-    // history.push('/ver');
+    dispatch(signInRequest(data.email, data.password));
   }, []);
 
   return (

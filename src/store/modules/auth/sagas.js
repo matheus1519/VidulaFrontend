@@ -15,13 +15,13 @@ export function* signIn({ payload }) {
       senha,
     });
 
-    const { token, nome } = response.data;
+    const { token, user } = response.data;
 
     api.defaults.headers.Authorization = `Bearer ${token}`;
 
-    yield put(signInSuccess(token, nome, email));
+    yield put(signInSuccess(token, user));
 
-    history.push('/principal');
+    history.push('/assistir');
   } catch (error) {
     toast.error('Senha incorreta!', {
       transition: Zoom,

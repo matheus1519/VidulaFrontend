@@ -1,6 +1,6 @@
 /* eslint-disable radix */
 import React, { useCallback, useState } from 'react';
-import { uniqueId } from 'lodash';
+import { v4 as uuid } from 'uuid';
 
 import { toast, Zoom } from 'react-toastify';
 import { Button, MainLayout, Upload } from '~/components';
@@ -15,7 +15,7 @@ function PrepareLesson() {
 
   function addNewTemplate() {
     return {
-      id: uniqueId(),
+      id: uuid(),
       name: '',
       progress: 0,
       uploaded: false,
