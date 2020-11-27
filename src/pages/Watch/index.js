@@ -98,6 +98,8 @@ function Watch() {
   const handleChangeDiscipline = useCallback(discipline => {
     setDisciplinesSelected(discipline);
     setChangeDiscipline(false);
+    setQuestionStep(false);
+    setDecisionStep(false);
 
     if (discipline.assuntos.length !== 0) {
       setSubjects(discipline.assuntos);
@@ -154,15 +156,18 @@ function Watch() {
         <Modal title="Escolha uma disciplina" onClose={setChangeDiscipline}>
           <ModalContent>
             {disciplines.length !== 0 ? (
-              disciplines.map(discipline => (
-                <div
-                  key={discipline.id}
-                  onClick={() => handleChangeDiscipline(discipline)}
-                >
-                  <h3>{discipline.nome}</h3>
-                  <p>{discipline.descricao}</p>
-                </div>
-              ))
+              disciplines.map(
+                discipline =>
+                  discipline.assuntos.length !== 0 && (
+                    <div
+                      key={discipline.id}
+                      onClick={() => handleChangeDiscipline(discipline)}
+                    >
+                      <h3>{discipline.nome}</h3>
+                      <p>{discipline.descricao}</p>
+                    </div>
+                  )
+              )
             ) : (
               <>
                 <h3>Nenhuma disciplina ainda foi adicionada.</h3>
@@ -338,7 +343,7 @@ function Watch() {
                     }
                   >
                     <h5>{subject.nome}</h5>
-                    <BiCheckboxChecked size={36} color={theme.success} />
+                    {/* <BiCheckboxChecked size={36} color={theme.success} /> */}
                   </Subject>
                 ))}
             </ul>

@@ -2,6 +2,8 @@ import React, { useCallback, useRef } from 'react';
 import { FiMail, FiLock, FiUser } from 'react-icons/fi';
 
 import * as Yup from 'yup';
+import { useDispatch } from 'react-redux';
+import { toast, Zoom } from 'react-toastify';
 import getValidationErrors from '~/util/getValidationErrors';
 
 import { Input, Button } from '~/components';
@@ -9,9 +11,11 @@ import { Input, Button } from '~/components';
 import { Container } from './styles';
 import history from '~/services/history';
 import api from '~/services/api';
+import { signInRequest } from '~/store/modules/auth/actions';
 
 function SignUp() {
   const formRef = useRef(null);
+  const dispatch = useDispatch();
 
   const handleSubmit = useCallback(async data => {
     try {
@@ -33,13 +37,23 @@ function SignUp() {
       formRef.current?.setErrors(errors);
     }
 
-    const response = await api.post('/usuarios', {
-      nome: data.name,
-      email: data.email.toLowerCase(),
-      senha: data.password,
-    });
+    try {
+      await api.post('/usuarios', {
+        nome: data.name,
+        email: data.email.toLowerCase(),
+        senha: data.password,
+      });
 
-    history.push('/ver');
+      toast.success('Conta criada com sucesso!', {
+        transition: Zoom,
+      });
+
+      dispatch(signInRequest(data.email, data.password));
+
+      history.push('/');
+    } catch (error) {
+      console.log(error);
+    }
   }, []);
 
   return (

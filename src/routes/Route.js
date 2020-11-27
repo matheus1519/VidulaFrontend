@@ -12,12 +12,21 @@ export default function RouteWrapper({
   ...rest
 }) {
   const { signed } = useSelector(state => state.auth);
+  const accessLevel = useSelector(state => state.user.user?.accessLevel);
 
   if (!signed && permission) {
     return <Redirect to="/" />;
   }
 
   if (signed && !permission) {
+    return <Redirect to="/assistir" />;
+  }
+
+  if (permission === 'admin' && accessLevel < 3) {
+    return <Redirect to="/assistir" />;
+  }
+
+  if (permission === 'teacher' && accessLevel < 2) {
     return <Redirect to="/assistir" />;
   }
 
