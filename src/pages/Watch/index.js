@@ -343,7 +343,7 @@ function Watch() {
                     }
                   >
                     <h5>{subject.nome}</h5>
-                    {/* <BiCheckboxChecked size={36} color={theme.success} /> */}
+                    <BiCheckboxChecked size={36} color={theme.success} />
                   </Subject>
                 ))}
             </ul>

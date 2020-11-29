@@ -37,7 +37,7 @@ function Questions({ teste, onConfirm }) {
         onChange={questionChange}
       >
         <RadioButton
-          value="alternativa1"
+          value="alternative1"
           label={testeMapped.alternative1}
           checked={questionSelected === 'alternative1'}
         />

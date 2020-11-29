@@ -26,6 +26,8 @@ export function* signIn({ payload }) {
     toast.error('Senha incorreta!', {
       transition: Zoom,
     });
+
+    console.log(error);
     yield put(signFailure());
   }
 }
