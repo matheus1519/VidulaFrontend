@@ -27,7 +27,6 @@ function VideoDetails({ location }) {
     history.push('/preparar-aula');
   }
 
-  let arrayVideo;
   const [videos, setVideos] = useState(location.state);
   const [videoSelected, setVideoSelected] = useState({});
   const [insertDetail, setInsertDetail] = useState(false);
@@ -39,41 +38,46 @@ function VideoDetails({ location }) {
     api.get('/disciplinas').then(response => setListSubjects(response.data));
   }, []);
 
-  const handleModalDetail = useCallback((row, column) => {
-    setInsertDetail(true);
-    setVideoSelected({ ...videos[row][column], row, column });
-  }, []);
+  const handleModalDetail = useCallback(
+    (row, column) => {
+      setInsertDetail(true);
+      setVideoSelected({ ...videos[row][column], row, column });
+    },
+    [videos]
+  );
 
-  const handleDataDetail = useCallback((dataUnform, dataVideo) => {
-    arrayVideo = videos;
-    arrayVideo[dataVideo.row][dataVideo.column] = {
-      name: dataUnform.name,
-      id: dataVideo.id,
-      url: dataVideo.url,
-      alternatives: {
-        question: dataVideo.alternatives.question,
-        alternative1: dataUnform.alternative1,
-        alternative2: dataUnform.alternative2,
-        alternative3: dataUnform.alternative3,
-        alternative4: dataUnform.alternative4,
-        alternative5: dataUnform.alternative5,
-        rightAlternative: dataVideo.alternatives.rightAlternative,
-      },
-    };
+  const handleDataDetail = useCallback(
+    (dataUnform, dataVideo) => {
+      const arrayVid = videos;
+      arrayVid[dataVideo.row][dataVideo.column] = {
+        name: dataUnform.name,
+        id: dataVideo.id,
+        url: dataVideo.url,
+        alternatives: {
+          question: dataVideo.alternatives.question,
+          alternative1: dataUnform.alternative1,
+          alternative2: dataUnform.alternative2,
+          alternative3: dataUnform.alternative3,
+          alternative4: dataUnform.alternative4,
+          alternative5: dataUnform.alternative5,
+          rightAlternative: dataVideo.alternatives.rightAlternative,
+        },
+      };
 
-    if (hasEmptyFields(arrayVideo[dataVideo.row][dataVideo.column])) {
-      arrayVideo[dataVideo.row][dataVideo.column].filled = false;
-    } else {
-      arrayVideo[dataVideo.row][dataVideo.column].filled = true;
-    }
+      if (hasEmptyFields(arrayVid[dataVideo.row][dataVideo.column])) {
+        arrayVid[dataVideo.row][dataVideo.column].filled = false;
+      } else {
+        arrayVid[dataVideo.row][dataVideo.column].filled = true;
+      }
 
-    setVideos([...arrayVideo]);
+      setVideos([...arrayVid]);
 
-    setInsertDetail(false);
-  }, []);
+      setInsertDetail(false);
+    },
+    [videos]
+  );
 
   const handleFinishSettings = useCallback(() => {
-    arrayVideo = videos;
     let hasEmpty = false;
 
     videos.forEach(niv =>
@@ -92,71 +96,76 @@ function VideoDetails({ location }) {
     }
 
     setAboutLesson(true);
-  }, []);
+  }, [videos]);
 
-  const handleConclude = useCallback(async (data, disciplineId) => {
-    videos.forEach((nivel, row) => {
-      nivel.forEach(async (video, column) => {
-        if (!isEmpty(video)) {
-          try {
-            const response = await api.post('/testes', {
-              pergunta: video.alternatives.question,
-              alternativa1: video.alternatives.alternative1,
-              alternativa2: video.alternatives.alternative2,
-              alternativa3: video.alternatives.alternative3,
-              alternativa4: video.alternatives.alternative4,
-              alternativa5: video.alternatives.alternative5,
-              alternativaCerta: video.alternatives.rightAlternative,
-            });
+  const handleConclude = useCallback(
+    async (data, disciplineId) => {
+      let arrayVid;
 
-            arrayVideo = videos;
-            arrayVideo[row][column].teste = response.data.id;
-            setVideos([...arrayVideo]);
-          } catch (error) {
-            console.log(error);
+      videos.forEach((nivel, row) => {
+        nivel.forEach(async (video, column) => {
+          if (!isEmpty(video)) {
+            try {
+              const response = await api.post('/testes', {
+                pergunta: video.alternatives.question,
+                alternativa1: video.alternatives.alternative1,
+                alternativa2: video.alternatives.alternative2,
+                alternativa3: video.alternatives.alternative3,
+                alternativa4: video.alternatives.alternative4,
+                alternativa5: video.alternatives.alternative5,
+                alternativaCerta: video.alternatives.rightAlternative,
+              });
+
+              arrayVid = videos;
+              arrayVid[row][column].teste = response.data.id;
+              setVideos([...arrayVid]);
+            } catch (error) {
+              console.log(error);
+            }
+
+            try {
+              await api.put(`/videos/${video.id}`, {
+                id: video.id,
+                nome: video.name,
+                url: video.url,
+                teste: { id: video.teste },
+                proximo:
+                  column < 3 && typeof arrayVid[0][column + 1].id === 'number'
+                    ? { id: arrayVid[0][column + 1].id }
+                    : null,
+                detalhe:
+                  row < 2 && typeof arrayVid[row + 1][column].id === 'number'
+                    ? { id: arrayVid[row + 1][column].id }
+                    : null,
+              });
+            } catch (err) {
+              console.log(err);
+            }
           }
-
-          try {
-            await api.put(`/videos/${video.id}`, {
-              id: video.id,
-              nome: video.name,
-              url: video.url,
-              teste: { id: video.teste },
-              proximo:
-                column < 3 && typeof arrayVideo[0][column + 1].id === 'number'
-                  ? { id: arrayVideo[0][column + 1].id }
-                  : null,
-              detalhe:
-                row < 2 && typeof arrayVideo[row + 1][column].id === 'number'
-                  ? { id: arrayVideo[row + 1][column].id }
-                  : null,
-            });
-          } catch (err) {
-            console.log(err);
-          }
-        }
-      });
-    });
-
-    try {
-      await api.post('/assuntos', {
-        nome: data.name,
-        inicio: { id: videos[0][0].id },
-        disciplina: { id: disciplineId },
+        });
       });
 
-      toast.success('Plano de aula criado com sucesso!', {
-        transition: Zoom,
-      });
-    } catch (err) {
-      console.log(err);
-      toast.error('Ocorreu um erro no servidor', {
-        transition: Zoom,
-      });
-    }
+      try {
+        await api.post('/assuntos', {
+          nome: data.name,
+          inicio: { id: videos[0][0].id },
+          disciplina: { id: disciplineId },
+        });
 
-    history.push('assistir');
-  }, []);
+        toast.success('Plano de aula criado com sucesso!', {
+          transition: Zoom,
+        });
+      } catch (err) {
+        console.log(err);
+        toast.error('Ocorreu um erro no servidor', {
+          transition: Zoom,
+        });
+      }
+
+      history.push('assistir');
+    },
+    [videos]
+  );
 
   return (
     <>

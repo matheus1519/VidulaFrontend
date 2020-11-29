@@ -12,7 +12,7 @@ function Modal({ title, width, children, onClose }) {
     return () => {
       body.style.overflow = 'auto';
     };
-  }, []);
+  }, [body.style.overflow]);
 
   const { theme } = useTheme();
 

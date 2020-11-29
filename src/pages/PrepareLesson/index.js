@@ -11,7 +11,7 @@ import api from '~/services/api';
 import { VideoDTO } from '~/util/video/VideoDTO';
 
 function PrepareLesson() {
-  let arrayVideo = [[], [], []];
+  const arrayVideo = [[], [], []];
 
   function addNewTemplate() {
     return {
@@ -32,43 +32,47 @@ function PrepareLesson() {
 
   const [videos, setVideos] = useState(arrayVideo);
 
-  const handleUploaded = useCallback((file, line, column) => {
-    const formVideo = new FormData();
-    formVideo.append('videoFile', file);
+  const handleUploaded = useCallback(
+    (file, line, column) => {
+      let arrayVid = [[], [], []];
+      const formVideo = new FormData();
+      formVideo.append('videoFile', file);
 
-    api
-      .post('/videos/send', formVideo, {
-        onUploadProgress: ev => {
-          const progress = parseInt(Math.round((ev.loaded * 100) / ev.total));
-          arrayVideo = videos;
-          arrayVideo[line][column].progress = progress;
-          setVideos([...arrayVideo]);
-        },
-      })
-      .then(success => {
-        arrayVideo = videos;
-        arrayVideo[line][column].name = file.name;
-        arrayVideo[line][column].uploaded = true;
-        arrayVideo[line][column].error = false;
-        arrayVideo[line][column].id = success.data.id;
-        arrayVideo[line][column].url = success.data.url;
+      api
+        .post('/videos/send', formVideo, {
+          onUploadProgress: ev => {
+            const progress = parseInt(Math.round((ev.loaded * 100) / ev.total));
+            arrayVid = videos;
+            arrayVid[line][column].progress = progress;
+            setVideos([...arrayVid]);
+          },
+        })
+        .then(success => {
+          arrayVid = videos;
+          arrayVid[line][column].name = file.name;
+          arrayVid[line][column].uploaded = true;
+          arrayVid[line][column].error = false;
+          arrayVid[line][column].id = success.data.id;
+          arrayVid[line][column].url = success.data.url;
 
-        if (line < 2) {
-          arrayVideo[line + 1][column] = addNewTemplate();
-        }
-        if (column < 3 && line === 0) {
-          arrayVideo[line][column + 1] = addNewTemplate();
-        }
-        setVideos([...arrayVideo]);
-      })
-      .catch(fail => {
-        arrayVideo = videos;
-        arrayVideo[line][column].error = true;
-        setVideos([...arrayVideo]);
+          if (line < 2) {
+            arrayVid[line + 1][column] = addNewTemplate();
+          }
+          if (column < 3 && line === 0) {
+            arrayVid[line][column + 1] = addNewTemplate();
+          }
+          setVideos([...arrayVid]);
+        })
+        .catch(fail => {
+          arrayVid = videos;
+          arrayVid[line][column].error = true;
+          setVideos([...arrayVid]);
 
-        console.log('sem conexão com o servidor!');
-      });
-  }, []);
+          console.log('sem conexão com o servidor!');
+        });
+    },
+    [videos]
+  );
 
   const handleNext = useCallback(() => {
     let interativo = false;
@@ -85,7 +89,7 @@ function PrepareLesson() {
     }
 
     history.push('/detalhes-dos-videos', VideoDTO(videos));
-  }, []);
+  }, [videos]);
 
   return (
     <MainLayout>

@@ -13,7 +13,7 @@ function Menu() {
 
   const onSignOut = useCallback(() => {
     dispatch(signOut());
-  }, []);
+  }, [dispatch]);
 
   return (
     <Container>

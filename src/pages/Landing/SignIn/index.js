@@ -15,28 +15,31 @@ function SignIn() {
   const formRef = useRef(null);
   const dispatch = useDispatch();
 
-  const handleSubmit = useCallback(async data => {
-    try {
-      const schema = Yup.object().shape({
-        name: Yup.string().required('Nome obrigatório'),
-        email: Yup.string()
-          .required('Email obrigatório')
-          .email('Digite um email válido'),
-        password: Yup.string().required('Senha obrigatória'),
-      });
+  const handleSubmit = useCallback(
+    async data => {
+      try {
+        const schema = Yup.object().shape({
+          name: Yup.string().required('Nome obrigatório'),
+          email: Yup.string()
+            .required('Email obrigatório')
+            .email('Digite um email válido'),
+          password: Yup.string().required('Senha obrigatória'),
+        });
 
-      await schema.validate(data, {
-        abortEarly: false,
-      });
-    } catch (err) {
-      const errors = getValidationErrors(err);
+        await schema.validate(data, {
+          abortEarly: false,
+        });
+      } catch (err) {
+        const errors = getValidationErrors(err);
 
-      // eslint-disable-next-line no-unused-expressions
-      formRef.current?.setErrors(errors);
-    }
+        // eslint-disable-next-line no-unused-expressions
+        formRef.current?.setErrors(errors);
+      }
 
-    dispatch(signInRequest(data.email, data.password));
-  }, []);
+      dispatch(signInRequest(data.email, data.password));
+    },
+    [dispatch]
+  );
 
   return (
     <Container ref={formRef} onSubmit={handleSubmit}>

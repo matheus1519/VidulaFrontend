@@ -17,44 +17,47 @@ function SignUp() {
   const formRef = useRef(null);
   const dispatch = useDispatch();
 
-  const handleSubmit = useCallback(async data => {
-    try {
-      const schema = Yup.object().shape({
-        name: Yup.string().required('Nome obrigatório'),
-        email: Yup.string()
-          .required('Email obrigatório')
-          .email('Digite um email válido'),
-        password: Yup.string().required('Senha obrigatória'),
-      });
+  const handleSubmit = useCallback(
+    async data => {
+      try {
+        const schema = Yup.object().shape({
+          name: Yup.string().required('Nome obrigatório'),
+          email: Yup.string()
+            .required('Email obrigatório')
+            .email('Digite um email válido'),
+          password: Yup.string().required('Senha obrigatória'),
+        });
 
-      await schema.validate(data, {
-        abortEarly: false,
-      });
-    } catch (err) {
-      const errors = getValidationErrors(err);
+        await schema.validate(data, {
+          abortEarly: false,
+        });
+      } catch (err) {
+        const errors = getValidationErrors(err);
 
-      // eslint-disable-next-line no-unused-expressions
-      formRef.current?.setErrors(errors);
-    }
+        // eslint-disable-next-line no-unused-expressions
+        formRef.current?.setErrors(errors);
+      }
 
-    try {
-      await api.post('/usuarios', {
-        nome: data.name,
-        email: data.email.toLowerCase(),
-        senha: data.password,
-      });
+      try {
+        await api.post('/usuarios', {
+          nome: data.name,
+          email: data.email.toLowerCase(),
+          senha: data.password,
+        });
 
-      toast.success('Conta criada com sucesso!', {
-        transition: Zoom,
-      });
+        toast.success('Conta criada com sucesso!', {
+          transition: Zoom,
+        });
 
-      dispatch(signInRequest(data.email, data.password));
+        dispatch(signInRequest(data.email, data.password));
 
-      history.push('/');
-    } catch (error) {
-      console.log(error);
-    }
-  }, []);
+        history.push('/');
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    [dispatch]
+  );
 
   return (
     <Container ref={formRef} onSubmit={handleSubmit}>

@@ -22,6 +22,7 @@ function Administrative() {
       url:
         'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
     },
+    person,
   };
 
   const handleAnalyzeVideo = useCallback(personSelected => {

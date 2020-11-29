@@ -2,13 +2,9 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 
-import { AiFillLike, AiOutlineLike } from 'react-icons/ai';
-import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
-import {
-  BiCheckbox,
-  BiCheckboxChecked,
-  BiCheckboxSquare,
-} from 'react-icons/bi';
+import { AiOutlineLike } from 'react-icons/ai';
+import { FaChevronUp } from 'react-icons/fa';
+import { BiCheckboxChecked } from 'react-icons/bi';
 
 import {
   Button,
@@ -22,7 +18,6 @@ import {
 
 import Questions from './Questions';
 
-import videoTest from '~/assets/video-test.mp4';
 import avatarAnony from '~/assets/avatar-anony.png';
 
 import {
@@ -45,30 +40,6 @@ import {
 
 import { useTheme } from '~/context/Theme';
 import api from '~/services/api';
-
-const questions = [
-  {
-    id: 1,
-    label:
-      'Escolher um bloco de código para executar se uma condição for verdadeira.',
-  },
-  {
-    id: 2,
-    label: 'Uma resposta qualquer aqui',
-  },
-  {
-    id: 3,
-    label: 'Uma resposta qualquer longa, comprida e que pule linha',
-  },
-  {
-    id: 4,
-    label: 'Uma resposta qualquer aqui',
-  },
-  {
-    id: 5,
-    label: 'Uma resposta qualquer aqui só que essa é maior.',
-  },
-];
 
 function Watch() {
   const [questionStep, setQuestionStep] = useState(false);
