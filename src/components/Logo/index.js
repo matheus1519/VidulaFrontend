@@ -9,8 +9,8 @@ function Logo({ outline, disabled, color }) {
   return (
     <Container
       disabled={disabled}
-      outline={outline}
-      to={outline ? '/ver' : '/'}
+      outline={outline ? 1 : 0}
+      to={outline ? '/assistir' : '/'}
     >
       {outline ? (
         <svg

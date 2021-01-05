@@ -6,7 +6,7 @@ export default reducers => {
     {
       key: 'vidula',
       storage,
-      whitelist: ['auth', 'user'],
+      whitelist: ['auth', 'user', 'watch'],
     },
     reducers
   );

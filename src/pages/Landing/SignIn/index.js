@@ -5,7 +5,7 @@ import * as Yup from 'yup';
 import { useDispatch } from 'react-redux';
 import getValidationErrors from '~/util/getValidationErrors';
 
-import { Input, Button, ButtonLink } from '~/components';
+import { Input, Button } from '~/components';
 
 import { Container } from './styles';
 
@@ -55,9 +55,9 @@ function SignIn() {
       <Button type="submit" flex>
         Entrar
       </Button>
-      <ButtonLink to="/esqueci-minha-senha" mt="8">
+      {/* <ButtonLink to="/esqueci-minha-senha" mt="8">
         Recuperar minha senha
-      </ButtonLink>
+      </ButtonLink> */}
     </Container>
   );
 }

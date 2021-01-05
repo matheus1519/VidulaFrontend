@@ -1,3 +1,4 @@
+/* eslint-disable prefer-const */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import React, { useCallback, useEffect, useRef, useState } from 'react';
@@ -5,6 +6,13 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { AiOutlineLike } from 'react-icons/ai';
 import { FaChevronUp } from 'react-icons/fa';
 import { BiCheckboxChecked } from 'react-icons/bi';
+
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  addDiscipline,
+  addVideo,
+  updatePath,
+} from '~/store/modules/watch/actions';
 
 import {
   Button,
@@ -40,86 +48,166 @@ import {
 
 import { useTheme } from '~/context/Theme';
 import api from '~/services/api';
+import { isEmpty } from '~/util/isObjectEmpty';
 
 function Watch() {
   const [questionStep, setQuestionStep] = useState(false);
   const [decisionStep, setDecisionStep] = useState(false);
 
-  const [isRightAnswer, setiIsRightAnswer] = useState(null);
+  const [isRightAnswer, setIsRightAnswer] = useState(null);
 
   const [disciplines, setDisciplines] = useState([]);
-  const [disciplineSelected, setDisciplinesSelected] = useState({});
-  const [changeDiscipline, setChangeDiscipline] = useState(true);
+
+  const getDisciplineStored = useSelector(state => state.watch.discipline);
+
+  const [disciplineSelected, setDisciplinesSelected] = useState(
+    getDisciplineStored || {}
+  );
+
+  const [changeDiscipline, setChangeDiscipline] = useState(
+    !!isEmpty(disciplineSelected)
+  );
 
   const [subjects, setSubjects] = useState([]);
   const [subjectSelected, setSubjectSelected] = useState({});
 
   const [video, setVideo] = useState({});
+  const getStoredVideo = useSelector(state => state.watch.video);
+
+  const path = useSelector(state => state.watch.path);
+  const userId = useSelector(state => state.user.user.id);
 
   const { theme } = useTheme();
   const videoRef = useRef(null);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     api
       .get('disciplinas')
       .then(response => setDisciplines(response.data))
       .catch(fail => console.log(fail));
-  }, []);
 
-  const handleChangeDiscipline = useCallback(discipline => {
-    setDisciplinesSelected(discipline);
-    setChangeDiscipline(false);
-    setQuestionStep(false);
-    setDecisionStep(false);
-
-    if (discipline.assuntos.length !== 0) {
-      setSubjects(discipline.assuntos);
-      setSubjectSelected(discipline.assuntos[0]);
-      setVideo(discipline.assuntos[0].inicio);
-      videoRef.current.load();
+    if (
+      !isEmpty(disciplineSelected) &&
+      disciplineSelected.assuntos.length !== 0
+    ) {
+      setSubjects(disciplineSelected.assuntos);
+      setSubjectSelected(disciplineSelected.assuntos[0]);
+      setVideo(getStoredVideo || disciplineSelected.assuntos[0].inicio);
     }
-  }, []);
+  }, [getStoredVideo, disciplineSelected]);
 
-  const onClickSubject = useCallback(subject => {
-    setVideo(subject.inicio);
-    setSubjectSelected(subject);
-    setQuestionStep(false);
-    setDecisionStep(false);
+  const handleChangeDiscipline = useCallback(
+    discipline => {
+      setDisciplinesSelected(discipline);
+      dispatch(addDiscipline(discipline));
+      setChangeDiscipline(false);
+      setQuestionStep(false);
+      setDecisionStep(false);
 
-    videoRef.current.load();
-  }, []);
+      if (discipline.assuntos.length !== 0) {
+        setSubjects(discipline.assuntos);
+        setSubjectSelected(discipline.assuntos[0]);
+        setVideo(discipline.assuntos[0].inicio);
+        dispatch(addVideo(discipline.assuntos[0].inicio));
+
+        videoRef.current.load();
+      }
+    },
+    [dispatch]
+  );
+
+  const onClickSubject = useCallback(
+    subject => {
+      setVideo(subject.inicio);
+      dispatch(addVideo(subject.inicio));
+
+      setSubjectSelected(subject);
+      setQuestionStep(false);
+      setDecisionStep(false);
+
+      videoRef.current.load();
+    },
+    [dispatch]
+  );
 
   const onAnswerConfirm = useCallback(rightAnswer => {
-    setiIsRightAnswer(rightAnswer);
+    setIsRightAnswer(rightAnswer);
     setQuestionStep(false);
     setDecisionStep(true);
   }, []);
 
-  const onDetail = useCallback(vid => {
-    setVideo(vid.detalhe);
-    document.querySelector('video').load();
-    setDecisionStep(false);
-  }, []);
+  const onDetail = useCallback(
+    vid => {
+      let pathBefore = path;
 
-  const onNext = useCallback(vid => {
-    setVideo(vid.proximo);
-    document.querySelector('video').load();
-    setDecisionStep(false);
-  }, []);
+      setVideo(vid.detalhe);
+      dispatch(addVideo(vid.detalhe));
 
-  const onFinish = useCallback((currentDiscipline, currentSubject) => {
-    currentDiscipline.assuntos.forEach(subject => {
-      if (subject.id === currentSubject.id) {
-        const index = currentDiscipline.assuntos.indexOf(currentSubject);
-        if (index < currentDiscipline.assuntos.length - 1) {
-          setSubjectSelected(currentDiscipline.assuntos[index + 1]);
-          setVideo(currentDiscipline.assuntos[index + 1].inicio);
-          setDecisionStep(false);
-          videoRef.current.load();
+      videoRef.current.load();
+      setDecisionStep(false);
+
+      setTimeout(() => {
+        dispatch(updatePath(`${pathBefore} d`));
+      }, 500);
+    },
+    [dispatch, path]
+  );
+
+  const onNext = useCallback(
+    vid => {
+      let pathBefore = path;
+
+      setVideo(vid.proximo);
+      dispatch(addVideo(vid.proximo));
+
+      videoRef.current.load();
+      setDecisionStep(false);
+
+      setTimeout(() => {
+        dispatch(updatePath(`${pathBefore} p`));
+      }, 500);
+    },
+    [dispatch, path]
+  );
+
+  const onFinish = useCallback(
+    (currentDiscipline, currentSubject, currentPath) => {
+      console.log('currentPath', currentPath);
+      api.post('/watch', {
+        path: currentPath,
+        visto: true,
+        user: { id: userId },
+        subject: { id: currentSubject.id },
+      });
+
+      currentDiscipline.assuntos.forEach(subject => {
+        if (subject.id === currentSubject.id) {
+          const index = currentDiscipline.assuntos.indexOf(currentSubject);
+          if (index < currentDiscipline.assuntos.length - 1) {
+            setSubjectSelected(currentDiscipline.assuntos[index + 1]);
+            setVideo(currentDiscipline.assuntos[index + 1].inicio);
+            dispatch(addVideo(currentDiscipline.assuntos[index + 1].inicio));
+
+            setDecisionStep(false);
+            videoRef.current.load();
+          }
+
+          // Send path and viewed
+
+          // api.get('/assuntos').then(response => {
+          //   console.log(response);
+          //   setSubjects(response.data);
+          // });
+
+          setTimeout(() => {
+            dispatch(updatePath(''));
+          }, 3000);
         }
-      }
-    });
-  }, []);
+      });
+    },
+    [dispatch]
+  );
 
   return (
     <>
@@ -181,7 +269,7 @@ function Watch() {
                         }
                         color="warning"
                         onClick={() =>
-                          onFinish(disciplineSelected, subjectSelected)
+                          onFinish(disciplineSelected, subjectSelected, path)
                         }
                       >
                         Terminar assunto
@@ -194,7 +282,9 @@ function Watch() {
                             : 'secondary'
                         }
                         color="warning"
-                        onClick={() => onNext(video)}
+                        onClick={() => {
+                          onNext(video);
+                        }}
                       >
                         Prosseguir com o conteúdo
                       </Button>
@@ -217,6 +307,7 @@ function Watch() {
                 onEnded={() => setQuestionStep(true)}
                 preload="auto"
                 autoPlay
+                controls
               >
                 <source src={video.url} type="video/mp4" />
                 <track
@@ -282,7 +373,7 @@ function Watch() {
                       Porque não usar a forma descriva ao invés da comparativa?
                       Seria melhor encaixada.
                     </p>
-                    {/* <ButtonLink>Responder</Bu  ttonLink> */}
+                    {/* <ButtonLink>Responder</ButtonLink> */}
                     <div>
                       <Icon size={24} icon={AiOutlineLike} />
                     </div>
@@ -314,7 +405,9 @@ function Watch() {
                     }
                   >
                     <h5>{subject.nome}</h5>
-                    <BiCheckboxChecked size={36} color={theme.success} />
+                    {/* {subject.watches && (
+                      <BiCheckboxChecked size={36} color={theme.success} />
+                    )} */}
                   </Subject>
                 ))}
             </ul>
