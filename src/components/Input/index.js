@@ -4,7 +4,7 @@ import { FiAlertCircle } from 'react-icons/fi';
 
 import { Container, Error } from './styles';
 
-function Input({ icon: Icon, name, mb, fit, ...rest }) {
+function Input({ icon: Icon, name, fit, onBlur, ...rest }) {
   const inputRef = useRef(null);
   const [isFocused, setIsFocused] = useState(false);
   const [isFilled, setIsFilled] = useState(false);
@@ -15,10 +15,11 @@ function Input({ icon: Icon, name, mb, fit, ...rest }) {
   }, []);
 
   const handleInputBlur = useCallback(() => {
+    if (onBlur) onBlur();
     setIsFocused(false);
 
     setIsFilled(!!inputRef.current?.value);
-  }, []);
+  }, [onBlur]);
 
   useEffect(() => {
     registerField({
@@ -35,7 +36,6 @@ function Input({ icon: Icon, name, mb, fit, ...rest }) {
       isFilled={isFilled}
       onClick={() => inputRef.current.focus()}
       fit={fit}
-      mb={mb}
     >
       {Icon && <Icon size={20} />}
       <input

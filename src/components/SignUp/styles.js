@@ -10,4 +10,8 @@ export const Container = styled(Form)`
   h4 {
     margin-bottom: 16px;
   }
+
+  > div {
+    margin-bottom: 16px;
+  }
 `;

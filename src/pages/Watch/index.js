@@ -5,7 +5,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 import { AiOutlineLike } from 'react-icons/ai';
 import { FaChevronUp } from 'react-icons/fa';
-import { BiCheckboxChecked } from 'react-icons/bi';
+// import { BiCheckboxChecked } from 'react-icons/bi';
 
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -46,7 +46,7 @@ import {
   Subject,
 } from './styles';
 
-import { useTheme } from '~/context/Theme';
+// import { useTheme } from '~/context/Theme';
 import api from '~/services/api';
 import { isEmpty } from '~/util/isObjectEmpty';
 
@@ -77,7 +77,7 @@ function Watch() {
   const path = useSelector(state => state.watch.path);
   const userId = useSelector(state => state.user.user.id);
 
-  const { theme } = useTheme();
+  // const { theme } = useTheme();
   const videoRef = useRef(null);
   const dispatch = useDispatch();
 
@@ -206,7 +206,7 @@ function Watch() {
         }
       });
     },
-    [dispatch]
+    [userId, dispatch]
   );
 
   return (

@@ -13,7 +13,6 @@ export const Container = styled.div`
   transition: 0.2s;
   cursor: text;
 
-  margin-bottom: ${({ mb }) => `${mb}px`};
 
   svg {
     margin-right: 16px;
@@ -59,6 +58,7 @@ export const Container = styled.div`
 
 
   input {
+    width:100%;
     flex: 1;
     background: transparent;
     font-size: 1rem;

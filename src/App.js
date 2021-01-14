@@ -2,7 +2,7 @@ import React from 'react';
 import { PersistGate } from 'redux-persist/integration/react';
 import { Router } from 'react-router-dom';
 import { Provider } from 'react-redux';
-import { ToastContainer } from 'react-toastify';
+import { ToastContainer, Zoom } from 'react-toastify';
 import { MyThemeProvider } from './context/Theme';
 
 import './config/ReactotronConfig';
@@ -21,7 +21,7 @@ function App() {
           <MyThemeProvider>
             <Routes />
             <GlobalStyle />
-            <ToastContainer position="bottom-right" />
+            <ToastContainer position="bottom-right" transition={Zoom} />
           </MyThemeProvider>
         </Router>
       </PersistGate>
