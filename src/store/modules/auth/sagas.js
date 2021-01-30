@@ -9,10 +9,10 @@ import { signInSuccess, signFailure, signOut } from './actions';
 
 export function* signIn({ payload }) {
   try {
-    const { email, senha } = payload;
+    const { email, password } = payload;
     const response = yield call(api.post, 'sessions', {
       email,
-      senha,
+      password,
     });
 
     const { token, user } = response.data;

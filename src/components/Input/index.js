@@ -1,13 +1,14 @@
 import { useField } from '@unform/core';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { FiAlertCircle } from 'react-icons/fi';
+import { FiAlertCircle, FiEye, FiEyeOff } from 'react-icons/fi';
 
 import { Container, Error } from './styles';
 
-function Input({ icon: Icon, name, fit, onBlur, ...rest }) {
+function Input({ type, icon: Icon, name, fit, onBlur, ...rest }) {
   const inputRef = useRef(null);
   const [isFocused, setIsFocused] = useState(false);
   const [isFilled, setIsFilled] = useState(false);
+  const [showedPassword, setShowedPassword] = useState(false);
   const { fieldName, defaultValue, error, registerField } = useField(name);
 
   const handleInputFocus = useCallback(() => {
@@ -43,8 +44,15 @@ function Input({ icon: Icon, name, fit, onBlur, ...rest }) {
         onBlur={handleInputBlur}
         ref={inputRef}
         defaultValue={defaultValue}
+        type={type === 'password' && showedPassword ? 'text' : type}
         {...rest}
       />
+      {type === 'password' && showedPassword && (
+        <FiEyeOff size={20} onClick={() => setShowedPassword(false)} />
+      )}
+      {type === 'password' && !showedPassword && (
+        <FiEye size={20} onClick={() => setShowedPassword(true)} />
+      )}
       {error && (
         <Error error title={error}>
           <FiAlertCircle size={20} />

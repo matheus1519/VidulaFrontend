@@ -14,10 +14,15 @@ export const Container = styled.div`
   cursor: text;
 
 
-  svg {
+  svg  {
     margin-right: 16px;
     color: ${({ theme }) => theme.disabled};
     transition: 0.2s;
+  }
+
+  input + svg{
+    margin:0;
+    cursor:pointer;
   }
 
   :hover {

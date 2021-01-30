@@ -18,6 +18,9 @@ export const Container = styled.button`
   font-size: 1rem;
   text-transform: uppercase;
   width: ${({ flex }) => (flex ? '100%' : 'fit-content')};
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   :hover {
     background-color: ${({ theme, color, type }) =>

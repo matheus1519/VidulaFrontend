@@ -3,11 +3,12 @@ import React, { useCallback, useRef, useState } from 'react';
 import { FiMail, FiLock, FiUser } from 'react-icons/fi';
 
 import * as Yup from 'yup';
-import { useDispatch } from 'react-redux';
-import { toast, Zoom } from 'react-toastify';
+import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 
 import getValidationErrors from '~/util/getValidationErrors';
 import isEmail from '~/util/isEmail';
+import firstLetterCapitalize from '~/util/firstLetterCapitalize';
 
 import { Input, Button } from '~/components';
 
@@ -18,6 +19,10 @@ import { signInRequest } from '~/store/modules/auth/actions';
 
 function SignUp() {
   const [emailBefore, setEmailBefore] = useState('');
+  const [emailExists, setEmailExists] = useState(true);
+
+  const [loading, setLoading] = useState(false);
+  const loadingSignin = useSelector(state => state.auth.loading);
 
   const formRef = useRef(null);
   const dispatch = useDispatch();
@@ -26,12 +31,14 @@ function SignUp() {
     const { email } = formRef.current.getData();
 
     if (email.length !== 0 && email !== emailBefore && isEmail(email)) {
-      const response = await api.get(`/usuarios/existe/${email}`);
+      const response = await api.get(`/users/existe/${email}`);
 
       if (!response.data) {
         toast.success('Email disponível!');
+        setEmailExists(false);
       } else {
         toast.error('Este email já está sendo usado!');
+        setEmailExists(true);
       }
     }
 
@@ -40,6 +47,8 @@ function SignUp() {
 
   const handleSubmit = useCallback(
     async data => {
+      setLoading(true);
+
       try {
         formRef.current?.setErrors({});
 
@@ -57,16 +66,19 @@ function SignUp() {
           abortEarly: false,
         });
 
+        if (emailExists) {
+          setLoading(false);
+          return toast.error('Este email já está sendo usado!');
+        }
+
         try {
-          await api.post('/usuarios', {
-            nome: data.name,
+          await api.post('/users', {
+            name: firstLetterCapitalize(data.name),
             email: data.email.toLowerCase(),
-            senha: data.password,
+            password: data.password,
           });
 
-          toast.success('Conta criada com sucesso!', {
-            transition: Zoom,
-          });
+          toast.success('Conta criada com sucesso!');
 
           dispatch(signInRequest(data.email, data.password));
 
@@ -79,8 +91,10 @@ function SignUp() {
 
         formRef.current?.setErrors(errors);
       }
+
+      setLoading(false);
     },
-    [dispatch]
+    [emailExists, dispatch]
   );
 
   return (
@@ -99,7 +113,7 @@ function SignUp() {
         type="password"
         placeholder="Senha"
       />
-      <Button type="submit" flex>
+      <Button loading={loading || loadingSignin} type="submit" flex>
         Criar Conta
       </Button>
     </Container>

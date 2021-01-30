@@ -1,11 +1,12 @@
 import React from 'react';
+import Loading from '../Loading';
 
 import { Container } from './styles';
 
-function Button({ flex, type, small, color, children, ...rest }) {
+function Button({ loading, flex, type, small, color, children, ...rest }) {
   return (
     <Container flex={flex} type={type} color={color} small={small} {...rest}>
-      {children}
+      {loading ? <Loading /> : children}
     </Container>
   );
 }

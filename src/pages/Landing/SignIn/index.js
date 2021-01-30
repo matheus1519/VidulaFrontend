@@ -3,7 +3,7 @@ import React, { useCallback, useRef, useState } from 'react';
 import { FiMail, FiLock } from 'react-icons/fi';
 
 import * as Yup from 'yup';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 
 import getValidationErrors from '~/util/getValidationErrors';
@@ -18,6 +18,10 @@ import api from '~/services/api';
 
 function SignIn() {
   const [emailBefore, setEmailBefore] = useState('');
+  const [emailNotExists, setEmailNotExists] = useState(false);
+
+  const loading = useSelector(state => state.auth.loading);
+
   const formRef = useRef(null);
   const dispatch = useDispatch();
 
@@ -25,10 +29,17 @@ function SignIn() {
     const { email } = formRef.current.getData();
 
     if (email.length !== 0 && email !== emailBefore && isEmail(email)) {
-      const response = await api.get(`/usuarios/existe/${email}`);
+      try {
+        const response = await api.get(`/users/existe/${email}`);
 
-      if (!response.data) {
-        toast.error('Este email não existe!');
+        if (!response.data) {
+          toast.error('Este email não existe!');
+          setEmailNotExists(true);
+        } else {
+          setEmailNotExists(false);
+        }
+      } catch (error) {
+        toast.error('Sem conexão com o servidor!');
       }
     }
 
@@ -41,24 +52,32 @@ function SignIn() {
         formRef.current?.setErrors({});
 
         const schema = Yup.object().shape({
-          name: Yup.string().required('Nome obrigatório'),
           email: Yup.string()
             .required('Email obrigatório')
             .email('Digite um email válido'),
           password: Yup.string().required('Senha obrigatória'),
         });
 
+        if (emailNotExists) {
+          return toast.error('Este email não existe!');
+        }
+
         await schema.validate(data, {
           abortEarly: false,
         });
+
+        dispatch(signInRequest(data.email, data.password));
       } catch (err) {
         const errors = getValidationErrors(err);
 
-        formRef.current?.setErrors(errors);
+        return formRef.current?.setErrors(errors);
       }
-      dispatch(signInRequest(data.email, data.password));
+
+      // setTimeout(() => {
+      //   toast.error('Sem conexão com o servidor!');
+      // }, 5000);
     },
-    [dispatch]
+    [emailNotExists, dispatch]
   );
 
   return (
@@ -76,7 +95,7 @@ function SignIn() {
         type="password"
         placeholder="Senha"
       />
-      <Button type="submit" flex>
+      <Button loading={loading} type="submit" flex>
         Entrar
       </Button>
       {/* <ButtonLink to="/esqueci-minha-senha" mt="8">
