@@ -2,7 +2,8 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { RadioGroup, TextField } from '@material-ui/core';
 import { SiGoogleclassroom } from 'react-icons/si';
 import { Autocomplete } from '@material-ui/lab';
-import { toast, Zoom } from 'react-toastify';
+import { toast } from 'react-toastify';
+import { useSelector } from 'react-redux';
 import { Button, Input, MainLayout, Modal, TextArea } from '~/components';
 import { hasEmptyFields } from '~/util/video/hasEmptyFields';
 
@@ -33,6 +34,8 @@ function VideoDetails({ location }) {
   const [aboutLesson, setAboutLesson] = useState(false);
   const [disciplineSelected, setDisciplineSelected] = useState({});
   const [listSubjects, setListSubjects] = useState([]);
+
+  const teacherId = useSelector(state => state.user.user.id);
 
   useEffect(() => {
     api.get('/disciplinas').then(response => setListSubjects(response.data));
@@ -89,9 +92,7 @@ function VideoDetails({ location }) {
     );
 
     if (hasEmpty) {
-      toast.error(`Preencha todas as informações`, {
-        transition: Zoom,
-      });
+      toast.error(`Preencha todas as informações`);
       return;
     }
 
@@ -150,21 +151,18 @@ function VideoDetails({ location }) {
           nome: data.name,
           inicio: { id: videos[0][0].id },
           disciplina: { id: disciplineId },
+          teacher: { id: teacherId },
         });
 
-        toast.success('Plano de aula criado com sucesso!', {
-          transition: Zoom,
-        });
+        toast.success('Plano de aula criado com sucesso!');
       } catch (err) {
         console.log(err);
-        toast.error('Ocorreu um erro no servidor', {
-          transition: Zoom,
-        });
+        toast.error('Ocorreu um erro no servidor');
       }
 
       history.push('assistir');
     },
-    [videos]
+    [videos, teacherId]
   );
 
   return (

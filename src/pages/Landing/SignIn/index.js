@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-expressions */
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { FiMail, FiLock } from 'react-icons/fi';
 
 import * as Yup from 'yup';
@@ -13,7 +13,7 @@ import { Input, Button } from '~/components';
 
 import { Container } from './styles';
 
-import { signInRequest } from '~/store/modules/auth/actions';
+import { signFailure, signInRequest } from '~/store/modules/auth/actions';
 import api from '~/services/api';
 
 function SignIn() {
@@ -24,6 +24,10 @@ function SignIn() {
 
   const formRef = useRef(null);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(signFailure());
+  }, [dispatch]);
 
   const emailExists = useCallback(async () => {
     const { email } = formRef.current.getData();
@@ -72,10 +76,6 @@ function SignIn() {
 
         return formRef.current?.setErrors(errors);
       }
-
-      // setTimeout(() => {
-      //   toast.error('Sem conexão com o servidor!');
-      // }, 5000);
     },
     [emailNotExists, dispatch]
   );

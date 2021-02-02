@@ -6,7 +6,7 @@ import { Container } from './styles';
 function Loading({ ...rest }) {
   return (
     <Container>
-      <CircularProgress size={19.5} {...rest} />
+      <CircularProgress size={19} {...rest} />
     </Container>
   );
 }

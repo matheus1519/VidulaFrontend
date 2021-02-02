@@ -4,6 +4,10 @@ export const Header = styled.div`
   display: flex;
   justify-content: space-between;
 
+  > div {
+    display: flex;
+  }
+
   button + button {
     margin-left: 16px;
   }

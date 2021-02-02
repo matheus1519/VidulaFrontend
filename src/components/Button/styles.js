@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 import { darken, lighten } from '@material-ui/core';
 import hexToRgba from '~/util/hexToRgba';
@@ -42,4 +42,21 @@ export const Container = styled.button`
       (type === 'primary' || type === 'submit') && darken(theme[color], 0.2)};
     box-shadow: unset;
   }
+
+  ${({ disabled }) =>
+    disabled &&
+    css`
+      filter: saturate(0.5);
+
+      :hover {
+        cursor: default;
+        box-shadow: unset;
+        background-color: ${({ theme }) => theme.primary};
+      }
+
+      :active {
+        cursor: default;
+        box-shadow: unset;
+      }
+    `}
 `;

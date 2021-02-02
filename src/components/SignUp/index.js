@@ -19,7 +19,7 @@ import { signInRequest } from '~/store/modules/auth/actions';
 
 function SignUp() {
   const [emailBefore, setEmailBefore] = useState('');
-  const [emailExists, setEmailExists] = useState(true);
+  const [emailExists, setEmailExists] = useState(false);
 
   const [loading, setLoading] = useState(false);
   const loadingSignin = useSelector(state => state.auth.loading);
@@ -36,9 +36,11 @@ function SignUp() {
       if (!response.data) {
         toast.success('Email disponível!');
         setEmailExists(false);
-      } else {
+      } else if (response.data) {
         toast.error('Este email já está sendo usado!');
         setEmailExists(true);
+      } else {
+        toast.error('Sem conexão com o servidor!');
       }
     }
 
@@ -84,7 +86,7 @@ function SignUp() {
 
           history.push('/');
         } catch (error) {
-          console.log(error);
+          toast.error('Sem conexão com o servidor!');
         }
       } catch (err) {
         const errors = getValidationErrors(err);

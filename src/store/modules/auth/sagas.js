@@ -1,6 +1,6 @@
 import { takeLatest, call, put, all } from 'redux-saga/effects';
 import JwtDecode from 'jwt-decode';
-import { toast, Zoom } from 'react-toastify';
+import { toast } from 'react-toastify';
 
 import api from '~/services/api';
 import history from '~/services/history';
@@ -23,11 +23,12 @@ export function* signIn({ payload }) {
 
     history.push('/assistir');
   } catch (error) {
-    toast.error('Senha incorreta!', {
-      transition: Zoom,
-    });
+    if (error.response?.status === 401) {
+      toast.error('Senha incorreta!');
+    } else {
+      toast.error('Sem conexão com o servidor!');
+    }
 
-    console.log(error);
     yield put(signFailure());
   }
 }

@@ -3,9 +3,25 @@ import Loading from '../Loading';
 
 import { Container } from './styles';
 
-function Button({ loading, flex, type, small, color, children, ...rest }) {
+function Button({
+  disabled,
+  loading,
+  flex,
+  type,
+  small,
+  color,
+  children,
+  ...rest
+}) {
   return (
-    <Container flex={flex} type={type} color={color} small={small} {...rest}>
+    <Container
+      disabled={loading}
+      flex={flex}
+      type={type}
+      color={color}
+      small={small}
+      {...rest}
+    >
       {loading ? <Loading /> : children}
     </Container>
   );
