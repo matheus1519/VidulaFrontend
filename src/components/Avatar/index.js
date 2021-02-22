@@ -1,9 +1,16 @@
 import React from 'react';
+import { Avatar } from '@material-ui/core';
 
 import { Container } from './styles';
 
-function Avatar({ url, size }) {
-  return <Container src={url} size={size} />;
+function AvatarCustom({ url, size, alt, children }) {
+  return (
+    <Container size={size}>
+      <Avatar alt={alt} src={url}>
+        {children}
+      </Avatar>
+    </Container>
+  );
 }
 
-export default Avatar;
+export default AvatarCustom;

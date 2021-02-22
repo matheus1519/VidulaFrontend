@@ -33,14 +33,14 @@ export const Container = styled.div`
 
 
 
-  /* ${props =>
-    !props.children[0].props.disabled &&
+  ${({ disabled }) =>
+    disabled &&
     css`
       &:hover {
-        box-shadow: 1px 1px 10px 2px black;
-        cursor: pointer;
+        box-shadow: unset;
+        cursor: default;
       }
-    `} */
+    `}
 
   svg {
     color: ${({ theme }) => theme.backgrounds.secondary};

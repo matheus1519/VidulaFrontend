@@ -62,8 +62,10 @@ function SignIn() {
           password: Yup.string().required('Senha obrigatória'),
         });
 
+        emailExists();
+
         if (emailNotExists) {
-          return toast.error('Este email não existe!');
+          return;
         }
 
         await schema.validate(data, {

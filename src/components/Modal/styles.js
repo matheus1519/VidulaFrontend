@@ -27,7 +27,7 @@ export const Container = styled.div`
     animation: ${swipeDown} ease-out 0.2s;
     width: fit-content;
     height: fit-content;
-    max-width: 60%;
+    max-width: ${({ width }) => width || '60%'};
     max-height: 95%;
     overflow-y: auto;
 

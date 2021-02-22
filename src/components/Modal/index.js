@@ -1,14 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import useKeypress from 'react-use-keypress';
 
 import { AiFillCloseCircle, AiOutlineCloseCircle } from 'react-icons/ai';
 import { Container, Header } from './styles';
-import { useTheme } from '~/context/Theme';
+import { useTheme } from '~/hooks/Theme';
 
 function Modal({ title, width, children, onClose }) {
   const body = document.querySelector('body');
-  body.style.overflow = 'hidden';
 
   useEffect(() => {
+    body.style.overflow = 'hidden';
+
     return () => {
       body.style.overflow = 'auto';
     };

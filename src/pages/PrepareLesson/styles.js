@@ -1,5 +1,9 @@
 import styled from 'styled-components';
 
+export const ModalContent = styled.div`
+  
+`;
+
 export const Header = styled.div`
   display: flex;
   justify-content: space-between;

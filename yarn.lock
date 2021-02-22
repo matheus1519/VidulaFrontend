@@ -10461,6 +10461,13 @@ react-transition-group@^4, react-transition-group@^4.0.0, react-transition-group
     loose-envify "^1.4.0"
     prop-types "^15.6.2"
 
+react-use-keypress@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/react-use-keypress/-/react-use-keypress-1.2.0.tgz#45286222a3b64b13fc7a9919ecb101010206d0eb"
+  integrity sha512-eAQ0VJiry4Lamla1InX/pnHvmyewW5H1nWBIKuILMrn0tvyXRlFKyy01SMfHaqSHjelYKgqn4NOJegGE1aRzmg==
+  dependencies:
+    use-latest "^1.2.0"
+
 react@^15.6.1:
   version "15.7.0"
   resolved "https://registry.yarnpkg.com/react/-/react-15.7.0.tgz#10308fd42ac6912a250bf00380751abc41ac7106"
@@ -12449,6 +12456,18 @@ use-callback-ref@^1.2.1:
   version "1.2.4"
   resolved "https://registry.yarnpkg.com/use-callback-ref/-/use-callback-ref-1.2.4.tgz#d86d1577bfd0b955b6e04aaf5971025f406bea3c"
   integrity sha512-rXpsyvOnqdScyied4Uglsp14qzag1JIemLeTWGKbwpotWht57hbP78aNT+Q4wdFKQfQibbUX4fb6Qb4y11aVOQ==
+
+use-isomorphic-layout-effect@^1.0.0:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/use-isomorphic-layout-effect/-/use-isomorphic-layout-effect-1.1.1.tgz#7bb6589170cd2987a152042f9084f9effb75c225"
+  integrity sha512-L7Evj8FGcwo/wpbv/qvSfrkHFtOpCzvM5yl2KVyDJoylVuSvzphiiasmjgQPttIGBAy2WKiBNR98q8w7PiNgKQ==
+
+use-latest@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/use-latest/-/use-latest-1.2.0.tgz#a44f6572b8288e0972ec411bdd0840ada366f232"
+  integrity sha512-d2TEuG6nSLKQLAfW3By8mKr8HurOlTkul0sOpxbClIv4SQ4iOd7BYr7VIzdbktUCnv7dua/60xzd8igMU6jmyw==
+  dependencies:
+    use-isomorphic-layout-effect "^1.0.0"
 
 use-sidecar@^1.0.1:
   version "1.0.3"

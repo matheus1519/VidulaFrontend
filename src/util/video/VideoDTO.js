@@ -11,7 +11,9 @@ export const VideoDTO = originalMatrix => {
     for (let column = 0; column < 4; column += 1) {
       if (typeof originalMatrix[row][column]?.id === 'number') {
         newMatrix[row][column].id = originalMatrix[row][column].id;
-        newMatrix[row][column].name = originalMatrix[row][column].name;
+        [newMatrix[row][column].name] = originalMatrix[row][column].name.split(
+          '.'
+        );
         newMatrix[row][column].url = originalMatrix[row][column].url;
         newMatrix[row][column].filled = false;
         newMatrix[row][column].alternatives = {};

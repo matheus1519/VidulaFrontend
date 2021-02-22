@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import Switch from 'react-switch';
 
-import { useTheme } from '~/context/Theme';
+import { useTheme } from '~/hooks/Theme';
 
 import { Container } from './styles';
 

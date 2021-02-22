@@ -134,7 +134,7 @@ export const Teacher = styled.div`
   display: flex;
   margin: 16px 0 32px;
 
-  div {
+  > div:last-child {
     margin-left: 8px;
     display: flex;
     flex-direction: column;

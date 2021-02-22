@@ -1,11 +1,9 @@
-/* eslint-disable prefer-const */
-/* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 
-// import { BiCheckboxChecked } from 'react-icons/bi';
-
 import { useDispatch, useSelector } from 'react-redux';
+import { BiCheckboxChecked } from 'react-icons/bi';
 import {
   addDiscipline,
   addVideo,
@@ -33,7 +31,7 @@ import {
   Subject,
 } from './styles';
 
-// import { useTheme } from '~/context/Theme';
+import { useTheme } from '~/hooks/Theme';
 import api from '~/services/api';
 import { isEmpty } from '~/util/isObjectEmpty';
 
@@ -45,11 +43,7 @@ function Watch() {
 
   const [disciplines, setDisciplines] = useState([]);
 
-  const getDisciplineStored = useSelector(state => state.watch.discipline);
-
-  const [disciplineSelected, setDisciplinesSelected] = useState(
-    getDisciplineStored || {}
-  );
+  const [disciplineSelected, setDisciplineSelected] = useState({});
 
   const [changeDiscipline, setChangeDiscipline] = useState(
     !!isEmpty(disciplineSelected)
@@ -59,46 +53,38 @@ function Watch() {
   const [subjectSelected, setSubjectSelected] = useState({});
 
   const [video, setVideo] = useState({});
-  const getStoredVideo = useSelector(state => state.watch.video);
 
   const path = useSelector(state => state.watch.path);
   const userId = useSelector(state => state.user.user.id);
 
-  // const { theme } = useTheme();
+  const { theme } = useTheme();
   const videoRef = useRef(null);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    api
-      .get('disciplinas')
-      .then(response => {
-        setDisciplines(response.data);
-      })
-      .catch(fail => console.log(fail));
-
-    if (
-      !isEmpty(disciplineSelected) &&
-      disciplineSelected.assuntos.length !== 0
-    ) {
-      setSubjects(disciplineSelected.assuntos);
-      setSubjectSelected(disciplineSelected.assuntos[0]);
-      setVideo(getStoredVideo || disciplineSelected.assuntos[0].inicio);
+    async function loadDisciplines() {
+      const response = await api.get('/disciplinas');
+      setDisciplines(response.data);
     }
-  }, [getStoredVideo, disciplineSelected]);
+
+    loadDisciplines();
+
+    videoRef.current.load();
+  }, []);
 
   const handleChangeDiscipline = useCallback(
     discipline => {
-      setDisciplinesSelected(discipline);
+      setDisciplineSelected(discipline);
       dispatch(addDiscipline(discipline));
       setChangeDiscipline(false);
       setQuestionStep(false);
       setDecisionStep(false);
 
-      if (discipline.assuntos.length !== 0) {
-        setSubjects(discipline.assuntos);
-        setSubjectSelected(discipline.assuntos[0]);
-        setVideo(discipline.assuntos[0].inicio);
-        dispatch(addVideo(discipline.assuntos[0].inicio));
+      if (discipline.subjects.length !== 0) {
+        setSubjects(discipline.subjects);
+        setSubjectSelected(discipline.subjects[0]);
+        setVideo(discipline.subjects[0].inicio);
+        dispatch(addVideo(discipline.subjects[0].inicio));
 
         videoRef.current.load();
       }
@@ -108,10 +94,11 @@ function Watch() {
 
   const onClickSubject = useCallback(
     subject => {
-      setVideo(subject.inicio);
       dispatch(addVideo(subject.inicio));
+      setVideo(subject.inicio);
 
       setSubjectSelected(subject);
+
       setQuestionStep(false);
       setDecisionStep(false);
 
@@ -128,7 +115,7 @@ function Watch() {
 
   const onDetail = useCallback(
     vid => {
-      let pathBefore = path;
+      const pathBefore = path;
 
       setVideo(vid.detalhe);
       dispatch(addVideo(vid.detalhe));
@@ -145,7 +132,7 @@ function Watch() {
 
   const onNext = useCallback(
     vid => {
-      let pathBefore = path;
+      const pathBefore = path;
 
       setVideo(vid.proximo);
       dispatch(addVideo(vid.proximo));
@@ -160,81 +147,99 @@ function Watch() {
     [dispatch, path]
   );
 
-  const onFinish = useCallback(
-    (currentDiscipline, currentSubject, currentPath) => {
-      console.log('currentPath', currentPath);
-      api.post('/watch', {
-        path: currentPath,
-        visto: true,
-        user: { id: userId },
-        subject: { id: currentSubject.id },
-      });
+  const onFinish = (currentDiscipline, currentSubject, currentPath) => {
+    console.log('currentPath', {
+      path: currentPath,
+      person: { id: userId },
+      subject: { id: currentSubject.id },
+    });
 
-      currentDiscipline.assuntos.forEach(subject => {
-        if (subject.id === currentSubject.id) {
-          const index = currentDiscipline.assuntos.indexOf(currentSubject);
-          if (index < currentDiscipline.assuntos.length - 1) {
-            setSubjectSelected(currentDiscipline.assuntos[index + 1]);
-            setVideo(currentDiscipline.assuntos[index + 1].inicio);
-            dispatch(addVideo(currentDiscipline.assuntos[index + 1].inicio));
+    const objWatch = {
+      path: currentPath,
+      person: { id: userId },
+      subject: { id: currentSubject.id },
+    };
 
-            setDecisionStep(false);
-            videoRef.current.load();
-          }
+    api.post('/watch', objWatch);
 
-          // Send path and viewed
+    setSubjects(
+      subjects.map(subject =>
+        subject.id === currentSubject.id
+          ? { ...subject, watches: [...subject.watches, objWatch] }
+          : subject
+      )
+    );
 
-          // api.get('/assuntos').then(response => {
-          //   console.log(response);
-          //   setSubjects(response.data);
-          // });
+    currentDiscipline.subjects.forEach(subject => {
+      if (subject.id === currentSubject.id) {
+        const index = currentDiscipline.subjects.indexOf(currentSubject);
+        if (index < currentDiscipline.subjects.length - 1) {
+          setSubjectSelected(currentDiscipline.subjects[index + 1]);
+          setVideo(currentDiscipline.subjects[index + 1].inicio);
+          dispatch(addVideo(currentDiscipline.subjects[index + 1].inicio));
 
-          setTimeout(() => {
-            dispatch(updatePath(''));
-          }, 3000);
+          setDecisionStep(false);
+          videoRef.current.load();
         }
-      });
-    },
-    [userId, dispatch]
-  );
+
+        // Send path and viewed
+
+        // api.get('/assuntos').then(response => {
+        //   console.log(response);
+        //   setSubjects(response.data);
+        // });
+
+        setTimeout(() => {
+          dispatch(updatePath(''));
+        }, 3000);
+      }
+    });
+  };
+
+  const userAlreadyWatchedThisSubject = useCallback(subject => {
+    const personWatched = subject.watches.some(
+      watch => watch.person?.id === userId
+    );
+
+    const isTheSameSubject = subject.watches.some(
+      watch => watch.subject?.id === subject.id
+    );
+
+    return personWatched && isTheSameSubject;
+  }, []);
 
   return (
     <>
-      {changeDiscipline && (
-        <Modal title="Escolha uma disciplina" onClose={setChangeDiscipline}>
+      {changeDiscipline && disciplines.length !== 0 && (
+        <Modal
+          title="Escolha uma disciplina"
+          onClose={isEmpty(disciplineSelected) ? () => {} : setChangeDiscipline}
+        >
           <ModalContent>
-            {console.log(disciplines)}
-            {disciplines.length !== 0 ? (
-              disciplines.map(
-                discipline =>
-                  discipline.assuntos?.length !== 0 && (
-                    <div
-                      key={discipline.id}
-                      onClick={() => handleChangeDiscipline(discipline)}
-                    >
-                      <h3>{discipline.nome}</h3>
-                      <p>{discipline.descricao}</p>
-                    </div>
-                  )
-              )
-            ) : (
-              <>
-                <h3>Nenhuma disciplina ainda foi adicionada.</h3>
-                <h4>Volte amanhã.</h4>
-              </>
+            {disciplines.map(
+              discipline =>
+                discipline.subjects?.length !== 0 && (
+                  <div
+                    key={discipline.id}
+                    onClick={() => handleChangeDiscipline(discipline)}
+                  >
+                    <h3>{discipline.name}</h3>
+                    <p>{discipline.description}</p>
+                  </div>
+                )
             )}
           </ModalContent>
         </Modal>
       )}
       <MainLayout>
         <Header>
-          <h1>{disciplineSelected.nome}</h1>
+          <h1>{disciplineSelected.name}</h1>
           <Button type="secondary" onClick={() => setChangeDiscipline(true)}>
             Trocar Disciplina
           </Button>
         </Header>
         <Divider />
-        <CurrentSubject>{subjectSelected.nome}</CurrentSubject>
+        <CurrentSubject>{subjectSelected.name}</CurrentSubject>
         <Content>
           <MainContent>
             <Video>
@@ -311,19 +316,30 @@ function Watch() {
               </video>
             </Video>
             <Teacher>
-              <Avatar url={avatarAnony} />
+              <Avatar
+                url={subjectSelected.teacher?.person.avatarUrl || avatarAnony}
+              />
               <div>
-                <p>Henrique de Carvalho</p>
-                <small>Professor de Matemática</small>
+                <p>{subjectSelected.teacher?.person.name}</p>
+                <small>
+                  Professor
+                  {subjectSelected.teacher?.person.gender === 'female' &&
+                    'a'}{' '}
+                  de {subjectSelected.teacher?.area}
+                </small>
               </div>
             </Teacher>
             <Divider />
-            <Doubts />
+            {subjectSelected.comments && (
+              <Doubts
+                doubts={subjectSelected.comments}
+                teacher={subjectSelected.teacher}
+                subjectId={subjectSelected.id}
+              />
+            )}
           </MainContent>
           <Subjects>
-            <h3>
-              {subjects.length !== 0 ? 'Assuntos' : 'Nenhum assunto diponível'}
-            </h3>
+            <h3>Assuntos</h3>
             <ul>
               {subjects &&
                 subjects.map(subject => (
@@ -336,9 +352,9 @@ function Watch() {
                     }
                   >
                     <h5>{subject.nome}</h5>
-                    {/* {subject.watches && (
+                    {userAlreadyWatchedThisSubject(subject) && (
                       <BiCheckboxChecked size={36} color={theme.success} />
-                    )} */}
+                    )}
                   </Subject>
                 ))}
             </ul>

@@ -3,15 +3,17 @@ import React, { useCallback, useState } from 'react';
 import { v4 as uuid } from 'uuid';
 
 import { toast, Zoom } from 'react-toastify';
-import { Button, MainLayout, Upload } from '~/components';
+import { Button, MainLayout, Upload, Modal } from '~/components';
 import history from '~/services/history';
 
-import { Header, Divider, UploadContainer } from './styles';
+import esquemaEstruturado from '~/assets/EsquemaEstruturadoV2.png';
+import { ModalContent, Header, Divider, UploadContainer } from './styles';
 import api from '~/services/api';
 import { VideoDTO } from '~/util/video/VideoDTO';
 
 function PrepareLesson() {
   const arrayVideo = [[], [], []];
+  const [needHelp, setNeedHelp] = useState(true);
 
   function addNewTemplate() {
     return {
@@ -92,35 +94,53 @@ function PrepareLesson() {
   }, [videos]);
 
   return (
-    <MainLayout>
-      <Header>
-        <h1>Insira os vídeos</h1>
-        <div>
-          <Button type="secondary" onClick={() => {}}>
-            Preciso de ajuda
-          </Button>
-          <Button onClick={handleNext}>Continuar</Button>
-        </div>
-      </Header>
-      <Divider />
-      <UploadContainer>
-        {videos.map((nivel, row) =>
-          nivel.map((vid, column) =>
-            vid.valueOf().id === undefined ? (
-              <div key={vid.id} />
-            ) : (
-              <Upload
-                key={vid.id}
-                progress={vid.progress}
-                error={vid.error}
-                uploaded={vid.uploaded}
-                onUpload={file => handleUploaded(file, row, column)}
-              />
+    <>
+      {needHelp && (
+        <Modal
+          title="Instruções para o planejamento de aula"
+          onClose={setNeedHelp}
+          width="80%"
+        >
+          <ModalContent>
+            <p>1. Observe o esquema de aula generica abaixo.</p>
+            <img
+              src={esquemaEstruturado}
+              alt="Esquema auxiliar para criação do plano de aula"
+            />
+          </ModalContent>
+        </Modal>
+      )}
+      <MainLayout>
+        <Header>
+          <h1>Insira os vídeos</h1>
+          <div>
+            <Button type="secondary" onClick={() => setNeedHelp(true)}>
+              Preciso de ajuda
+            </Button>
+            <Button onClick={handleNext}>Continuar</Button>
+          </div>
+        </Header>
+        <Divider />
+        <UploadContainer>
+          {videos.map((nivel, row) =>
+            nivel.map((vid, column) =>
+              vid.valueOf().id === undefined ? (
+                <div key={vid.id} />
+              ) : (
+                <Upload
+                  key={vid.id}
+                  progress={vid.progress}
+                  error={vid.error}
+                  uploaded={vid.uploaded}
+                  onUpload={file => handleUploaded(file, row, column)}
+                  disabled={vid.uploaded}
+                />
+              )
             )
-          )
-        )}
-      </UploadContainer>
-    </MainLayout>
+          )}
+        </UploadContainer>
+      </MainLayout>
+    </>
   );
 }
 

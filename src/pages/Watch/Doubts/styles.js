@@ -1,4 +1,15 @@
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
+
+const slideDown = keyframes`
+  from{
+    transform:translateX(-56px);
+  }
+
+  to{
+    transform:translateX(0);
+
+  }
+`;
 
 export const Container = styled.div`
   margin-bottom: 64px;
@@ -10,7 +21,7 @@ export const Container = styled.div`
 
 export const Doubt = styled.div`
   display: flex;
-
+  background-color: ${({ theme }) => theme.backgrounds.primary};
   b + & {
     margin-top: 8px;
   }
@@ -19,41 +30,49 @@ export const Doubt = styled.div`
     margin-top: 16px;
   }
 
-  > div {
+  div + & {
+    margin-top: 8px;
+  }
+
+  > div:last-child {
     margin-left: 8px;
+    width: 100%;
 
     h6 {
       margin-bottom: 8px;
       position: relative;
 
       small {
-        position: absolute;
-        right: 8px;
         color: ${({ theme }) => theme.disabled};
+        margin-left: 8px;
       }
     }
   }
 `;
 
 export const DoubtBody = styled.div`
-  display: grid;
-  grid-template-columns: ${({ teacher }) => (teacher ? '1fr' : '1fr 100px')};
+  display: flex;
   position: relative;
+  justify-content: space-between;
 
   b {
-    position: absolute;
-    right: -8px;
-    top: -8px;
+    margin-top: -8px;
+    margin-right: -8px;
+  }
+
+  p {
+    width: fit-content;
   }
 
   > div {
-    position: relative;
+    display: flex;
+    align-items: center;
     margin-left: auto;
-
+    margin-top: -8px;
+    margin-right: -8px;
+    color: ${({ theme }) => theme.primary};
     > div {
-      position: absolute;
-      right: -8px;
-      top: -8px;
+      margin-left: 8px;
     }
   }
 `;
@@ -63,7 +82,9 @@ export const TakeDoubt = styled.div`
   width: 100%;
   margin-top: 16px;
 
-  div {
+  animation: ${slideDown}.2s;
+
+  > div:last-child {
     margin-left: 8px;
     width: 100%;
     display: flex;

@@ -6,7 +6,7 @@ import { MdAddCircleOutline, MdErrorOutline } from 'react-icons/md';
 
 import { Container, Message } from './styles';
 
-function Upload({ progress, uploaded, error, onUpload, style }) {
+function Upload({ progress, uploaded, error, onUpload, style, disabled }) {
   const onDrop = useCallback(
     acceptedFiles => {
       return onUpload(acceptedFiles[0]);
@@ -60,6 +60,7 @@ function Upload({ progress, uploaded, error, onUpload, style }) {
     <Container
       isDragActive={isDragActive}
       isDragReject={isDragReject}
+      disabled={disabled}
       uploaded={uploaded}
       error={error}
       multiple={false}

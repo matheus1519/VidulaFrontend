@@ -1,5 +1,5 @@
 import React from 'react';
-import { useTheme } from '~/context/Theme';
+import { useTheme } from '~/hooks/Theme';
 
 import { Container } from './styles';
 
