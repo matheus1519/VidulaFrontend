@@ -35,7 +35,7 @@ export const Person = styled.div`
   align-items: center;
   margin-bottom: 32px;
 
-  div + div {
+  > div + div {
     margin-left: 32px;
   }
 `;
@@ -44,7 +44,7 @@ export const AvatarClickable = styled.div`
   position: relative;
   cursor: pointer;
 
-  div {
+  > div:first-child {
     position: absolute;
     top: 0;
     left: 0;
@@ -56,8 +56,10 @@ export const AvatarClickable = styled.div`
     align-items: center;
     transition: 0.2s;
     justify-content: center;
+    z-index: 1;
 
     svg {
+      z-index: 2;
       opacity: 0;
       transition: 0.2s;
       color: ${({ theme }) => theme.primary};
@@ -65,22 +67,24 @@ export const AvatarClickable = styled.div`
   }
 
   :hover {
-    svg {
-      opacity: 1;
-      color: ${({ theme }) => shade(0.2, theme.primary)};
-    }
-
-    div {
+    > div:first-child {
       background: ${({ theme }) => hexToRgba(theme.texts.primary, 0.7)};
+
+      svg {
+        opacity: 1;
+        color: ${({ theme }) => shade(0.2, theme.primary)};
+      }
     }
   }
 
   :active {
-    div {
+    div:first-child {
       background: ${({ theme }) => shade(0.3, hexToRgba(theme.primary, 0.7))};
-    }
-    svg {
-      color: ${({ theme }) => lighten(0.05, theme.primary)};
+
+      svg {
+        opacity: 1;
+        color: ${({ theme }) => lighten(0.05, theme.primary)};
+      }
     }
   }
 `;
@@ -139,6 +143,8 @@ export const FormStyled = styled(Form)`
 `;
 
 export const Teacher = styled.div`
+  max-width: 380px;
+
   h4 {
     margin-bottom: 16px;
   }

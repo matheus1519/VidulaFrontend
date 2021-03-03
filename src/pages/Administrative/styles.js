@@ -11,7 +11,7 @@ export const ModalContent = styled.div`
     display: flex;
     align-items: center;
 
-    div {
+    > div:last-child {
       margin-left: 16px;
 
       h3 {
@@ -31,7 +31,9 @@ export const Header = styled.div`
   justify-content: space-between;
   align-items: center;
 
-  div {
+  > div {
+    display: flex;
+
     button:first-child {
       border-top-right-radius: 0;
       border-bottom-right-radius: 0;

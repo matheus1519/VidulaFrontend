@@ -6,14 +6,14 @@ import { toast, Zoom } from 'react-toastify';
 import { Button, MainLayout, Upload, Modal } from '~/components';
 import history from '~/services/history';
 
-import esquemaEstruturado from '~/assets/EsquemaEstruturadoV2.png';
+import esquemaEstruturado from '~/assets/EsquemaEstruturadoV2.svg';
 import { ModalContent, Header, Divider, UploadContainer } from './styles';
 import api from '~/services/api';
 import { VideoDTO } from '~/util/video/VideoDTO';
 
 function PrepareLesson() {
   const arrayVideo = [[], [], []];
-  const [needHelp, setNeedHelp] = useState(true);
+  const [needHelp, setNeedHelp] = useState(false);
 
   function addNewTemplate() {
     return {
@@ -99,14 +99,33 @@ function PrepareLesson() {
         <Modal
           title="Instruções para o planejamento de aula"
           onClose={setNeedHelp}
-          width="80%"
+          width="65%"
         >
           <ModalContent>
-            <p>1. Observe o esquema de aula generica abaixo.</p>
-            <img
-              src={esquemaEstruturado}
-              alt="Esquema auxiliar para criação do plano de aula"
-            />
+            <p>
+              1. Observe o esquema de aula generica abaixo e insira seus videos
+              baseados no exemplo.
+            </p>
+            <div>
+              <img
+                src={esquemaEstruturado}
+                alt="Esquema auxiliar para criação do plano de aula"
+              />
+            </div>
+            <p>
+              2. O Assunto representa uma videoaula tradicional. A linha logo
+              abaixo do Assunto representa o Assunto divido em quatro partes. As
+              linhas sucessivas representam detalhes do nível de cima em sua
+              respectiva coluna.
+            </p>
+            <p>
+              3. O aluno decide se quer prosseguir com o conteúdo. Ou quer ver
+              mais de acordo com os níveis de detalhe que você irá colocar.
+            </p>
+            <p>
+              4. É obrigatorio ter pelo menos uma videoaula do nivel 0 e uma
+              videoaula do nível 1. Assim a aula é considerada interativa.
+            </p>
           </ModalContent>
         </Modal>
       )}

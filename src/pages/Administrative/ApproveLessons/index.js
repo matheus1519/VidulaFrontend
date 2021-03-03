@@ -100,6 +100,72 @@ function ApproveLessons() {
           </li>
         </ul>
       </Lesson>
+      <Lesson>
+        <div>
+          <h5>Juliano Carneiro</h5>
+          <h5>Linguagem C</h5>
+          <h5>Estrutura Básica</h5>
+        </div>
+        <ul>
+          <li>
+            <ButtonLink>Assistir Aula</ButtonLink>
+          </li>
+          <li>
+            <Button small type="secondary" color="success">
+              Aprovar
+            </Button>
+          </li>
+          <li>
+            <Button small type="secondary" color="danger">
+              Recusar
+            </Button>
+          </li>
+        </ul>
+      </Lesson>
+      <Lesson>
+        <div>
+          <h5>Juliano Carneiro</h5>
+          <h5>Linguagem C</h5>
+          <h5>Estrutura Básica</h5>
+        </div>
+        <ul>
+          <li>
+            <ButtonLink>Assistir Aula</ButtonLink>
+          </li>
+          <li>
+            <Button small type="secondary" color="success">
+              Aprovar
+            </Button>
+          </li>
+          <li>
+            <Button small type="secondary" color="danger">
+              Recusar
+            </Button>
+          </li>
+        </ul>
+      </Lesson>
+      <Lesson>
+        <div>
+          <h5>Juliano Carneiro</h5>
+          <h5>Linguagem C</h5>
+          <h5>Estrutura Básica</h5>
+        </div>
+        <ul>
+          <li>
+            <ButtonLink>Assistir Aula</ButtonLink>
+          </li>
+          <li>
+            <Button small type="secondary" color="success">
+              Aprovar
+            </Button>
+          </li>
+          <li>
+            <Button small type="secondary" color="danger">
+              Recusar
+            </Button>
+          </li>
+        </ul>
+      </Lesson>
     </Container>
   );
 }

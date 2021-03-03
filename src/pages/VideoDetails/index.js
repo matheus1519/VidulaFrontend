@@ -291,7 +291,7 @@ function VideoDetails({ location }) {
                 id="combo-box-demo"
                 noOptionsText="Nenhuma disciplina encontrada"
                 options={listSubjects}
-                getOptionLabel={option => option.nome}
+                getOptionLabel={option => option.name}
                 onChange={(e, value) => {
                   setDisciplineSelected(value);
                 }}
