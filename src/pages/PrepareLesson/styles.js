@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import Tooltip from '~/components/Tooltip';
 
 export const ModalContent = styled.div`
   div {
@@ -42,3 +43,5 @@ export const UploadContainer = styled.div`
   justify-items: center;
   margin-bottom: 64px;
 `;
+
+export const VideoName = styled(Tooltip)``;

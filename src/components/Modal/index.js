@@ -25,24 +25,26 @@ function Modal({ title, width, children, onClose }) {
       <div>
         <Header>
           <h2>{title}</h2>
-          <div
-            onMouseEnter={() => setOnMouseOver(true)}
-            onMouseLeave={() => setOnMouseOver(false)}
-          >
-            {onMouseOver ? (
-              <AiFillCloseCircle
-                onClick={() => onClose(false)}
-                color={theme.danger}
-                size={44}
-              />
-            ) : (
-              <AiOutlineCloseCircle
-                onClick={() => onClose(true)}
-                color={theme.danger}
-                size={44}
-              />
-            )}
-          </div>
+          {onClose && (
+            <div
+              onMouseEnter={() => setOnMouseOver(true)}
+              onMouseLeave={() => setOnMouseOver(false)}
+            >
+              {onMouseOver ? (
+                <AiFillCloseCircle
+                  onClick={() => onClose(false)}
+                  color={theme.danger}
+                  size={44}
+                />
+              ) : (
+                <AiOutlineCloseCircle
+                  onClick={() => onClose(true)}
+                  color={theme.danger}
+                  size={44}
+                />
+              )}
+            </div>
+          )}
         </Header>
         {children}
       </div>

@@ -7,7 +7,13 @@ import { Button, MainLayout, Upload, Modal } from '~/components';
 import history from '~/services/history';
 
 import esquemaEstruturado from '~/assets/EsquemaEstruturadoV2.svg';
-import { ModalContent, Header, Divider, UploadContainer } from './styles';
+import {
+  ModalContent,
+  Header,
+  Divider,
+  UploadContainer,
+  VideoName,
+} from './styles';
 import api from '~/services/api';
 import { VideoDTO } from '~/util/video/VideoDTO';
 
@@ -146,14 +152,27 @@ function PrepareLesson() {
               vid.valueOf().id === undefined ? (
                 <div key={vid.id} />
               ) : (
-                <Upload
-                  key={vid.id}
-                  progress={vid.progress}
-                  error={vid.error}
-                  uploaded={vid.uploaded}
-                  onUpload={file => handleUploaded(file, row, column)}
-                  disabled={vid.uploaded}
-                />
+                <div key={vid.id}>
+                  {typeof vid.id === 'number' ? (
+                    <VideoName title={vid.name.split('.')[0]}>
+                      <Upload
+                        progress={vid.progress}
+                        error={vid.error}
+                        uploaded={vid.uploaded}
+                        onUpload={file => handleUploaded(file, row, column)}
+                        disabled={vid.uploaded}
+                      />
+                    </VideoName>
+                  ) : (
+                    <Upload
+                      progress={vid.progress}
+                      error={vid.error}
+                      uploaded={vid.uploaded}
+                      onUpload={file => handleUploaded(file, row, column)}
+                      disabled={vid.uploaded}
+                    />
+                  )}
+                </div>
               )
             )
           )}

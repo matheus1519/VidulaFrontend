@@ -213,7 +213,7 @@ function Watch() {
       {changeDiscipline && disciplines.length !== 0 && (
         <Modal
           title="Escolha uma disciplina"
-          onClose={isEmpty(disciplineSelected) ? () => {} : setChangeDiscipline}
+          onClose={isEmpty(disciplineSelected) ? null : setChangeDiscipline}
         >
           <ModalContent>
             {disciplines.map(
