@@ -1,5 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
-import useKeypress from 'react-use-keypress';
+import React, { useEffect, useState } from 'react';
 
 import { AiFillCloseCircle, AiOutlineCloseCircle } from 'react-icons/ai';
 import { Container, Header } from './styles';

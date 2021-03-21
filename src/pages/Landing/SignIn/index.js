@@ -79,7 +79,7 @@ function SignIn() {
         return formRef.current?.setErrors(errors);
       }
     },
-    [emailNotExists, dispatch]
+    [emailNotExists, emailExists, dispatch]
   );
 
   return (

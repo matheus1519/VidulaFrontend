@@ -196,17 +196,20 @@ function Watch() {
     });
   };
 
-  const userAlreadyWatchedThisSubject = useCallback(subject => {
-    const personWatched = subject.watches.some(
-      watch => watch.person?.id === userId
-    );
+  const userAlreadyWatchedThisSubject = useCallback(
+    subject => {
+      const personWatched = subject.watches.some(
+        watch => watch.person?.id === userId
+      );
 
-    const isTheSameSubject = subject.watches.some(
-      watch => watch.subject?.id === subject.id
-    );
+      const isTheSameSubject = subject.watches.some(
+        watch => watch.subject?.id === subject.id
+      );
 
-    return personWatched && isTheSameSubject;
-  }, []);
+      return personWatched && isTheSameSubject;
+    },
+    [userId]
+  );
 
   return (
     <>
