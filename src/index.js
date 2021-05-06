@@ -4,7 +4,7 @@ import { isMobile } from 'react-device-detect';
 import App from './App';
 
 if (isMobile) {
-  window.location.href = 'https://m.vidula.tk';
+  window.location.href = 'https://m.vidula.ml';
 } else {
   ReactDOM.render(<App />, document.getElementById('root'));
 }
