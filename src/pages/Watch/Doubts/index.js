@@ -34,13 +34,13 @@ function Doubts({ doubts, teacher, subjectId }) {
   });
 
   const renderTitle = () => {
-    if (doubts.length === 0) {
+    if (newDoubts.length === 0) {
       return 'Não há dúvidas nesse assunto';
     }
-    if (doubts.length === 1) {
+    if (newDoubts.length === 1) {
       return '1 Dúvida';
     }
-    return `${doubts.length} Dúvidas`;
+    return `${newDoubts.length} Dúvidas`;
   };
 
   const handleAnswerDoubt = id => {
@@ -154,7 +154,7 @@ function Doubts({ doubts, teacher, subjectId }) {
             <h6>{doubtObj.person.name}</h6>
             <DoubtBody>
               <p>{doubtObj.doubt}</p>
-              {userIdLogged !== teacher.id && (
+              {userIdLogged !== teacher.person.id && (
                 <div>
                   {doubtObj.likes.length}
                   <Icon
@@ -167,7 +167,7 @@ function Doubts({ doubts, teacher, subjectId }) {
                   />
                 </div>
               )}
-              {userIdLogged === teacher.id &&
+              {userIdLogged === teacher.person.id &&
                 !doubtObj.answer &&
                 !doubtObj.answering && (
                   <ButtonLink onClick={() => handleAnswerDoubt(doubtObj.id)}>
@@ -220,7 +220,7 @@ function Doubts({ doubts, teacher, subjectId }) {
           </div>
         </Doubt>
       ))}
-      {userIdLogged !== teacher.id && (
+      {userIdLogged !== teacher.person.id && (
         <TakeDoubt>
           <Avatar url={avatarUrl || avatarAnony} alt={personName} />
           <div>

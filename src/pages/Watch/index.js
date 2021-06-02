@@ -34,6 +34,7 @@ import {
 import { useTheme } from '~/hooks/Theme';
 import api from '~/services/api';
 import { isEmpty } from '~/util/isObjectEmpty';
+import history from '~/services/history';
 
 function Watch() {
   const [questionStep, setQuestionStep] = useState(false);
@@ -155,7 +156,7 @@ function Watch() {
     });
 
     const objWatch = {
-      path: currentPath,
+      path: currentPath.trim(),
       person: { id: userId },
       subject: { id: currentSubject.id },
     };
@@ -180,14 +181,9 @@ function Watch() {
 
           setDecisionStep(false);
           videoRef.current.load();
+        } else {
+          history.push('/');
         }
-
-        // Send path and viewed
-
-        // api.get('/assuntos').then(response => {
-        //   console.log(response);
-        //   setSubjects(response.data);
-        // });
 
         setTimeout(() => {
           dispatch(updatePath(''));

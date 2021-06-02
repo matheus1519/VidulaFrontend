@@ -34,11 +34,20 @@ function VideoDetails({ location }) {
   const [aboutLesson, setAboutLesson] = useState(false);
   const [disciplineSelected, setDisciplineSelected] = useState({});
   const [listSubjects, setListSubjects] = useState([]);
+  const [teacher, setTeacher] = useState({});
 
-  const teacherId = useSelector(state => state.user.user.id);
+  const userId = useSelector(state => state.user.user.id);
 
   useEffect(() => {
     api.get('/disciplinas').then(response => setListSubjects(response.data));
+
+    api.get('/teachers').then(response => {
+      const teacherFiltered = response.data.filter(
+        teach => userId === teach.person.id
+      );
+
+      setTeacher(teacherFiltered[0]);
+    });
   }, []);
 
   const handleModalDetail = useCallback(
@@ -100,7 +109,7 @@ function VideoDetails({ location }) {
   }, [videos]);
 
   const handleConclude = useCallback(
-    async (data, disciplineId) => {
+    async (data, disciplineId, teacherId) => {
       let arrayVid;
 
       videos.forEach((nivel, row) => {
@@ -162,7 +171,7 @@ function VideoDetails({ location }) {
 
       history.push('assistir');
     },
-    [videos, teacherId]
+    [videos, teacher]
   );
 
   return (
@@ -276,7 +285,9 @@ function VideoDetails({ location }) {
       {aboutLesson && (
         <Modal title="Sobre a aula" onClose={setAboutLesson}>
           <ModalContentAboutLesson
-            onSubmit={data => handleConclude(data, disciplineSelected.id)}
+            onSubmit={data =>
+              handleConclude(data, disciplineSelected.id, teacher.id)
+            }
           >
             <h4>Como se chama o assunto mostrado na aula?</h4>
             <Input
