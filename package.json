@@ -19,7 +19,7 @@
     "filesize": "^6.1.0",
     "history": "^4.10.1",
     "history-prop-types": "^2.5.2",
-    "immer": "^6.0.2",
+    "immer": "^8.0.1",
     "jquery": "^3.4.1",
     "jwt-decode": "^2.2.0",
     "lodash": "^4.17.15",
