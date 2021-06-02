@@ -48,7 +48,7 @@ function VideoDetails({ location }) {
 
       setTeacher(teacherFiltered[0]);
     });
-  }, []);
+  }, [userId]);
 
   const handleModalDetail = useCallback(
     (row, column) => {
@@ -171,7 +171,7 @@ function VideoDetails({ location }) {
 
       history.push('assistir');
     },
-    [videos, teacher]
+    [videos]
   );
 
   return (
