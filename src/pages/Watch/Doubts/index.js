@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { AiOutlineLike } from 'react-icons/ai';
 
 import { useSelector } from 'react-redux';
@@ -11,17 +11,18 @@ import api from '~/services/api';
 
 import { Container, Doubt, DoubtBody, TakeDoubt } from './styles';
 
-function Doubts({ doubts, teacher, subjectId }) {
+export default function Doubts({ doubts, teacher, subjectId }) {
   const { id: userIdLogged, avatarUrl, name: personName } = useSelector(
     state => state.user.user
   );
 
   const [doubtText, setDoubtText] = useState('');
   const [answerText, setAnswerText] = useState('');
+  const [newDoubts, setNewDoubts] = useState([]);
 
-  const [newDoubts, setNewDoubts] = useState(
-    doubts.map(doubt => ({ ...doubt, answering: false }))
-  );
+  useEffect(() => {
+    setNewDoubts(doubts.map(doubt => ({ ...doubt, answering: false })));
+  }, [doubts]);
 
   newDoubts.sort((a, b) => {
     if (a.likes.length > b.likes.length) {
@@ -97,7 +98,7 @@ function Doubts({ doubts, teacher, subjectId }) {
       },
     ]);
 
-    setDoubtText('');
+    return setDoubtText('');
   };
 
   const giveLike = doubtId => {
@@ -132,7 +133,7 @@ function Doubts({ doubts, teacher, subjectId }) {
       return console.log(err);
     }
 
-    setNewDoubts(
+    return setNewDoubts(
       newDoubts.map(doubt =>
         doubt.id === doubtObj.id
           ? { ...doubtObj, answer: answerText, answering: false }
@@ -236,5 +237,3 @@ function Doubts({ doubts, teacher, subjectId }) {
     </Container>
   );
 }
-
-export default Doubts;
